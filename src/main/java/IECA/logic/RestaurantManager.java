@@ -2,44 +2,25 @@ package IECA.logic;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
-import io.javalin.Javalin;
-import io.javalin.http.Handler;
-import org.json.HTTP;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
 
 public class RestaurantManager {
-    private ArrayList<Restaurant> restaurants ;
-    private ArrayList<Food> foods ;
+    private ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
+    private ArrayList<Food> foods = new ArrayList<Food>();
     private User current_user;
     public RestaurantManager() throws IOException {
         restaurants = new ArrayList<Restaurant>();
         foods = new ArrayList<Food>();
-        current_user = new User(1,"leimah","gheifa","gheifa@gmail.com",5000,"+989121327950");
+        current_user = new User();
     }
-    public void setParameters(String restaurants_list) throws IOException {
-        ObjectMapper restaurant_mapper = new ObjectMapper();
-        restaurants = restaurant_mapper.readValue(restaurants_list, new TypeReference<ArrayList<Restaurant>>(){});
-        foods = new ArrayList<Food>();
-        for(Restaurant res :restaurants){
-            for(Food f:res.getMenu()){
-                f.setRestaurantId(res.getId());
-                foods.add(f);
-            }
-        }
-        Cart userCart = new Cart();
-        current_user.setMyCart(userCart);
-    }
+
     public ArrayList<Restaurant> get_restaurants(){return restaurants;}
     public ArrayList<Food> get_foods(){return foods;}
     public User get_user(){return current_user;}
@@ -168,7 +149,7 @@ public class RestaurantManager {
 //        }
 //    }
     public int addToCart(String jsonInString) throws IOException {
-        int success = current_user.getMy_cart().addFood(jsonInString, foods);
+        int success = current_user.getMyCart().addFood(jsonInString, foods);
         return success;
     }
 //    public void getCart(){
@@ -176,12 +157,12 @@ public class RestaurantManager {
 //    }
     public boolean finalizeOrder() {
         int totalCost=0;
-        for (int i = 0; i<current_user.getMy_cart().getFoods().size();i++){
-            for(int j =0;j<current_user.getMy_cart().getNumberOfFood().get(i);j++){
-                totalCost+=current_user.getMy_cart().getFoods().get(i).getPrice();
+        for (int i = 0; i<current_user.getMyCart().getFoods().size();i++){
+            for(int j =0;j<current_user.getMyCart().getNumberOfFood().get(i);j++){
+                totalCost+=current_user.getMyCart().getFoods().get(i).getPrice();
             }
         }
-        if (totalCost<= current_user.getCredit() && current_user.getMy_cart().getFoods().size()!=0) {
+        if (totalCost<= current_user.getCredit() && current_user.getMyCart().getFoods().size()!=0) {
             current_user.addCredit(-totalCost);
             return true;
         }

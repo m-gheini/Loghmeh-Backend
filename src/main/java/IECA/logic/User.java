@@ -9,16 +9,16 @@ public class User {
     private Cart myCart;
     private String phoneNumber;
 
-    public User(int _id, String _name, String _familyName, String _email, int _credit,String _phoneNumber){
-        id = _id;
-        name = _name;
-        familyName = _familyName;
-        email =_email;
-        credit = _credit;
-        phoneNumber = _phoneNumber;
+    public User(){
+        id = 1;
+        name = "leila";
+        familyName = "fakheri";
+        email ="fakheri90@gmail.com";
+        credit = 5000;
+        phoneNumber = "09121111111";
         myCart = new Cart();
     }
-    public Cart getMy_cart(){return myCart;}
+    public Cart getMyCart(){return myCart;}
     public int getId(){return id;}
     public String getName(){return name;}
     public String getFamilyName(){return familyName;}

@@ -14,6 +14,17 @@ public class Food {
     private String restaurantId;
     private int price;
     private String image;
+    private int oldPrice;
+    private int count;
+
+    public int getCount() {
+        return count;
+    }
+
+    public int getOldPrice() {
+        return oldPrice;
+    }
+
     public String getName(){
         return name;
     }
@@ -32,13 +43,40 @@ public class Food {
     public String getImage(){
         return image;
     }
-    public void setName(String _name){name = _name;}
-    public void setDescription(String _description){description = _description;}
-    public void setPopularity(float _populariry){popularity = _populariry;}
-    public void setRestaurantId(String _restaurantId){restaurantId = _restaurantId;}
-    public void setPrice(int _price){price = _price;}
-    public void setImage(String _image){image = _image;}
-//    @Override
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setOldPrice(int oldPrice) {
+        this.oldPrice = oldPrice;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPopularity(float popularity) {
+        this.popularity = popularity;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setRestaurantId(String restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    //    @Override
 //    public String toString(){
 //        return "{ \"name\" : " + name + ", \"description\" : " + description + ",\"popularity\" : " + popularity + ", \"price\" : " + price + ", \"image\" : " + image +" } "  ;
 //    }

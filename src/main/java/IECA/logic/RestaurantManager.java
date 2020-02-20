@@ -3,11 +3,8 @@ import IECA.database.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.BufferedReader;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.*;
 
 
@@ -67,7 +64,7 @@ public class RestaurantManager {
         return nullRest;
     }
     private Food searchForFood(String jsonInString) throws IOException {
-        Food null_food = new Food();
+        Food nullFood = new Food();
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> jsonMap = mapper.readValue(jsonInString, new TypeReference<Map<String, String>>() {
         });
@@ -77,7 +74,7 @@ public class RestaurantManager {
             if (current.getName().equals(foodName) && current.getRestaurantId().equals(restaurantId))
                 return current;
         }
-        return null_food;
+        return nullFood;
     }
     public void addRestaurant(String jsonInString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -225,17 +222,6 @@ public class RestaurantManager {
             System.out.println(me.getValue());
         }
         return result;
-    }
-    public String readFromWeb() throws IOException {
-        URL url = new URL("http://138.197.181.131:8080/restaurants");
-        BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-        StringBuilder sb = new StringBuilder();
-        sb.append(br.readLine());
-        return sb.toString();
-    }
-    public String[] splitInput(String inString) {
-        String[] arrOfPartsOfURL = inString.split(",");
-        return arrOfPartsOfURL;
     }
 //    public static void main(String[] args) throws IOException{
 //        RestaurantManager loghmeh = new RestaurantManager();

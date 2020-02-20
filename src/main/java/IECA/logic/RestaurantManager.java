@@ -1,5 +1,5 @@
 package IECA.logic;
-
+import IECA.database.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -12,18 +12,48 @@ import java.util.*;
 
 
 public class RestaurantManager {
-    private ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
-    private ArrayList<Food> foods = new ArrayList<Food>();
-    private User current_user;
+
+    private ArrayList<Restaurant> restaurants;
+    private ArrayList<Food> foods ;
+    private User currentUser;
+    private Delivery deliveries;
     public RestaurantManager() throws IOException {
-        restaurants = new ArrayList<Restaurant>();
-        foods = new ArrayList<Food>();
-        current_user = new User();
+        DatasetManager database = new DatasetManager();
+        database.addToDataset(database.readFromWeb("http://138.197.181.131:8080/restaurants"));
+        restaurants = database.getRestaurants();
+        foods = database.getFoods();
+        currentUser = new User();
+        deliveries = new Delivery();
     }
 
-    public ArrayList<Restaurant> get_restaurants(){return restaurants;}
-    public ArrayList<Food> get_foods(){return foods;}
-    public User get_user(){return current_user;}
+    public ArrayList<Food> getFoods() {
+        return foods;
+    }
+
+    public Delivery getDeliveries() {
+        return deliveries;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setRestaurants(ArrayList<Restaurant> restaurants) {
+        this.restaurants = restaurants;
+    }
+
+    public void setFoods(ArrayList<Food> foods) {
+        this.foods = foods;
+    }
+
+    public void setDeliveries(Delivery deliveries) {
+        this.deliveries = deliveries;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
     private Restaurant searchForRestaurant(String jsonInString) throws IOException {
         Restaurant nullRest = new Restaurant();
 
@@ -149,7 +179,7 @@ public class RestaurantManager {
 //        }
 //    }
     public int addToCart(String jsonInString) throws IOException {
-        int success = current_user.getMyCart().addFood(jsonInString, foods);
+        int success = currentUser.getMyCart().addFood(jsonInString, foods);
         return success;
     }
 //    public void getCart(){
@@ -157,13 +187,13 @@ public class RestaurantManager {
 //    }
     public boolean finalizeOrder() {
         int totalCost=0;
-        for (int i = 0; i<current_user.getMyCart().getFoods().size();i++){
-            for(int j =0;j<current_user.getMyCart().getNumberOfFood().get(i);j++){
-                totalCost+=current_user.getMyCart().getFoods().get(i).getPrice();
+        for (int i = 0; i<currentUser.getMyCart().getFoods().size();i++){
+            for(int j =0;j<currentUser.getMyCart().getNumberOfFood().get(i);j++){
+                totalCost+=currentUser.getMyCart().getFoods().get(i).getPrice();
             }
         }
-        if (totalCost<= current_user.getCredit() && current_user.getMyCart().getFoods().size()!=0) {
-            current_user.addCredit(-totalCost);
+        if (totalCost<= currentUser.getCredit() && currentUser.getMyCart().getFoods().size()!=0) {
+            currentUser.addCredit(-totalCost);
             return true;
         }
         return false;

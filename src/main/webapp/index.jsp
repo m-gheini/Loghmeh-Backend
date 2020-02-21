@@ -14,9 +14,14 @@
     <tr>
         <td><%= RestaurantManager.getInstance().getRestaurants().get(i).getId()%></td>
         <td><img class="logo" src=" <%= RestaurantManager.getInstance().getRestaurants().get(i).getLogo()%>" alt="logo"></td>
-        <td><%= RestaurantManager.getInstance().getRestaurants().get(i).getName().toString()%></td>
+        <td><%= RestaurantManager.getInstance().getRestaurants().get(i).getName()%></td>
         <td>(<%= RestaurantManager.getInstance().getRestaurants().get(i).getLocation().getX()%>,
             <%= RestaurantManager.getInstance().getRestaurants().get(i).getLocation().getY()%>)</td>
+        <td>
+            <form action="SpecificRestaurant.jsp">
+                <button type="submit" name="restaurantInfo" value="<%=RestaurantManager.getInstance().getRestaurants().get(i).getId()%>">more info</button>
+            </form>
+        </td>
     </tr>
     <%}%>
 </table>

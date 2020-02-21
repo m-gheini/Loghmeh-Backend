@@ -1,3 +1,4 @@
+<%@ page import="IECA.logic.RestaurantManager" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,18 +27,17 @@
         <th>name</th>
         <th>location</th>
     </tr>
+
+        <%int size = RestaurantManager.getInstance().getRestaurants().size();%>
+        <%for (int i =0;i<size;i++){%>
     <tr>
-        <td>1</td>
-        <td><img class="logo" src="https://picsum.photos/536/354" alt="logo"></td>
-        <td>restaurant 1 name</td>
-        <td>(10, 7)</td>
+        <td><%= RestaurantManager.getInstance().getRestaurants().get(i).getId()%></td>
+        <td><img class="logo" <%= RestaurantManager.getInstance().getRestaurants().get(i).getLogo()%> alt="logo"></td>
+        <td><%= RestaurantManager.getInstance().getRestaurants().get(i).getName()%><%System.out.println(RestaurantManager.getInstance().getRestaurants().get(i).getName());%></td>
+        <td>(<%= RestaurantManager.getInstance().getRestaurants().get(i).getLocation().getX()%>,
+            <%= RestaurantManager.getInstance().getRestaurants().get(i).getLocation().getY()%>)</td>
     </tr>
-    <tr>
-        <td>2</td>
-        <td><img class="logo" src="https://picsum.photos/536/354" alt="logo"></td>
-        <td>restaurant 2 name</td>
-        <td>(210, 99)</td>
-    </tr>
+    <%}%>
 </table>
 </body>
 </html>

@@ -58,4 +58,10 @@ public class DatasetManager {
     }
 
     public void addToDataset(String datasetInString) throws IOException {}
+    public static void main(String args[]) throws IOException {
+        RestaurantDataset d = new RestaurantDataset();
+        d.readFromWeb("http://138.197.181.131:8080/restaurants");
+        d.addToDataset(d.readFromWeb("http://138.197.181.131:8080/restaurants"));
+        System.out.println(d.getRestaurants().get(0).getId());
+    }
 }

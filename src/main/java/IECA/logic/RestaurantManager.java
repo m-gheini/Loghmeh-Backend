@@ -9,20 +9,26 @@ import java.util.*;
 
 
 public class RestaurantManager {
+    private static RestaurantManager instance;
+
 
     private ArrayList<Restaurant> restaurants;
     private ArrayList<Food> foods ;
     private User currentUser;
     private Delivery deliveries;
-    public RestaurantManager() throws IOException {
-        DatasetManager database = new DatasetManager();
-        database.addToDataset(database.readFromWeb("http://138.197.181.131:8080/restaurants"));
-        restaurants = database.getRestaurants();
-        foods = database.getFoods();
+    private RestaurantManager() throws IOException {
+        RestaurantDataset restaurantDataset = new RestaurantDataset();
+        restaurantDataset.addToDataset(restaurantDataset.readFromWeb("http://138.197.181.131:8080/restaurants"));
+        restaurants = restaurantDataset.getRestaurants();
+        foods = restaurantDataset.getFoods();
         currentUser = new User();
         deliveries = new Delivery();
     }
-
+    public static RestaurantManager getInstance() throws IOException {
+        if (instance == null)
+            instance = new RestaurantManager();
+        return instance;
+    }
     public ArrayList<Food> getFoods() {
         return foods;
     }
@@ -222,6 +228,10 @@ public class RestaurantManager {
             System.out.println(me.getValue());
         }
         return result;
+    }
+    public static void main(String[] args) throws IOException {
+
+        System.out.println(RestaurantManager.getInstance().getFoods().get(0).getName());
     }
 //    public static void main(String[] args) throws IOException{
 //        RestaurantManager loghmeh = new RestaurantManager();

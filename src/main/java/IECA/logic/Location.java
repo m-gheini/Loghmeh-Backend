@@ -15,8 +15,8 @@ public class Location {
         return y;
     }
 
-//    @Override
-//    public String toString(){
-//        return "location : { \"x\" : " + x + ",\"y\" : " + y + "}";
-//    }
+    @Override
+    public String toString(){
+        return "location : { \"x\" : " + x + ",\"y\" : " + y + "}";
+    }
 }

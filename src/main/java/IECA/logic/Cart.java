@@ -16,16 +16,7 @@ public class Cart {
         foods = new ArrayList<Food>();
         numberOfFood = new ArrayList<Integer>();
     }
-//    public void print_foods(){
-//        JSONArray output = new JSONArray();
-//        for(int i = 0; i<foods.size(); i++){
-//            JSONObject currFoodJO = new JSONObject();
-//            currFoodJO.put("name", foods.get(i).getName());
-//            currFoodJO.put("count", number_of_food.get(i));
-//            output.put(currFoodJO);
-//        }
-//        System.out.println(output);
-//    }
+
     public ArrayList<Food> getFoods(){
         return foods;
     }

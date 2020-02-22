@@ -1,10 +1,4 @@
-<%@ page import="IECA.logic.RestaurantManager" %><%--
-  Created by IntelliJ IDEA.
-  User: leilafakheri
-  Date: 2/22/2020 AD
-  Time: 4:44 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="IECA.logic.RestaurantManager" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="header.jsp" />
 <%String restaurantName ="";

@@ -127,31 +127,7 @@ public class RestaurantManager {
         }
         return result;
     }
-//    public void print_restaurant(Restaurant inRes){
-//        JSONObject output = new JSONObject();
-//        output.put("id",inRes.getId());
-//        output.put("name", inRes.getName());
-//        output.put("description", inRes.getDescription());
-//        Location resLocation = inRes.getLocation();
-//        JSONObject locJO = new JSONObject();
-//        locJO.put("x", resLocation.getX());
-//        locJO.put("y", resLocation.getY());
-//        output.put("location", locJO);
-//        output.put("logo",inRes.getLogo());
-//        ArrayList<Food> menu = inRes.getMenu();
-//        JSONArray foodJarr = new JSONArray();
-//        for (Food currFood : menu) {
-//            JSONObject foodJO = new JSONObject();
-//            foodJO.put("name", currFood.getName());
-//            foodJO.put("description", currFood.getDescription().replace("\u2019","\'"));
-//            foodJO.put("popularity", currFood.getPopularity());
-//            foodJO.put("price", currFood.getPrice());
-//            foodJO.put("image",currFood.getImage());
-//            foodJarr.put(foodJO);
-//        }
-//        output.put("menu", foodJarr);
-//        System.out.println(output);
-//    }
+
     public Restaurant getRestaurant(String jsonInString) throws IOException {
         Restaurant inRes = searchForRestaurant(jsonInString);
         if (inRes.getName() == (null)) {
@@ -166,29 +142,12 @@ public class RestaurantManager {
             return new Restaurant();
         }
     }
-//    public void getFood(String jsonInString) throws IOException {
-//        Food inFood = searchForFood(jsonInString);
-//        if (inFood.getName() == (null)) {
-//            System.out.println("No food with this name in this restaurant.");
-//        } else {
-//            JSONObject output = new JSONObject();
-//            output.put("name", inFood.getName());
-//            output.put("description", inFood.getDescription().replace("\u2019","\'"));
-//            output.put("popularity", inFood.getPopularity());
-//            output.put("price", inFood.getPrice());
-//            output.put("restaurantId", inFood.getRestaurantId());
-//            output.put("image",inFood.getImage());
-//            String jsonstr = output.toString();
-//            System.out.println(jsonstr);
-//        }
-//    }
+
     public int addToCart(String jsonInString) throws IOException {
         int success = currentUser.getMyCart().addFood(jsonInString, foods);
         return success;
     }
-//    public void getCart(){
-//        current_user.getMy_cart().print_foods();
-//    }
+
     public boolean finalizeOrder() {
         int totalCost=0;
         for (int i = 0; i<currentUser.getMyCart().getFoods().size();i++){
@@ -230,39 +189,5 @@ public class RestaurantManager {
         }
         return result;
     }
-    public static void main(String[] args) throws IOException {
 
-        System.out.println(RestaurantManager.getInstance().getFoods().get(0).getName());
-    }
-//    public static void main(String[] args) throws IOException{
-//        RestaurantManager loghmeh = new RestaurantManager();
-//        loghmeh.setParameters(loghmeh.readFromWeb());
-//        ArrayList<Restaurant> res =  loghmeh.getRestaurants();
-//        Javalin app = Javalin.create().start(7000);
-//        app.get("/*", new ServerHandler(loghmeh));
-//        app.post("/userInfo", ctx -> {
-//            if(!ctx.formParam("credit").equals("")){
-//                loghmeh.current_user.addCredit(Integer.valueOf(ctx.formParam("credit")));
-//        }
-//            ctx.redirect("/userInfo");
-//        });
-//        app.post("Restaurants/*", ctx -> {
-//            String[] partsOfValue = loghmeh.splitInput(ctx.formParam("food"));
-//            String jsonInString = "{ \"foodName\" : \"" + partsOfValue[0] +"\", \"restaurantId\" : \"" + partsOfValue[1] +"\" } ";
-//            if(loghmeh.addToCart(jsonInString) == 1)
-//                ctx.redirect("/Restaurants/"+partsOfValue[1]);
-//            else
-//                ctx.redirect("/errorOfDifferentRestaurant");
-//        });
-//        app.post("/test", ctx -> {
-//            if(loghmeh.finalizeOrder()){
-//                ctx.status(200);
-//                ctx.redirect("/finalize");
-//            }
-//            else{
-//                ctx.status(400);
-//                ctx.redirect("/finalizeError");
-//            }
-//        });
-//   }
 }

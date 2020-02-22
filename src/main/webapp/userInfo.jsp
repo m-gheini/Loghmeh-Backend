@@ -1,11 +1,5 @@
 <%@ page import="IECA.logic.RestaurantManager" %>
-<%@ page import="IECA.logic.User" %><%--
-  Created by IntelliJ IDEA.
-  User: mahya
-  Date: 2/22/2020
-  Time: 11:16 AM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="IECA.logic.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%User currentUser = RestaurantManager.getInstance().getCurrentUser();%>
 <jsp:include page="header.jsp" />

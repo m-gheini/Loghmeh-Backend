@@ -76,8 +76,8 @@ public class Food {
         this.restaurantId = restaurantId;
     }
 
-    //    @Override
-//    public String toString(){
-//        return "{ \"name\" : " + name + ", \"description\" : " + description + ",\"popularity\" : " + popularity + ", \"price\" : " + price + ", \"image\" : " + image +" } "  ;
-//    }
+        @Override
+    public String toString(){
+        return "{ \"name\" : " + name + ", \"description\" : " + description + ",\"popularity\" : " + popularity + ", \"price\" : " + price + ", \"image\" : " + image +" } "  ;
+    }
 }

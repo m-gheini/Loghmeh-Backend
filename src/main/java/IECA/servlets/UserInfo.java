@@ -22,13 +22,7 @@ public class UserInfo extends HttpServlet {
         requestDispatcher.forward(request, response);
     }
 
-//    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("userInfo.jsp");
-//
-//        String value = request.getParameter("credit");
-//        if(!(value.equals(""))){
-//            RestaurantManager.getInstance().getCurrentUser().addCredit(Integer.valueOf(value));
-//        }
-//
-//    }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
 }

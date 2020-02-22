@@ -46,14 +46,14 @@ public class Restaurant {
     }
     public void setId(String _id){id = _id;}
     public void setLogo(String _logo){logo = _logo;}
-//    @Override
-//    public String toString(){
-//        String restaurantInString = "{ ";
-//        restaurantInString = restaurantInString + "\"id\" : " + id + ",\"name\" : " + name +"\"location\" : " +location.toString()
-//           +",\"logo\" : "+logo + "\"menu\" :[\\n";
-//        for(Food current:menu)
-//            restaurantInString+=current.toString();
-//
-//        return restaurantInString+"]\\n}";
-//    }
+    @Override
+    public String toString(){
+        String restaurantInString = "{ ";
+        restaurantInString = restaurantInString + "\"id\" : " + id + ",\"name\" : " + name +"\"location\" : " +location.toString()
+           +",\"logo\" : "+logo + "\"menu\" :[\\n";
+        for(Food current:menu)
+            restaurantInString+=current.toString();
+
+        return restaurantInString+"]\\n}";
+    }
 }

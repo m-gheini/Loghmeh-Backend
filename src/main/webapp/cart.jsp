@@ -23,4 +23,7 @@
 <form action="" method="POST">
     <button type="submit">finalize</button>
 </form>
+<form action="index.jsp">
+    <button type="submit" name="home" value="">Home</button>
+</form>
 <jsp:include page="footer.jsp" />

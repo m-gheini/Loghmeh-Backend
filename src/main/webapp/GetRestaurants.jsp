@@ -27,4 +27,9 @@
     </tr>
     <%}%>
 </table>
+<div>
+<form action="index.jsp">
+    <button type="submit" name="home" value="">Home</button>
+</form>
+</div>
 <jsp:include page="footer.jsp" />

@@ -21,6 +21,9 @@
             <input type="text" name="credit" value="">
         </form>
     </ul>
+<form action="index.jsp">
+    <button type="submit" name="home" value="">Home</button>
+</form>
 <jsp:include page="footer.jsp" />
 
 

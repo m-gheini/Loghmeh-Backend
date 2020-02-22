@@ -20,7 +20,6 @@
     <li ><%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(i).getName()%></li>
     <%}%>
 </ul>
-
 <div align="center">your order has been successfully finalized<br></div>
 <%RestaurantManager.getInstance().getCurrentUser().getMyCart().clearCart();%>
 <form action="index.jsp">

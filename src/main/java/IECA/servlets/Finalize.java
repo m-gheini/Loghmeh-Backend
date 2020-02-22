@@ -18,7 +18,7 @@ public class Finalize extends HttpServlet {
             total+=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood().get(i)*
                     RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(i).getPrice();
         }
-        if(RestaurantManager.getInstance().getCurrentUser().getCredit()>=total){
+        if(RestaurantManager.getInstance().getCurrentUser().getCredit()>=total && RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0){
             RestaurantManager.getInstance().getCurrentUser().addCredit(-total);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("finalize.jsp");
             requestDispatcher.forward(request, response);

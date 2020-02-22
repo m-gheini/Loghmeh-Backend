@@ -12,4 +12,12 @@
 <!--    <servlet-name>getRestaurants</servlet-name>-->
 <!--    <url-pattern>/get</url-pattern>-->
 <!--  </servlet-mapping>-->
+<!--  <servlet>-->
+<!--    <servlet-name>userInfo</servlet-name>-->
+<!--    <servlet-class>IECA.servlets.UserInfo</servlet-class>-->
+<!--  </servlet>-->
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>userInfo</servlet-name>-->
+<!--    <url-pattern>/UserInfo</url-pattern>-->
+<!--  </servlet-mapping>-->
 </web-app>

@@ -2,6 +2,7 @@ package IECA.servlets;
 
 import IECA.logic.RestaurantManager;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,14 +17,18 @@ public class UserInfo extends HttpServlet {
         if(!(value.equals(""))){
             RestaurantManager.getInstance().getCurrentUser().addCredit(Integer.valueOf(value));
         }
+        String userInfo = "userInfo.jsp";
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(userInfo);
+        requestDispatcher.forward(request, response);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String value = request.getParameter("credit");
-        if(!(value.equals(""))){
-            RestaurantManager.getInstance().getCurrentUser().addCredit(Integer.valueOf(value));
-        }
-        System.out.println(value);
-        response.setContentType("userInfo.jsp");
-    }
+//    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        response.setContentType("userInfo.jsp");
+//
+//        String value = request.getParameter("credit");
+//        if(!(value.equals(""))){
+//            RestaurantManager.getInstance().getCurrentUser().addCredit(Integer.valueOf(value));
+//        }
+//
+//    }
 }

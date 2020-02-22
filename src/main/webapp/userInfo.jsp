@@ -24,7 +24,7 @@
         <li>phone number: <%=currentUser.getPhoneNumber()%></li>
         <li>email: <%=currentUser.getEmail()%></li>
         <li>credit: <%=currentUser.getCredit()%></li>
-        <form action="userInfo.jsp" method="post">
+        <form action="UserInfo" method="post">
             <button type="submit">increase</button>
             <input type="text" name="credit" value="">
         </form>
@@ -32,5 +32,4 @@
 </body>
 </html>
 
-<%if(!(request.getParameter("credit").equals(""))){
-        RestaurantManager.getInstance().getCurrentUser().addCredit(Integer.valueOf(request.getParameter("credit"))); }%>
+

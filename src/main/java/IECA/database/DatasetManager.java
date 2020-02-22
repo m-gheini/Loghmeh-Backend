@@ -48,7 +48,6 @@ public class DatasetManager {
     public void setRestaurants(ArrayList<Restaurant> restaurants) {
         this.restaurants = restaurants;
     }
-
     public String readFromWeb(String urlString) throws IOException {
         URL url = new URL(urlString);
         BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));

@@ -16,10 +16,12 @@ public class SpecificRestaurant extends HttpServlet {
         String value = request.getParameter("restaurantInfo");
         boolean notFound = true;
         for(Restaurant restaurant : RestaurantManager.getInstance().getRestaurants()){
-            if(restaurant.getId().equals(value))
+            if (restaurant.getId().equals(value)) {
                 notFound = false;
+                break;
+            }
         }
-        if (notFound == false) {
+        if (!notFound) {
             response.setContentType("SpecificRestaurant.jsp");
             response.setStatus(200);
         }

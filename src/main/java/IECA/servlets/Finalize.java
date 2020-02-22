@@ -32,6 +32,10 @@ public class Finalize extends HttpServlet {
             requestDispatcher.forward(request, response);
         }
         else{
+            request.setAttribute("foodName",null);
+            request.setAttribute("restaurantId",RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId());
+            request.setAttribute("cart",null);
+            request.setAttribute("i",-9);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("cart.jsp");
             requestDispatcher.forward(request, response);
         }

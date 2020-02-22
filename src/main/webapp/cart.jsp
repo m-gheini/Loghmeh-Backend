@@ -9,17 +9,23 @@
 
 <jsp:include page="header.jsp" />
 <%String restaurantName ="";
-    if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0)
-        restaurantName = request.getParameter("foodInfo").split(",")[1];%>
+String restaurantId="";
+    if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0 ) {
+        restaurantId = RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId();
+        restaurantName = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
+    }
+%>
 <div><%=restaurantName%></div>
 <ul>
 <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size();i++){%>
-    <li><%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(i).getName()%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood().get(i)%></li>
+    <li ><%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(i).getName()%></li>
     <%}%>
 </ul>
+<%if(!(restaurantId.equals(""))){%>
 <form action="SpecificRestaurant.jsp">
-    <button type="submit" name="restaurantInfo" value="<%=restaurantName%>">Go Back To Restaurant To Order More</button>
+    <button type="submit" name="restaurantInfo" value="<%=restaurantId%>">Go Back To Restaurant To Order More</button>
 </form>
+<%}%>
 <form action="" method="POST">
     <button type="submit">finalize</button>
 </form>

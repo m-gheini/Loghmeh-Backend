@@ -1,23 +1,7 @@
 <%@ page import="IECA.logic.RestaurantManager" %>
 <%@ page import="IECA.logic.Restaurant" %>
 <jsp:include page="header.jsp" />
-<%String value = request.getParameter("restaurantInfo");
-    boolean notFound = true;
-    for (Restaurant restaurant : RestaurantManager.getInstance().getRestaurants()) {
-        if (restaurant.getId().equals(value)) {
-            notFound = false;
-            break;
-        }
-    }
-%>
 
-<% if(value==null || notFound==true){ %>
-<jsp:forward page="index.jsp">
-</jsp:forward>
-<%} else { %>
-<jsp:forward page="SpecificRestaurant.jsp">
-</jsp:forward>
-<%} %>
 <table>
     <tr>
         <th>id</th>

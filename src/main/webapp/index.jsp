@@ -7,8 +7,8 @@
     <form action="userInfo.jsp">
         <button type="submit" name="userInfo" value="">Profile</button>
     </form>
-    <form action="Cart">
-        <button type="submit" name="cart" value="">Cart</button>
+    <form action="Cart" , method="post">
+        <button type="submit" name="cartFromHome" value="">Cart</button>
     </form>
 </ul>
 <jsp:include page="footer.jsp" />

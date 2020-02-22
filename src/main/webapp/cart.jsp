@@ -9,7 +9,7 @@ String restaurantId= (String) request.getAttribute("restaurantId");
         restaurantId = (String) request.getAttribute("restaurantId");
     }
     if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0 ||
-            !(request.getAttribute("cart").equals(null))) {
+            request.getAttribute("cart") != null) {
         restaurantName = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
     }
 %>

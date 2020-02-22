@@ -16,7 +16,7 @@
         </form>
     </ul>
 <%for (int i=0;i<RestaurantManager.getInstance().getCurrentUser().getOrders().size();i++){%>
-<form action="cart.jsp" method="post">
+<form action="Cart" method="post">
     <button type="submit" name="cart" value="<%=i%>">order <%=i+1%></button>
 </form>
 <%}%>

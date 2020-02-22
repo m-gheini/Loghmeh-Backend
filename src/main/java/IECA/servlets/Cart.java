@@ -17,6 +17,7 @@ public class Cart extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String foodInJson="";
         if(request.getParameter("foodInfo")!=null) {
+            System.out.println("HERRE");
             String value = request.getParameter("foodInfo");
             String foodName =new String(value.split(",")[0].getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);
             String restaurantId = value.split(",")[1];
@@ -31,6 +32,7 @@ public class Cart extends HttpServlet {
 
         }
         else if(request.getParameter("cart")!=null){
+            System.out.println("HERRE22");
             int i = Integer.parseInt(request.getParameter("cart"));
             IECA.logic.Cart previousCart = RestaurantManager.getInstance().getCurrentUser().getOrders().get(i);
             request.setAttribute("cart",previousCart);

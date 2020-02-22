@@ -3,7 +3,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="header.jsp" />
 <%String restaurantName ="";
-System.out.println("AAAAAAAAA"+request.getAttribute("i"));
 int index = (int) request.getAttribute("i");
 String restaurantId= (String) request.getAttribute("restaurantId");
     if (request.getAttribute("cart") != null){
@@ -24,16 +23,17 @@ String restaurantId= (String) request.getAttribute("restaurantId");
         for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getOrders().get(index).getFoods().size();i++){%>
     <li ><%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(index).getNumberOfFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(index).getFoods().get(i).getName()%></li>
     <%}%>
+    <%=restaurantId = ""%>
     <%}%>
 </ul>
 <%if(!(restaurantId.equals(""))){%>
 <form action="SpecificRestaurant.jsp">
     <button type="submit" name="restaurantInfo" value="<%=restaurantId%>">Go Back To Restaurant To Order More</button>
 </form>
-<%}%>
 <form action="Finalize" method="POST">
     <button type="submit">finalize</button>
 </form>
+<%}%>
 
 <form action="index.jsp">
     <button type="submit" name="home" value="">Home</button>

@@ -1,5 +1,6 @@
 package IECA.servlets;
 
+import IECA.logic.Food;
 import IECA.logic.RestaurantManager;
 
 import javax.servlet.RequestDispatcher;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @WebServlet("/Finalize")
 public class Finalize extends HttpServlet {
@@ -20,7 +22,12 @@ public class Finalize extends HttpServlet {
         }
         if(RestaurantManager.getInstance().getCurrentUser().getCredit()>=total && RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0){
             RestaurantManager.getInstance().getCurrentUser().addCredit(-total);
-            RestaurantManager.getInstance().getCurrentUser().addOrder(RestaurantManager.getInstance().getCurrentUser().getMyCart());
+            IECA.logic.Cart previousCart = new IECA.logic.Cart();
+            ArrayList<Food> foods = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods());
+            previousCart.setFoods(foods);
+            ArrayList<Integer> counts = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood());
+            previousCart.setNumberOfFood(counts);
+            RestaurantManager.getInstance().getCurrentUser().addOrder(previousCart);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("finalize.jsp");
             requestDispatcher.forward(request, response);
         }

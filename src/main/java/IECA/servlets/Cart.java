@@ -33,8 +33,11 @@ public class Cart extends HttpServlet {
         }
         else if(request.getParameter("cart")!=null){
             System.out.println("HERRE22");
+            System.out.println(RestaurantManager.getInstance().getCurrentUser().getOrders().get(0).getStatus());
             int i = Integer.parseInt(request.getParameter("cart"));
+            System.out.println("i:"+i);
             IECA.logic.Cart previousCart = RestaurantManager.getInstance().getCurrentUser().getOrders().get(i);
+            System.out.println(previousCart.getFoods().size());
             request.setAttribute("cart",previousCart);
             request.setAttribute("restaurantId",RestaurantManager.getInstance().getCurrentUser().getOrders().get(i).getFoods().get(0).getRestaurantId());
             request.setAttribute("i",i);

@@ -29,6 +29,14 @@ public class Cart {
         return numberOfFood;
     }
 
+    public void setFoods(ArrayList<Food> foods) {
+        this.foods = foods;
+    }
+
+    public void setNumberOfFood(ArrayList<Integer> numberOfFood) {
+        this.numberOfFood = numberOfFood;
+    }
+
     public void setStatus(String status) {
         this.status = status;
     }

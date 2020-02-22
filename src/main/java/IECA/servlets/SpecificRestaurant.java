@@ -1,8 +1,10 @@
 package IECA.servlets;
 
+import IECA.logic.Food;
 import IECA.logic.Restaurant;
 import IECA.logic.RestaurantManager;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,12 +24,12 @@ public class SpecificRestaurant extends HttpServlet {
             }
         }
         if (!notFound) {
-            response.setContentType("SpecificRestaurant.jsp");
-            response.setStatus(200);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("SpecificRestaurant.jsp");
+            requestDispatcher.forward(request, response);
         }
         else{
-            response.setContentType("index.jsp");
-            response.setStatus(404);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("GetRestaurants.jsp");
+            requestDispatcher.forward(request, response);
         }
     }
 

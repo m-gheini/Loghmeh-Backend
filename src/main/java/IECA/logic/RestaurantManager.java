@@ -57,7 +57,7 @@ public class RestaurantManager {
         this.currentUser = currentUser;
     }
 
-    private Restaurant searchForRestaurant(String jsonInString) throws IOException {
+    public Restaurant searchForRestaurant(String jsonInString) throws IOException {
         Restaurant nullRest = new Restaurant();
 
         ObjectMapper mapper = new ObjectMapper();
@@ -69,7 +69,7 @@ public class RestaurantManager {
         }
         return nullRest;
     }
-    private Food searchForFood(String jsonInString) throws IOException {
+    public Food searchForFood(String jsonInString) throws IOException {
         Food nullFood = new Food();
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> jsonMap = mapper.readValue(jsonInString, new TypeReference<Map<String, String>>() {
@@ -77,8 +77,9 @@ public class RestaurantManager {
         String foodName = jsonMap.get("foodName");
         String restaurantId = jsonMap.get("restaurantId");
         for (Food current : foods) {
-            if (current.getName().equals(foodName) && current.getRestaurantId().equals(restaurantId))
+            if (current.getName().equals(foodName) && current.getRestaurantId().equals(restaurantId)) {
                 return current;
+            }
         }
         return nullFood;
     }

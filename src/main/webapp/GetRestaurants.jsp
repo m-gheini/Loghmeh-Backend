@@ -1,5 +1,7 @@
 <%@ page import="IECA.logic.RestaurantManager" %>
 <%@ page import="IECA.logic.Restaurant" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <jsp:include page="header.jsp" />
 
 <table>
@@ -10,7 +12,6 @@
         <th>location</th>
     </tr>
 
-    <%System.out.println( RestaurantManager.getInstance().getRestaurants());%>
     <%for (Restaurant res: RestaurantManager.getInstance().getRestaurants()){%>
     <tr>
         <td><%= res.getId()%></td>
@@ -19,7 +20,7 @@
         <td>(<%= res.getLocation().getX()%>,
             <%= res.getLocation().getY()%>)</td>
         <td>
-            <form action="SpecificRestaurant.jsp">
+            <form action="SpecificRestaurant" method="post">
                 <button type="submit" name="restaurantInfo" value="<%=res.getId()%>">more info</button>
             </form>
         </td>

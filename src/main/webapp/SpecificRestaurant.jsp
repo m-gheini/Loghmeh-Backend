@@ -10,25 +10,7 @@
         break;
     }
 }%>
-<html>
-<head>
-    <title>RestaurantInfo</title>
-    <style>
-        img{
-            width: 100px;
-            height: 100px;
-        }
-        li{
-            display: flex;
-            flex-direction: row;
-            padding: 0 0 5px;
-        }
-        div, form{
-            padding: 0 5px;
-        }
-    </style>
-</head>
-<body>
+<jsp:include page="header.jsp" />
 <ul>
     <li>id: <%=thisRes.getId()%></li>
     <li>name: <%=thisRes.getName()%></li>
@@ -41,13 +23,13 @@
                 <img src="<%=foodInMenu.getImage()%>" alt="logo">
                 <div><%=foodInMenu.getName()%></div>
                 <div><%=foodInMenu.getPrice()%> Toman</div>
-                <form action="" method="post">
-                    <button type="submit" name="foodInfo" value="<%=foodInMenu.getName()%>,<%=foodInMenu.getRestaurantId()%>">add To Cart</button>
+                <form action="Cart" method="post">
+                    <button type="submit" name="foodInfo" value="<%=foodInMenu.getName()%>,<%=foodInMenu.getRestaurantId()%>,<%=foodInMenu.getPrice()%>">add To Cart</button>
                 </form>
             </li>
             <%}%>
         </ul>
     </li>
 </ul>
-</body>
-</html>
+<jsp:include page="footer.jsp" />
+

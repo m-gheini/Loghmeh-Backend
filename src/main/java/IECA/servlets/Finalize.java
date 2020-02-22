@@ -20,6 +20,7 @@ public class Finalize extends HttpServlet {
         }
         if(RestaurantManager.getInstance().getCurrentUser().getCredit()>=total && RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0){
             RestaurantManager.getInstance().getCurrentUser().addCredit(-total);
+            RestaurantManager.getInstance().getCurrentUser().addOrder(RestaurantManager.getInstance().getCurrentUser().getMyCart());
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("finalize.jsp");
             requestDispatcher.forward(request, response);
         }

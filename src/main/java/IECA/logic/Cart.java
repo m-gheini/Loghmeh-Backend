@@ -11,16 +11,28 @@ import java.util.Map;
 public class Cart {
     private ArrayList<Food> foods ;
     private ArrayList<Integer> numberOfFood ;
-
+    private String status;
     public Cart(){
         foods = new ArrayList<Food>();
         numberOfFood = new ArrayList<Integer>();
+        status = "finding delivery";
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public ArrayList<Food> getFoods(){
         return foods;
     }
-    public ArrayList<Integer> getNumberOfFood() {return numberOfFood;}
+    public ArrayList<Integer> getNumberOfFood() {
+        return numberOfFood;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public void clearCart(){
         foods.clear();
         numberOfFood.clear();

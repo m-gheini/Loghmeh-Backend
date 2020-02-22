@@ -15,6 +15,11 @@
             <input type="text" name="credit" value="">
         </form>
     </ul>
+<%for (int i=0;i<RestaurantManager.getInstance().getCurrentUser().getOrders().size();i++){%>
+<form action="cart.jsp" method="post">
+    <button type="submit" name="cart" value="<%=i%>">order <%=i+1%></button>
+</form>
+<%}%>
 <form action="index.jsp">
     <button type="submit" name="home" value="">Home</button>
 </form>

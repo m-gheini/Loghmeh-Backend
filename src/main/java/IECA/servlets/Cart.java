@@ -23,8 +23,20 @@ public class Cart extends HttpServlet {
             int price = Integer.parseInt(value.split(",")[2]);
             foodInJson = "{\"foodName\":\""+foodName+"\","+"\"restaurantId\":\""+restaurantId+"\"}";
             RestaurantManager.getInstance().addToCart(foodInJson);
-        }
+            request.setAttribute("foodName",foodName);
+            request.setAttribute("restaurantId",restaurantId);
+            request.setAttribute("cart",null);
+            request.setAttribute("i",-9);
 
+
+        }
+        else if(request.getParameter("cart")!=null){
+            int i = Integer.parseInt(request.getParameter("cart"));
+            IECA.logic.Cart previousCart = RestaurantManager.getInstance().getCurrentUser().getOrders().get(i);
+            request.setAttribute("cart",previousCart);
+            request.setAttribute("restaurantId",RestaurantManager.getInstance().getCurrentUser().getOrders().get(i).getFoods().get(0).getRestaurantId());
+            request.setAttribute("i",i);
+        }
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("cart.jsp");
         requestDispatcher.forward(request, response);

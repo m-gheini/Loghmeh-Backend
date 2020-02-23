@@ -16,6 +16,7 @@ public class RestaurantManager {
     private ArrayList<Food> foods ;
     private User currentUser;
     private ArrayList<Delivery> deliveries;
+    private int bestTime;
     private RestaurantManager() throws IOException {
         RestaurantDataset restaurantDataset = new RestaurantDataset();
         restaurantDataset.addToDataset(restaurantDataset.readFromWeb("http://138.197.181.131:8080/restaurants"));
@@ -24,10 +25,28 @@ public class RestaurantManager {
         currentUser = new User();
         deliveries = new ArrayList<Delivery>();
     }
+
+    public void setBestTime(int bestTime) {
+        this.bestTime = bestTime;
+    }
+
+    public int getBestTime() {
+        return bestTime;
+    }
+
     public static RestaurantManager getInstance() throws IOException {
         if (instance == null)
             instance = new RestaurantManager();
         return instance;
+    }
+    public int getBestDelivery(Restaurant restaurant){
+        int min = 999999999;
+        for(Delivery delivery:deliveries){
+            if (delivery.getTime(restaurant)<min)
+                min = (int)delivery.getTime(restaurant);
+        }
+        bestTime = min;
+        return min;
     }
     public ArrayList<Food> getFoods() {
         return foods;

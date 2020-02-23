@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
-
+import IECA.logic.schedulers.*;
 public class Cart {
     private ArrayList<Food> foods ;
     private ArrayList<Integer> numberOfFood ;
@@ -39,6 +39,9 @@ public class Cart {
 
     public void setStatus(String status) {
         this.status = status;
+        if(status.equals("done")){
+            TimeScheduler timeScheduler = new TimeScheduler();
+        }
     }
 
     public void clearCart(){

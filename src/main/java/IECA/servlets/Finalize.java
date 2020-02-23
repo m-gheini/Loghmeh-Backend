@@ -1,9 +1,8 @@
 package IECA.servlets;
-
+import IECA.logic.schedulers.*;
+import IECA.database.DeliveryDataset;
 import IECA.logic.Food;
 import IECA.logic.RestaurantManager;
-import IECA.logic.Runner;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -32,9 +31,7 @@ public class Finalize extends HttpServlet {
             ArrayList<Integer> counts = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood());
             previousCart.setNumberOfFood(counts);
             RestaurantManager.getInstance().getCurrentUser().addOrder(previousCart);
-            Runner runner = new Runner();
-            ServletContextEvent sce = new ServletContextEvent(getServletContext("/Delivery"));
-            runner.contextInitialized(sce);
+            DeliveryScheduler deliveryScheduler = new DeliveryScheduler();
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("finalize.jsp");
             requestDispatcher.forward(request, response);
         }
@@ -50,6 +47,6 @@ public class Finalize extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        response.setContentType("finalize.jsp");
     }
 }

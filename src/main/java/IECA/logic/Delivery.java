@@ -28,4 +28,10 @@ public class Delivery {
     public void setLocation(Location location) {
         this.location = location;
     }
+    public double getTime(Restaurant restaurant){
+        return  (Math.sqrt(Math.pow(location.getX()-restaurant.getLocation().getX(), 2) +
+                Math.pow(location.getY()-restaurant.getLocation().getY(), 2))+
+                Math.sqrt(Math.pow(restaurant.getLocation().getX(), 2) +
+                        Math.pow(restaurant.getLocation().getY(), 2)))/velocity;
+    }
 }

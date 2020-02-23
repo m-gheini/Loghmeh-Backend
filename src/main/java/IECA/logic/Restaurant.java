@@ -40,12 +40,17 @@ public class Restaurant {
     }
     public void setMenu(ArrayList<Food> _menu){
         menu = new ArrayList<Food>();
-        for(Food current:_menu){
-            menu.add(current);
-        }
+        menu.addAll(_menu);
     }
     public void setId(String _id){id = _id;}
     public void setLogo(String _logo){logo = _logo;}
+    public int calculateApproximationArrival(){
+        int result = 0;
+        int distanceResCustomer = (int) Math.sqrt(Math.pow(location.getX(), 2) + Math.pow(location.getY(), 2));
+        int distanceDeliveryRes = distanceResCustomer/2;
+        result += (distanceResCustomer/5) + (distanceDeliveryRes/5) + 60;
+        return result;
+    }
     @Override
     public String toString(){
         String restaurantInString = "{ ";

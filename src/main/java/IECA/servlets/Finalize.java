@@ -2,8 +2,11 @@ package IECA.servlets;
 
 import IECA.logic.Food;
 import IECA.logic.RestaurantManager;
+import IECA.logic.Runner;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 
 @WebServlet("/Finalize")
 public class Finalize extends HttpServlet {
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int total = 0;
         for (int i =0;i<RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size();i++){
@@ -28,6 +32,9 @@ public class Finalize extends HttpServlet {
             ArrayList<Integer> counts = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood());
             previousCart.setNumberOfFood(counts);
             RestaurantManager.getInstance().getCurrentUser().addOrder(previousCart);
+            Runner runner = new Runner();
+            ServletContextEvent sce = new ServletContextEvent(getServletContext("/Delivery"));
+            runner.contextInitialized(sce);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("finalize.jsp");
             requestDispatcher.forward(request, response);
         }

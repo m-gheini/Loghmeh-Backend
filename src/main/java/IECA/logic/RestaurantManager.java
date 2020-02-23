@@ -15,14 +15,14 @@ public class RestaurantManager {
     private ArrayList<Restaurant> restaurants;
     private ArrayList<Food> foods ;
     private User currentUser;
-    private Delivery deliveries;
+    private ArrayList<Delivery> deliveries;
     private RestaurantManager() throws IOException {
         RestaurantDataset restaurantDataset = new RestaurantDataset();
         restaurantDataset.addToDataset(restaurantDataset.readFromWeb("http://138.197.181.131:8080/restaurants"));
         restaurants = restaurantDataset.getRestaurants();
         foods = restaurantDataset.getFoods();
         currentUser = new User();
-        deliveries = new Delivery();
+        deliveries = new ArrayList<Delivery>();
     }
     public static RestaurantManager getInstance() throws IOException {
         if (instance == null)
@@ -33,7 +33,7 @@ public class RestaurantManager {
         return foods;
     }
 
-    public Delivery getDeliveries() {
+    public ArrayList<Delivery> getDeliveries() {
         return deliveries;
     }
 
@@ -49,7 +49,7 @@ public class RestaurantManager {
         this.foods = foods;
     }
 
-    public void setDeliveries(Delivery deliveries) {
+    public void setDeliveries(ArrayList<Delivery> deliveries) {
         this.deliveries = deliveries;
     }
 

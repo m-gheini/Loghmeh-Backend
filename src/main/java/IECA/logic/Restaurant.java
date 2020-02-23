@@ -48,7 +48,7 @@ public class Restaurant {
         int result = 0;
         int distanceResCustomer = (int) Math.sqrt(Math.pow(location.getX(), 2) + Math.pow(location.getY(), 2));
         int distanceDeliveryRes = distanceResCustomer/2;
-        result += (distanceResCustomer/5) + (distanceDeliveryRes/5) + 60;
+        result = (distanceResCustomer/5) + (distanceDeliveryRes/5) + 60;
         return result;
     }
     @Override

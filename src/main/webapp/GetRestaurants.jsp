@@ -10,7 +10,7 @@
         <th>logo</th>
         <th>name</th>
         <th>location</th>
-        <th>Approximate Delay</th>
+        <th>Approximate time for delivery</th>
     </tr>
 
     <%for (Restaurant res: RestaurantManager.getInstance().getRestaurants()){%>
@@ -20,7 +20,7 @@
         <td><%= res.getName()%></td>
         <td>(<%= res.getLocation().getX()%>,
             <%= res.getLocation().getY()%>)</td>
-        <td><%=res.calculateApproximationArrival()%></td>
+        <td><%=res.calculateApproximationArrival()/60%>:<%=res.calculateApproximationArrival()%60%> s</td>
         <td>
             <form action="SpecificRestaurant" method="post">
                 <button type="submit" name="restaurantInfo" value="<%=res.getId()%>">more info</button>

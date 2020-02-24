@@ -1,6 +1,7 @@
 package IECA.logic.schedulers;
 
 import IECA.database.DeliveryDataset;
+import IECA.logic.Restaurant;
 import IECA.logic.RestaurantManager;
 
 import java.io.IOException;
@@ -8,7 +9,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class DeliveryScheduler extends TimerTask{
+    Restaurant restaurant = new Restaurant();
     private Timer timer ;
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
     public DeliveryScheduler(){
         timer = new Timer();
         timer.schedule(this,0,30000);
@@ -29,6 +40,8 @@ public class DeliveryScheduler extends TimerTask{
             try {
                 int finalIndex = RestaurantManager.getInstance().getCurrentUser().getOrders().size()-1;
                 RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).setStatus("delivering");
+                RestaurantManager.getInstance().getBestDelivery(restaurant);
+                TimeScheduler timeScheduler = new TimeScheduler();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -32,6 +32,8 @@ public class Finalize extends HttpServlet {
             previousCart.setNumberOfFood(counts);
             RestaurantManager.getInstance().getCurrentUser().addOrder(previousCart);
             DeliveryScheduler deliveryScheduler = new DeliveryScheduler();
+            String restaurantId = (RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId());
+            deliveryScheduler.setRestaurant(RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}"));
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("finalize.jsp");
             requestDispatcher.forward(request, response);
         }

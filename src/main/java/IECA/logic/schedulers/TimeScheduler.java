@@ -15,7 +15,8 @@ public class TimeScheduler extends TimerTask {
     @Override
     public void run() {
         try {
-            RestaurantManager.getInstance().setBestTime(RestaurantManager.getInstance().getBestTime()-1);
+            int newValue = (RestaurantManager.getInstance().getBestTime())-1;
+            RestaurantManager.getInstance().setBestTime(newValue);
             if(RestaurantManager.getInstance().getBestTime()<=0){
                 int finalIndex = RestaurantManager.getInstance().getCurrentUser().getOrders().size()-1;
                 RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).setStatus("done");

@@ -38,9 +38,6 @@ public class Cart {
     }
 
     public void setStatus(String status) {
-        if(status.equals("done")){
-            TimeScheduler timeScheduler = new TimeScheduler();
-        }
         this.status = status;
     }
 

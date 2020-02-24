@@ -3,28 +3,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta http-equiv="refresh" content="1" />
-    <title>loghmeh!</title>
-    <style>
-        table {
-            text-align: center;
-            margin: auto;
-        }
-        th, td {
-            padding: 5px;
-            text-align: center;
-        }
-        .logo{
-            width: 100px;
-            height: 100px;
-        }
-    </style>
-</head>
+<jsp:include page="header.jsp" />
+
+<meta http-equiv="refresh" content="1;URL='finalize.jsp'">
 <body><%String restaurantName ="";
     String restaurantId="";
     Restaurant restaurant = new Restaurant();
@@ -44,8 +25,8 @@
 <div >your order has been successfully finalized<br></div>
 <div>status: <%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getStatus()%><br></div>
 <%if(RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getStatus().equals("delivering")){%>
-<div>remained time : <%=(int)(RestaurantManager.getInstance().getBestDelivery(restaurant)/60)%> :
-    <%=(int)(RestaurantManager.getInstance().getBestDelivery(restaurant)%60)%>s<br></div>
+<div>remained time : <%=(int)(RestaurantManager.getInstance().getBestTime()/60)%> :
+    <%=(int)(RestaurantManager.getInstance().getBestTime()%60)%>s<br></div>
 <%}%>
 <%RestaurantManager.getInstance().getCurrentUser().getMyCart().clearCart();%>
 <form action="index.jsp">

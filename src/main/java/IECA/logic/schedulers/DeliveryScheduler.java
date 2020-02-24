@@ -27,7 +27,8 @@ public class DeliveryScheduler extends TimerTask{
         }
         if (deliveryDataset.getDeliveries().size()!=0){
             try {
-                RestaurantManager.getInstance().getCurrentUser().getMyCart().setStatus("delivering");
+                int finalIndex = RestaurantManager.getInstance().getCurrentUser().getOrders().size()-1;
+                RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).setStatus("delivering");
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -17,7 +17,8 @@ public class TimeScheduler extends TimerTask {
         try {
             RestaurantManager.getInstance().setBestTime(RestaurantManager.getInstance().getBestTime()-1);
             if(RestaurantManager.getInstance().getBestTime()<=0){
-                RestaurantManager.getInstance().getCurrentUser().getMyCart().setStatus("done");
+                int finalIndex = RestaurantManager.getInstance().getCurrentUser().getOrders().size()-1;
+                RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).setStatus("done");
                 System.out.println(RestaurantManager.getInstance().getBestTime());
                 timer.cancel();
             }

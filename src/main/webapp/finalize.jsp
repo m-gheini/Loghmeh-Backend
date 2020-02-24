@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta http-equiv="refresh" content="1"/>
+    <meta http-equiv="refresh" content="1" />
     <title>loghmeh!</title>
     <style>
         table {
@@ -28,21 +28,22 @@
 <body><%String restaurantName ="";
     String restaurantId="";
     Restaurant restaurant = new Restaurant();
-    if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0 ) {
-        restaurantId = RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId();
+    int finalIndex = RestaurantManager.getInstance().getCurrentUser().getOrders().size()-1;
+    if(RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getFoods().size()>0 ) {
+        restaurantId = RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getFoods().get(0).getRestaurantId();
         restaurantName = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
         restaurant = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}");
     }
 %>
 <div><%=restaurantName%></div>
 <ul>
-    <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size();i++){%>
-    <li ><%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(i).getName()%></li>
+    <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getFoods().size();i++){%>
+    <li ><%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getNumberOfFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getFoods().get(i).getName()%></li>
     <%}%>
 </ul>
 <div >your order has been successfully finalized<br></div>
-<div>status: <%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getStatus()%><br></div>
-<%if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getStatus().equals("delivering")){%>
+<div>status: <%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getStatus()%><br></div>
+<%if(RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getStatus().equals("delivering")){%>
 <div>remained time : <%=(int)(RestaurantManager.getInstance().getBestDelivery(restaurant)/60)%> :
     <%=(int)(RestaurantManager.getInstance().getBestDelivery(restaurant)%60)%>s<br></div>
 <%}%>

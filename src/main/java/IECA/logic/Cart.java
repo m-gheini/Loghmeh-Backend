@@ -38,10 +38,10 @@ public class Cart {
     }
 
     public void setStatus(String status) {
-        this.status = status;
         if(status.equals("done")){
             TimeScheduler timeScheduler = new TimeScheduler();
         }
+        this.status = status;
     }
 
     public void clearCart(){

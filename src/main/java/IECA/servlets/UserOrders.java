@@ -14,6 +14,7 @@ import java.io.IOException;
 public class UserOrders extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int i = Integer.parseInt(request.getParameter("cart"));
+        System.out.println(i);
         IECA.logic.Cart previousCart = RestaurantManager.getInstance().getCurrentUser().getOrders().get(i);
         request.setAttribute("cart",previousCart);
         request.setAttribute("restaurantId",RestaurantManager.getInstance().getCurrentUser().getOrders().get(i).getFoods().get(0).getRestaurantId());

@@ -1,5 +1,6 @@
 package IECA.logic;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -80,7 +81,8 @@ public class User {
     public void setOrders(ArrayList<Cart> orders) {
         this.orders = orders;
     }
-    public void addOrder(Cart newOrder){
+    public void addOrder(Cart newOrder) throws IOException {
+        newOrder.setIndex(RestaurantManager.getInstance().getCurrentUser().getOrders().size());
         orders.add(newOrder);
     }
     public void addCredit(int value){credit = credit+value;}

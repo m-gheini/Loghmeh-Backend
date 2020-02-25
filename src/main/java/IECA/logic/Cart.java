@@ -12,10 +12,20 @@ public class Cart {
     private ArrayList<Food> foods ;
     private ArrayList<Integer> numberOfFood ;
     private String status;
-    public Cart(){
+    int index;
+    public Cart() {
         foods = new ArrayList<Food>();
         numberOfFood = new ArrayList<Integer>();
         status = "finding delivery";
+        index = 0;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public String getStatus() {

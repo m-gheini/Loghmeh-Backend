@@ -45,7 +45,6 @@ public class RestaurantManager {
             if (delivery.getTime(restaurant)<min)
                 min = (int)delivery.getTime(restaurant);
         }
-        System.out.println(min);
         bestTime = min;
         return min;
     }

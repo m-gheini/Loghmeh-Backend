@@ -22,19 +22,26 @@ public class Cart extends HttpServlet {
             String restaurantId = value.split(",")[1];
             int price = Integer.parseInt(value.split(",")[2]);
             foodInJson = "{\"foodName\":\""+foodName+"\","+"\"restaurantId\":\""+restaurantId+"\"}";
-            RestaurantManager.getInstance().addToCart(foodInJson);
-            request.setAttribute("foodName",foodName);
-            request.setAttribute("restaurantId",restaurantId);
-            request.setAttribute("cart",null);
-            request.setAttribute("i",-9);
+            if(RestaurantManager.getInstance().addToCart(foodInJson) == 0){
+                request.setAttribute("foodName",foodName);
+                request.setAttribute("restaurantId",restaurantId);
+                request.setAttribute("cart",null);
+                request.setAttribute("i",-6);
+            }
+            else {
+                request.setAttribute("foodName", foodName);
+                request.setAttribute("restaurantId", restaurantId);
+                request.setAttribute("cart", null);
+                request.setAttribute("i", -7);
+            }
         }
-        else if(request.getParameter("cart")!=null){
-            int i = Integer.parseInt(request.getParameter("cart"));
-            IECA.logic.Cart previousCart = RestaurantManager.getInstance().getCurrentUser().getOrders().get(i);
-            request.setAttribute("cart",previousCart);
-            request.setAttribute("restaurantId",RestaurantManager.getInstance().getCurrentUser().getOrders().get(i).getFoods().get(0).getRestaurantId());
-            request.setAttribute("i",i);
-        }
+//        else if(request.getParameter("cart")!=null){
+//            int i = Integer.parseInt(request.getParameter("cart"));
+//            IECA.logic.Cart previousCart = RestaurantManager.getInstance().getCurrentUser().getOrders().get(i);
+//            request.setAttribute("cart",previousCart);
+//            request.setAttribute("restaurantId",RestaurantManager.getInstance().getCurrentUser().getOrders().get(i).getFoods().get(0).getRestaurantId());
+//            request.setAttribute("i",i);
+//        }
         else if(request.getParameter("cartFromHome")!=null){
             request.setAttribute("foodName",null);
             if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0)
@@ -42,7 +49,7 @@ public class Cart extends HttpServlet {
             else
                 request.setAttribute("restaurantId","");
             request.setAttribute("cart",null);
-            request.setAttribute("i",-9);
+            request.setAttribute("i",-8);
         }
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("cart.jsp");

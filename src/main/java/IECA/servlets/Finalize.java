@@ -38,16 +38,25 @@ public class Finalize extends HttpServlet {
             requestDispatcher.forward(request, response);
         }
         else{
-            request.setAttribute("foodName",null);
-            request.setAttribute("restaurantId",RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId());
-            request.setAttribute("cart",null);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("enoughCreditError.jsp");
-            requestDispatcher.forward(request, response);
+            if(RestaurantManager.getInstance().getCurrentUser().getCredit()<total) {
+                request.setAttribute("foodName", null);
+                request.setAttribute("restaurantId", RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId());
+                request.setAttribute("cart", null);
+                response.setStatus(400);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("enoughCreditError.jsp");
+                requestDispatcher.forward(request, response);
+            }
+            else{
+                response.setStatus(400);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("emptyCartError.jsp");
+                requestDispatcher.forward(request, response);
+            }
         }
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         response.setContentType("finalize.jsp");
     }
 }

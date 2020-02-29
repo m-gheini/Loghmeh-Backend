@@ -26,7 +26,8 @@ public class Cart extends HttpServlet {
                 request.setAttribute("foodName",foodName);
                 request.setAttribute("restaurantId",restaurantId);
                 request.setAttribute("cart",null);
-                request.setAttribute("i",-6);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("differentRestaurantError.jsp");
+                requestDispatcher.forward(request, response);
             }
             else {
                 request.setAttribute("foodName", foodName);

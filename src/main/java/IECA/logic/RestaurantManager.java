@@ -25,7 +25,9 @@ public class RestaurantManager {
         currentUser = new User();
         deliveries = new ArrayList<Delivery>();
     }
-
+    public ArrayList<Restaurant> getAllRestaurants(){
+        return restaurants;
+    }
     public void setBestTime(int bestTime) {
         this.bestTime = bestTime;
     }

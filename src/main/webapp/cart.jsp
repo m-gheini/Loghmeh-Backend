@@ -6,7 +6,12 @@
 int index = (int) request.getAttribute("i");
 String restaurantId= (String) request.getAttribute("restaurantId");
 %>
+<%if(restaurantId==""){%>
+<div>Your cart is empty!</div>
+<%}%>
+<%if(!(restaurantId=="")){%>
 <div><h4><%=RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName()%><br></div>
+<%}%>
 <ul>
     <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size();i++){%>
     <li ><%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(i).getName()%></li>

@@ -3,15 +3,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="header.jsp" />
 <%String restaurantName ="";
-int index = (int) request.getAttribute("i");
-String restaurantId= (String) request.getAttribute("restaurantId");
+    String restaurantId= (String) request.getAttribute("restaurantId");
 %>
-<%if(index == -6){%>
-<div>You already have some order from different restaurant!</div>
-<%}%>
-<%if((restaurantId.equals(""))){%>
-    <div>Your cart is empty!</div>
-<%}%>
+<div>Your credit is not enough!</div>
+
 <div><%=restaurantName%></div>
 <ul>
     <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size();i++){%>

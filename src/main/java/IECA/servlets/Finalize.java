@@ -41,8 +41,7 @@ public class Finalize extends HttpServlet {
             request.setAttribute("foodName",null);
             request.setAttribute("restaurantId",RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId());
             request.setAttribute("cart",null);
-            request.setAttribute("i",-9);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("cart.jsp");
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("enoughCreditError.jsp");
             requestDispatcher.forward(request, response);
         }
 

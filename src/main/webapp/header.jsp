@@ -7,6 +7,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>loghmeh!</title>
     <style>
+        .old-price {
+            text-decoration: line-through;
+        }
         table {
             text-align: center;
             margin: auto;

@@ -27,11 +27,9 @@ public class FoodPartyScheduler extends TimerTask {
             e.printStackTrace();
         }
         try {
-            RestaurantManager.getInstance().setSaleRestaurants(foodPartyDataset.getRestaurantsOnSale());
             RestaurantManager.getInstance().setSaleFoods(foodPartyDataset.getFoodsOnSale());
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

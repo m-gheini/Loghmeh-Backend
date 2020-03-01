@@ -1,9 +1,6 @@
 package IECA.database;
 
-import IECA.logic.Delivery;
-import IECA.logic.Food;
-import IECA.logic.Restaurant;
-import IECA.logic.SaleFood;
+import IECA.logic.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -12,26 +9,49 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FoodPartyDataset extends DatasetManager{
+    public ArrayList<SaleFood> convertObjToSaleFood(HashMap<String,Object> object){
+        ArrayList<SaleFood> saleFoods = new ArrayList<SaleFood>();
+        String restaurantImage = (String) object.get("logo");
+        String restaurantId = (String) object.get("id");
+        String restaurantName = (String) object.get("name");
+        Location restaurantLocation = new Location();
+        restaurantLocation.setX((int)(((HashMap<String ,Object>)object.get("location")).get("x")));
+        restaurantLocation.setY((int)(((HashMap<String ,Object>)object.get("location")).get("y")));
+
+        for(HashMap<String,Object> obj:(ArrayList<HashMap<String,Object>>)object.get("menu")){
+            SaleFood saleFood = new SaleFood();
+            saleFood.setRestaurantImage(restaurantImage);
+            saleFood.setRestaurantLocation(restaurantLocation);
+            saleFood.setRestaurantName(restaurantName);
+            saleFood.setRestaurantId(restaurantId);
+            saleFood.setCount((int) obj.get("count"));
+            saleFood.setOldPrice((int) obj.get("oldPrice"));
+            saleFood.setName((String) obj.get("name"));
+            saleFood.setDescription((String) obj.get("description"));
+            saleFood.setPrice((int) obj.get("price"));
+            //saleFood.setPopularity((float) obj.get("popularity"));
+            saleFood.setImage((String) obj.get("image"));
+            saleFoods.add(saleFood);
+        }
+        return saleFoods;
+    }
     @Override
     public void addToDataset(String datasetInString) throws IOException {
-        ObjectMapper restaurantMapper = new ObjectMapper();
-        //ArrayList<Restaurant> restaurants = restaurantMapper.readValue(datasetInString, new TypeReference<ArrayList<Restaurant>>(){});
+        ObjectMapper foodMapper = new ObjectMapper();
+        ArrayList<HashMap<String,Object>> foodsObj = foodMapper.readValue(datasetInString, new TypeReference<ArrayList<HashMap<String,Object>>>(){});
         ArrayList<SaleFood> foods = new ArrayList<SaleFood>();
-        //for(Restaurant res :restaurants){
-//            for(SaleFood f:res.getSaleMenu()){
-//                f.setRestaurantId(res.getId());
-//                foods.add(f);
-//            }
-        //}
-        //setRestaurantsOnSale(restaurants);
+        for (HashMap<String,Object> o:foodsObj){
+            for (SaleFood s:convertObjToSaleFood(o)){
+                foods.add(s);
+            }
+        }
         setFoodsOnSale(foods);
-//        for (Restaurant r:restaurants){
-//            System.out.println(r.toString());
-//        }
         System.out.println("##############################################");
-        for(SaleFood s:foods){
+        for(Object s:foods){
             System.out.println(s.toString());
         }
     }

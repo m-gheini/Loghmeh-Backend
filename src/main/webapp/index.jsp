@@ -1,5 +1,6 @@
+<%@ page import="IECA.logic.RestaurantManager" %>
 <jsp:include page="header.jsp" />
-
+<%RestaurantManager.getInstance();%>
 <ul>
     <form action="GetRestaurants" method="post">
         <button type="submit" name="getRestaurants" value="">See Available Restaurants In Radius</button>

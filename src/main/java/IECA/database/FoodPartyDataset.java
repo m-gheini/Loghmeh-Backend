@@ -3,6 +3,7 @@ package IECA.database;
 import IECA.logic.Delivery;
 import IECA.logic.Food;
 import IECA.logic.Restaurant;
+import IECA.logic.SaleFood;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,14 +18,16 @@ public class FoodPartyDataset extends DatasetManager{
     public void addToDataset(String datasetInString) throws IOException {
         ObjectMapper restaurantMapper = new ObjectMapper();
         ArrayList<Restaurant> restaurants = restaurantMapper.readValue(datasetInString, new TypeReference<ArrayList<Restaurant>>(){});
-        ArrayList<Food> foods = new ArrayList<Food>();
+        ArrayList<SaleFood> foods = new ArrayList<SaleFood>();
         for(Restaurant res :restaurants){
-            for(Food f:res.getMenu()){
+            for(SaleFood f:res.getSaleMenu()){
                 f.setRestaurantId(res.getId());
                 foods.add(f);
             }
         }
-        setRestaurants(restaurants);
-        setFoods(foods);
+        setRestaurantsOnSale(restaurants);
+        setFoodsOnSale(foods);
+        System.out.println(restaurants.toString());
+        System.out.println(foods.toString());
     }
 }

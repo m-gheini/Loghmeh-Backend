@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.math.BigDecimal;
 
 public class FoodPartyDataset extends DatasetManager{
     public ArrayList<SaleFood> convertObjToSaleFood(HashMap<String,Object> object){
@@ -33,7 +34,7 @@ public class FoodPartyDataset extends DatasetManager{
             saleFood.setName((String) obj.get("name"));
             saleFood.setDescription((String) obj.get("description"));
             saleFood.setPrice((int) obj.get("price"));
-            //saleFood.setPopularity((float) obj.get("popularity"));
+            saleFood.setPopularity(BigDecimal.valueOf((Double) obj.get("popularity")).floatValue());
             saleFood.setImage((String) obj.get("image"));
             saleFoods.add(saleFood);
         }
@@ -45,9 +46,7 @@ public class FoodPartyDataset extends DatasetManager{
         ArrayList<HashMap<String,Object>> foodsObj = foodMapper.readValue(datasetInString, new TypeReference<ArrayList<HashMap<String,Object>>>(){});
         ArrayList<SaleFood> foods = new ArrayList<SaleFood>();
         for (HashMap<String,Object> o:foodsObj){
-            for (SaleFood s:convertObjToSaleFood(o)){
-                foods.add(s);
-            }
+            foods.addAll(convertObjToSaleFood(o));
         }
         setFoodsOnSale(foods);
         System.out.println("##############################################");

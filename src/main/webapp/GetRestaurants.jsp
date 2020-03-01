@@ -21,7 +21,7 @@
             <%= res.getLocation().getY()%>)</td>
         <td><%=res.calculateApproximationArrival()/60%>:<%=res.calculateApproximationArrival()%60%> s</td>
         <td>
-            <form action="SpecificRestaurant" method="post">
+            <form action="SpecificRestaurant"  method="post">
                 <button type="submit" name="restaurantInfo" value="<%=res.getId()%>">more info</button>
             </form>
         </td>

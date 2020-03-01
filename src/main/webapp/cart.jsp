@@ -18,7 +18,7 @@ String restaurantId= (String) request.getAttribute("restaurantId");
     <%}%>
 </ul>
 <%if(!(restaurantId.equals(""))){%>
-<form action="CheckRestaurantID" method="post">
+<form action="SpecificRestaurant" method="post">
     <button type="submit" name="restaurantInfo" value="<%=restaurantId%>">Go Back To Restaurant To Order More</button>
 </form>
 <form action="Finalize" method="POST">

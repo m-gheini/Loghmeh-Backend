@@ -2,8 +2,7 @@
 <%@ page import="IECA.logic.Cart" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="header.jsp" />
-<%String restaurantName ="";
-int index = (int) request.getAttribute("i");
+<%
 String restaurantId= (String) request.getAttribute("restaurantId");
 %>
 <%if(restaurantId==""){%>
@@ -16,8 +15,11 @@ String restaurantId= (String) request.getAttribute("restaurantId");
     <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size();i++){%>
     <li ><%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(i).getName()%></li>
     <%}%>
+    <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size();i++){%>
+    <li ><%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfSaleFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(i).getName()%></li>
+    <%}%>
 </ul>
-<%if(!(restaurantId.equals(""))){%>
+<%if(!(restaurantId.equals("")) && request.getParameter("cartFromFoodParty")==null){%>
 <form action="SpecificRestaurant" method="post">
     <button type="submit" name="restaurantInfo" value="<%=restaurantId%>">Go Back To Restaurant To Order More</button>
 </form>

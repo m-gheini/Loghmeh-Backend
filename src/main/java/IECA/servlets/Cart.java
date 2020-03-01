@@ -33,16 +33,8 @@ public class Cart extends HttpServlet {
                 request.setAttribute("foodName", foodName);
                 request.setAttribute("restaurantId", restaurantId);
                 request.setAttribute("cart", null);
-                request.setAttribute("i", -7);
             }
         }
-//        else if(request.getParameter("cart")!=null){
-//            int i = Integer.parseInt(request.getParameter("cart"));
-//            IECA.logic.Cart previousCart = RestaurantManager.getInstance().getCurrentUser().getOrders().get(i);
-//            request.setAttribute("cart",previousCart);
-//            request.setAttribute("restaurantId",RestaurantManager.getInstance().getCurrentUser().getOrders().get(i).getFoods().get(0).getRestaurantId());
-//            request.setAttribute("i",i);
-//        }
         else if(request.getParameter("cartFromHome")!=null){
             request.setAttribute("foodName",null);
             if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0)
@@ -50,9 +42,21 @@ public class Cart extends HttpServlet {
             else
                 request.setAttribute("restaurantId","");
             request.setAttribute("cart",null);
-            request.setAttribute("i",-8);
         }
-
+        else if(request.getParameter("cartFromFoodParty")!=null){
+            String value = request.getParameter("cartFromFoodParty");
+            String foodName =new String(value.split(",")[0].getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);
+            String restaurantId = value.split(",")[1];
+            foodInJson = "{\"foodName\":\""+foodName+"\","+"\"restaurantId\":\""+restaurantId+"\"}";
+            if(RestaurantManager.getInstance().addToCartSaleFood(foodInJson) == 0){
+                request.setAttribute("restaurantId",restaurantId);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("differentRestaurantError.jsp");
+                requestDispatcher.forward(request, response);
+            }
+            else {
+                request.setAttribute("restaurantId", restaurantId);
+            }
+        }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("cart.jsp");
         requestDispatcher.forward(request, response);
 

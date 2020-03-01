@@ -11,6 +11,8 @@ import IECA.logic.schedulers.*;
 public class Cart {
     private ArrayList<Food> foods ;
     private ArrayList<Integer> numberOfFood ;
+    private ArrayList<Food> saleFoods ;
+    private ArrayList<Integer> numberOfSaleFood ;
     private String status;
     int index;
     public Cart() {
@@ -19,9 +21,48 @@ public class Cart {
         status = "finding delivery";
         index = 0;
     }
+    public int addSaleFood(String jsonString, ArrayList<SaleFood> allSaleFoods) throws IOException {
+        boolean found = false;
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> jsonMap = mapper.readValue(jsonString, new TypeReference<Map<String, Object>>() {
+        });
+        String foodName = (String) jsonMap.get("foodName");
+        String restaurantId = (String) jsonMap.get("restaurantId");
+        int index = 0;
+        for (int i = 0; i < saleFoods.size(); i++) {
+            if (!(restaurantId.equals(saleFoods.get(i).getRestaurantId())))
+                return 0;
+            else {
+                if (foodName.equals(saleFoods.get(i).getName()) && restaurantId.equals(saleFoods.get(i).getRestaurantId())) {
+                    found = true;
+                    index = i;
+                }
+            }
+        }
+        for (int j = 0; j < allSaleFoods.size(); j++) {
+            if (foodName.equals(allSaleFoods.get(j).getName()) && restaurantId.equals(allSaleFoods.get(j).getRestaurantId())) {
 
+                if (found == true) {
+                    numberOfSaleFood.set(index, numberOfSaleFood.get(index) + 1);
+                } else {
+                    saleFoods.add(allSaleFoods.get(j));
+                    numberOfFood.add(1);
+                }
+                return 1;
+            }
+        }
+        return 0;
+    }
     public int getIndex() {
         return index;
+    }
+
+    public ArrayList<Food> getSaleFoods() {
+        return saleFoods;
+    }
+
+    public ArrayList<Integer> getNumberOfSaleFood() {
+        return numberOfSaleFood;
     }
 
     public void setIndex(int index) {
@@ -37,6 +78,14 @@ public class Cart {
     }
     public ArrayList<Integer> getNumberOfFood() {
         return numberOfFood;
+    }
+
+    public void setSaleFoods(ArrayList<Food> saleFoods) {
+        this.saleFoods = saleFoods;
+    }
+
+    public void setNumberOfSaleFood(ArrayList<Integer> numberOfSaleFood) {
+        this.numberOfSaleFood = numberOfSaleFood;
     }
 
     public void setFoods(ArrayList<Food> foods) {

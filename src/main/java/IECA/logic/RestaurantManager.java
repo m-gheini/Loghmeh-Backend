@@ -190,7 +190,10 @@ public class RestaurantManager {
         int success = currentUser.getMyCart().addFood(jsonInString, foods);
         return success;
     }
-
+    public int addToCartSaleFood(String jsonInString) throws IOException {
+        int success = currentUser.getMyCart().addSaleFood(jsonInString, saleFoods);
+        return success;
+    }
     public boolean finalizeOrder() {
         int totalCost=0;
         for (int i = 0; i<currentUser.getMyCart().getFoods().size();i++){

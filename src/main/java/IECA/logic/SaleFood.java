@@ -19,4 +19,7 @@ public class SaleFood extends Food{
     public void setCount(int count) {
         this.count = count;
     }
+    public String toString(){
+        return "{ "+"\"count\" : " + getCount() +"\",oldPrice\" : " + getOldPrice() +"\",name\" : " + getName() + ", \"description\" : " + getDescription() + ",\"popularity\" : " + getPopularity() + ", \"price\" : " + getPrice() + ", \"image\" : " + getImage() +" } "  ;
+    }
 }

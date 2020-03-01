@@ -14,11 +14,7 @@ public class Restaurant {
     private ArrayList<Food> menu ;
     private String id;
     private String logo;
-    private ArrayList<SaleFood> saleMenu;
 
-    public ArrayList<SaleFood> getSaleMenu() {
-        return saleMenu;
-    }
 
     public String getName(){
 
@@ -41,10 +37,6 @@ public class Restaurant {
     }
     public String getLogo(){
         return logo;
-    }
-
-    public void setSaleMenu(ArrayList<SaleFood> saleMenu) {
-        this.saleMenu = saleMenu;
     }
 
     public void addFood(Food _food){

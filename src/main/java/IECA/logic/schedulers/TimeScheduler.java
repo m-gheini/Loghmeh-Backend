@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TimeScheduler extends TimerTask {
+    private static final int SECOND = 1000;
     private Timer timer ;
     public TimeScheduler(){
         timer = new Timer();

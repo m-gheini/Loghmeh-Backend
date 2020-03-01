@@ -1,5 +1,6 @@
 package IECA.logic;
 import IECA.database.*;
+import IECA.logic.schedulers.FoodPartyScheduler;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,10 +28,19 @@ public class RestaurantManager {
         foods = restaurantDataset.getFoods();
         currentUser = new User();
         deliveries = new ArrayList<Delivery>();
+        FoodPartyScheduler foodPartyScheduler = new FoodPartyScheduler();
     }
 
     public ArrayList<SaleFood> getSaleFoods() {
         return saleFoods;
+    }
+
+    public ArrayList<Restaurant> getSaleRestaurants() {
+        return saleRestaurants;
+    }
+
+    public void setSaleRestaurants(ArrayList<Restaurant> saleRestaurants) {
+        this.saleRestaurants = saleRestaurants;
     }
 
     public void setSaleFoods(ArrayList<SaleFood> saleFoods) {

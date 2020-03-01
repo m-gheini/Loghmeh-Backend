@@ -1,6 +1,5 @@
 package IECA.servlets;
 
-import IECA.logic.Food;
 import IECA.logic.Restaurant;
 import IECA.logic.RestaurantManager;
 
@@ -12,18 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/SpecificRestaurant")
-public class SpecificRestaurant extends HttpServlet {
+@WebServlet(name = "CheckRestaurantID")
+public class CheckRestaurantID extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String value = request.getParameter("restaurantInfo");
-        boolean notFound = true;
         boolean totallyNotFound = true;
-        for(Restaurant restaurant : RestaurantManager.getInstance().getRestaurants()){
-            if (restaurant.getId().equals(value)) {
-                notFound = false;
-                break;
-            }
-        }
         for(Restaurant restaurant : RestaurantManager.getInstance().getAllRestaurants()){
             if (restaurant.getId().equals(value)) {
                 totallyNotFound = false;
@@ -35,14 +27,20 @@ public class SpecificRestaurant extends HttpServlet {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("validIdError.jsp");
             requestDispatcher.forward(request, response);
         }
-        if (!notFound) {
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("SpecificRestaurant.jsp");
+        boolean notFound = true;
+        for (Restaurant restaurant : RestaurantManager.getInstance().getRestaurants()) {
+            if (restaurant.getId().equals(value)) {
+                notFound = false;
+                break;
+            }
+        }
+        if (notFound) {
+            response.setStatus(403);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("outOfBindError.jsp");
             requestDispatcher.forward(request, response);
         }
-        else{
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("GetRestaurants.jsp");
-            requestDispatcher.forward(request, response);
-        }
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("SpecificRestaurant.jsp");
+        requestDispatcher.forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -11,10 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 
 @WebServlet("/GetRestaurants")
 public class GetRestaurants extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         }
 
 
@@ -33,6 +35,7 @@ public class GetRestaurants extends HttpServlet {
             requestDispatcher.forward(request, response);
         }
         else {
+
             String srPageName = "SpecificRestaurant.jsp";
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(srPageName);
             requestDispatcher.forward(request, response);

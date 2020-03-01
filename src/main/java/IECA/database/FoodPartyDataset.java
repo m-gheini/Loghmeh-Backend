@@ -17,19 +17,19 @@ public class FoodPartyDataset extends DatasetManager{
     @Override
     public void addToDataset(String datasetInString) throws IOException {
         ObjectMapper restaurantMapper = new ObjectMapper();
-        ArrayList<Restaurant> restaurants = restaurantMapper.readValue(datasetInString, new TypeReference<ArrayList<Restaurant>>(){});
+        //ArrayList<Restaurant> restaurants = restaurantMapper.readValue(datasetInString, new TypeReference<ArrayList<Restaurant>>(){});
         ArrayList<SaleFood> foods = new ArrayList<SaleFood>();
-        for(Restaurant res :restaurants){
-            for(SaleFood f:res.getSaleMenu()){
-                f.setRestaurantId(res.getId());
-                foods.add(f);
-            }
-        }
-        setRestaurantsOnSale(restaurants);
+        //for(Restaurant res :restaurants){
+//            for(SaleFood f:res.getSaleMenu()){
+//                f.setRestaurantId(res.getId());
+//                foods.add(f);
+//            }
+        //}
+        //setRestaurantsOnSale(restaurants);
         setFoodsOnSale(foods);
-        for (Restaurant r:restaurants){
-            System.out.println(r.toString());
-        }
+//        for (Restaurant r:restaurants){
+//            System.out.println(r.toString());
+//        }
         System.out.println("##############################################");
         for(SaleFood s:foods){
             System.out.println(s.toString());

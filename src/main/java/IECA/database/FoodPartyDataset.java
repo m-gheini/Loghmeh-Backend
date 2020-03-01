@@ -49,9 +49,9 @@ public class FoodPartyDataset extends DatasetManager{
             foods.addAll(convertObjToSaleFood(o));
         }
         setFoodsOnSale(foods);
-        System.out.println("##############################################");
-        for(Object s:foods){
-            System.out.println(s.toString());
-        }
+//        System.out.println("##############################################");
+//        for(Object s:foods){
+//            System.out.println(s.toString());
+//        }
     }
 }

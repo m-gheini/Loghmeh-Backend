@@ -18,10 +18,13 @@ public class Cart {
     public Cart() {
         foods = new ArrayList<Food>();
         numberOfFood = new ArrayList<Integer>();
+        saleFoods = new ArrayList<Food>();
+        numberOfSaleFood = new ArrayList<Integer>();
         status = "finding delivery";
         index = 0;
     }
     public int addSaleFood(String jsonString, ArrayList<SaleFood> allSaleFoods) throws IOException {
+        System.out.println("+*+*+*+*+*+*+*+*+()()()()()FoodSaleB------>"+saleFoods.size());
         boolean found = false;
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> jsonMap = mapper.readValue(jsonString, new TypeReference<Map<String, Object>>() {
@@ -29,6 +32,7 @@ public class Cart {
         String foodName = (String) jsonMap.get("foodName");
         String restaurantId = (String) jsonMap.get("restaurantId");
         int index = 0;
+        System.out.println("+*+*+*+*+*+*+*+*+()()()()()FoodSaleC------>"+saleFoods.size());
         for (int i = 0; i < saleFoods.size(); i++) {
             if (!(restaurantId.equals(saleFoods.get(i).getRestaurantId())))
                 return 0;
@@ -39,14 +43,14 @@ public class Cart {
                 }
             }
         }
-        for (int j = 0; j < allSaleFoods.size(); j++) {
-            if (foodName.equals(allSaleFoods.get(j).getName()) && restaurantId.equals(allSaleFoods.get(j).getRestaurantId())) {
+        for (SaleFood allSaleFood : allSaleFoods) {
+            if (foodName.equals(allSaleFood.getName()) && restaurantId.equals(allSaleFood.getRestaurantId())) {
 
-                if (found == true) {
+                if (found) {
                     numberOfSaleFood.set(index, numberOfSaleFood.get(index) + 1);
                 } else {
-                    saleFoods.add(allSaleFoods.get(j));
-                    numberOfFood.add(1);
+                    saleFoods.add(allSaleFood);
+                    numberOfSaleFood.add(1);
                 }
                 return 1;
             }

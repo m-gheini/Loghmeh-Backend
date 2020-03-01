@@ -14,16 +14,7 @@ public class Food {
     private String restaurantId;
     private int price;
     private String image;
-    private int oldPrice;
-    private int count;
 
-    public int getCount() {
-        return count;
-    }
-
-    public int getOldPrice() {
-        return oldPrice;
-    }
 
     public String getName(){
         return name;
@@ -44,13 +35,6 @@ public class Food {
         return image;
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public void setOldPrice(int oldPrice) {
-        this.oldPrice = oldPrice;
-    }
 
     public void setDescription(String description) {
         this.description = description;

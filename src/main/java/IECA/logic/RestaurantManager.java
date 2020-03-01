@@ -14,9 +14,12 @@ public class RestaurantManager {
 
     private ArrayList<Restaurant> restaurants;
     private ArrayList<Food> foods ;
+    private ArrayList<Restaurant> saleRestaurants;//TODO initialize
+    private ArrayList<SaleFood> saleFoods ;
     private User currentUser;
     private ArrayList<Delivery> deliveries;
     private int bestTime;
+
     private RestaurantManager() throws IOException {
         RestaurantDataset restaurantDataset = new RestaurantDataset();
         restaurantDataset.addToDataset(restaurantDataset.readFromWeb("http://138.197.181.131:8080/restaurants"));
@@ -25,6 +28,15 @@ public class RestaurantManager {
         currentUser = new User();
         deliveries = new ArrayList<Delivery>();
     }
+
+    public ArrayList<SaleFood> getSaleFoods() {
+        return saleFoods;
+    }
+
+    public void setSaleFoods(ArrayList<SaleFood> saleFoods) {
+        this.saleFoods = saleFoods;
+    }
+
     public ArrayList<Restaurant> getAllRestaurants(){
         return restaurants;
     }

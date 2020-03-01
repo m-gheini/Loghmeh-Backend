@@ -14,27 +14,48 @@ public class Restaurant {
     private ArrayList<Food> menu ;
     private String id;
     private String logo;
+    private ArrayList<SaleFood> saleMenu;
+
+    public ArrayList<SaleFood> getSaleMenu() {
+        return saleMenu;
+    }
 
     public String getName(){
+
         return name;
     }
     public String getDescription(){
+
         return description;
     }
     public Location getLocation(){
+
         return location;
     }
     public ArrayList<Food> getMenu(){
+
         return  menu;
     }
-    public String getId(){return id;}
-    public String getLogo(){return logo;}
+    public String getId(){
+        return id;
+    }
+    public String getLogo(){
+        return logo;
+    }
+
+    public void setSaleMenu(ArrayList<SaleFood> saleMenu) {
+        this.saleMenu = saleMenu;
+    }
 
     public void addFood(Food _food){
         menu.add(_food);
     }
-    public void setName(String _name){name = _name;}
-    public void setDescription(String _description){description = _description;}
+    public void setName(String _name){
+        name = _name;
+    }
+    public void setDescription(String _description){
+        description = _description;
+    }
     public void setLocation(Location _address){
         location = _address;
     }
@@ -42,8 +63,12 @@ public class Restaurant {
         menu = new ArrayList<Food>();
         menu.addAll(_menu);
     }
-    public void setId(String _id){id = _id;}
-    public void setLogo(String _logo){logo = _logo;}
+    public void setId(String _id){
+        id = _id;
+    }
+    public void setLogo(String _logo){
+        logo = _logo;
+    }
     public int calculateApproximationArrival(){
         int result = 0;
         int distanceResCustomer = (int) Math.sqrt(Math.pow(location.getX(), 2) + Math.pow(location.getY(), 2));

@@ -7,7 +7,7 @@
     <form action="userInfo.jsp">
         <button type="submit" name="userInfo" value="">Profile</button>
     </form>
-    <form action="Cart" , method="post">
+    <form action="Cart"  method="post">
         <button type="submit" name="cartFromHome" value="">Cart</button>
     </form>
 </ul>

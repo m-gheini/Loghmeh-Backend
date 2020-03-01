@@ -1,7 +1,7 @@
 <jsp:include page="header.jsp" />
 
 <ul>
-    <form action="GetRestaurants.jsp">
+    <form action="GetRestaurants" method="post">
         <button type="submit" name="getRestaurants" value="">See Available Restaurants In Radius</button>
     </form>
     <form action="userInfo.jsp">

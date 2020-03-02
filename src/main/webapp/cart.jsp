@@ -5,7 +5,8 @@
 <%
 String restaurantId= (String) request.getAttribute("restaurantId");
 %>
-<%if(restaurantId.equals("")){%>
+<%if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()==0 &&
+    RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size()==0){%>
 <div>Your cart is empty!</div>
 <%}%>
 <%if(!(restaurantId.equals("")) && request.getParameter("cartFromFoodParty")==null){%>
@@ -26,10 +27,10 @@ String restaurantId= (String) request.getAttribute("restaurantId");
 <form action="SpecificRestaurant" method="post">
     <button type="submit" name="restaurantInfo" value="<%=restaurantId%>">Go Back To Restaurant To Order More</button>
 </form>
+<%}%>
 <form action="Finalize" method="POST">
     <button type="submit">finalize</button>
 </form>
-<%}%>
 
 <form action="index.jsp">
     <button type="submit" name="home" value="">Home</button>

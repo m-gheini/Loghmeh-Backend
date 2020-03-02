@@ -13,13 +13,19 @@
     if(RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getFoods().size()>0 ) {
         restaurantId = RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getFoods().get(0).getRestaurantId();
         restaurantName = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
-        restaurant = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}");
+    }
+    else if(RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getSaleFoods().size()>0 ) {
+        restaurantId = RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getSaleFoods().get(0).getRestaurantId();
+        restaurantName = RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getSaleFoods().get(0).getRestaurantName();
     }
 %>
 <div><%=restaurantName%></div>
 <ul>
     <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getFoods().size();i++){%>
     <li ><%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getNumberOfFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getFoods().get(i).getName()%></li>
+    <%}%>
+    <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getSaleFoods().size();i++){%>
+    <li ><%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getNumberOfSaleFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getSaleFoods().get(i).getName()%></li>
     <%}%>
 </ul>
 <div >your order has been successfully finalized<br></div>

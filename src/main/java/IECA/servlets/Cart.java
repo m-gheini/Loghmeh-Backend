@@ -48,12 +48,13 @@ public class Cart extends HttpServlet {
             String foodName =new String(value.split(",")[0].getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);
             String restaurantId = value.split(",")[1];
             foodInJson = "{\"foodName\":\""+foodName+"\","+"\"restaurantId\":\""+restaurantId+"\"}";
-            if(RestaurantManager.getInstance().addToCartSaleFood(foodInJson) == 0){
+            if(RestaurantManager.getInstance().addToCartSaleFood(foodInJson) == 0 ){
                 request.setAttribute("restaurantId",restaurantId);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("differentRestaurantError.jsp");
                 requestDispatcher.forward(request, response);
             }
             else {
+                System.out.println("+++"+restaurantId+"+++");
                 request.setAttribute("restaurantId", restaurantId);
             }
         }

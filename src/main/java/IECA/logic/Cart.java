@@ -34,6 +34,8 @@ public class Cart {
         System.out.println("ID---:>"+restaurantId);
         int index = 0;
         System.out.println("+*+*+*+*+*+*+*+*+()()()()()FoodSaleC------>"+saleFoods.size());
+        if((foods.size()>0 && !foods.get(0).getRestaurantId().equals(restaurantId)))
+            return 0;
         for (int i = 0; i < saleFoods.size(); i++) {
             if (!(restaurantId.equals(saleFoods.get(i).getRestaurantId())))
                 return 0;
@@ -44,6 +46,7 @@ public class Cart {
                 }
             }
         }
+
         for (SaleFood allSaleFood : allSaleFoods) {
             if (foodName.equals(allSaleFood.getName()) && restaurantId.equals(allSaleFood.getRestaurantId())) {
                 if(allSaleFood.getCount() > 0) {
@@ -114,6 +117,8 @@ public class Cart {
     public void clearCart(){
         foods.clear();
         numberOfFood.clear();
+        saleFoods.clear();
+        numberOfSaleFood.clear();
     }
     public int addFood(String jsonString, ArrayList<Food> allFoods) throws IOException {
         boolean found = false;
@@ -123,8 +128,10 @@ public class Cart {
         String foodName = (String) jsonMap.get("foodName");
         String  restaurantId= (String) jsonMap.get("restaurantId");
         int index = 0;
+        if((saleFoods.size()>0 && !saleFoods.get(0).equals(restaurantId)))
+        return 0;
         for (int i = 0;i<foods.size();i++) {
-            if (!(restaurantId.equals(foods.get(i).getRestaurantId()))) {
+            if (!(restaurantId.equals(foods.get(i).getRestaurantId()))){
                 System.out.println("YOU CAN NOT CHOOSE FOOD FROM DIFFERENT RESTAURANTS");
                 return 0;
             } else {

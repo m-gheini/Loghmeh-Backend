@@ -13,64 +13,80 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 @WebServlet("/Cart")
 public class Cart extends HttpServlet {
+    private HashMap<String,String> strAttr;
+    private String foodName = "";
+    private String restaurantId = "";
+    private String restaurantName = "";
+    private String value;
+    private ServletHandler servletHandler;
+    private ArrayList<Food> foods ;
+    private ArrayList<SaleFood> saleFoods;
+    private void initial(HttpServletRequest request, String from) throws IOException {
+        strAttr = new HashMap<>();
+        foodName = "";
+        restaurantId = "";
+        restaurantName = "";
+        servletHandler = new ServletHandler();
+        value = request.getParameter(from);
+        foods = RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods();
+        saleFoods = RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods();
+    }
+    private void dispatch(HttpServletRequest request, HttpServletResponse response, String address,int statusCode) throws ServletException, IOException {
+        response.setStatus(statusCode);
+        strAttr.put("restaurantId", restaurantId);
+        strAttr.put("restaurantName", restaurantName);
+        strAttr.put("foodName", foodName);
+        servletHandler.setStrAttributes(strAttr,request);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(address);
+        requestDispatcher.forward(request, response);
+    }
+    private String createJsonForm(){
+        return "{\"foodName\":\""+foodName+"\","+"\"restaurantId\":\""+restaurantId+"\"}";
+    }
+    private void goToCorrectPage(HttpServletRequest request, HttpServletResponse response, int condition) throws ServletException, IOException {
+        if(condition == 0){
+            dispatch(request,response,"differentRestaurantError.jsp",400);
+        }
+        else {
+            dispatch(request,response,"cart.jsp",200);
+        }
+    }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String foodInJson="";
         if(request.getParameter("foodInfo")!=null) {
-            String value = request.getParameter("foodInfo");
-            String foodName =new String(value.split(",")[0].getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);
-            String restaurantId = value.split(",")[1];
-            String restaurantName = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
-            foodInJson = "{\"foodName\":\""+foodName+"\","+"\"restaurantId\":\""+restaurantId+"\"}";
-            if(RestaurantManager.getInstance().addToCart(foodInJson) == 0){
-                request.setAttribute("foodName",foodName);
-                request.setAttribute("restaurantId",restaurantId);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("differentRestaurantError.jsp");
-                requestDispatcher.forward(request, response);
-            }
-            else {
-                request.setAttribute("foodName", foodName);
-                request.setAttribute("restaurantId", restaurantId);
-                request.setAttribute("restaurantName", restaurantName);
-            }
+            initial(request, "foodInfo");
+            foodName =new String(value.split(",")[0].getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);
+            restaurantId = value.split(",")[1];
+            restaurantName = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
+            foodInJson = createJsonForm();
+            goToCorrectPage(request,response,RestaurantManager.getInstance().addToCart(foodInJson));
         }
         else if(request.getParameter("cartFromHome")!=null){
-            request.setAttribute("foodName",null);
-            String restaurantId = "";
-            if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0) {
-                restaurantId = RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId();
-                request.setAttribute("restaurantId", restaurantId);
-                request.setAttribute("restaurantName", RestaurantManager.getInstance().searchForRestaurant("{\"id\":\"" + restaurantId + "\"}").getName());
+            initial(request,"cartFromHome");
+            if(foods.size()>0) {
+                restaurantId = foods.get(0).getRestaurantId();
+                restaurantName = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\"" + restaurantId + "\"}").getName();
             }
-            if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size()>0) {
-                request.setAttribute("restaurantId", RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantId());
-                request.setAttribute("restaurantName", RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantName());
+            if(saleFoods.size()>0) {
+                restaurantId = saleFoods.get(0).getRestaurantId();
+                restaurantName = saleFoods.get(0).getRestaurantName();
             }
-            else
-                request.setAttribute("restaurantId","");
+            dispatch(request,response,"cart.jsp",200);
         }
         else if(request.getParameter("cartFromFoodParty")!=null){
-            String value = request.getParameter("cartFromFoodParty");
-            String foodName =new String(value.split(",")[0].getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);
-            String restaurantId = value.split(",")[1];
-            String restaurantName =new String(value.split(",")[3].getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);
-            foodInJson = "{\"foodName\":\""+foodName+"\","+"\"restaurantId\":\""+restaurantId+"\"}";
-            if(RestaurantManager.getInstance().addToCartSaleFood(foodInJson) == 0 ){
-                request.setAttribute("restaurantId",restaurantId);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("differentRestaurantError.jsp");
-                requestDispatcher.forward(request, response);
-            }
-            else {
-                request.setAttribute("restaurantId", restaurantId);
-                request.setAttribute("restaurantName", restaurantName);
-            }
+            initial(request,"cartFromFoodParty");
+            foodName =new String(value.split(",")[0].getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);
+            restaurantId = value.split(",")[1];
+            restaurantName =new String(value.split(",")[3].getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);
+            foodInJson = createJsonForm();
+            goToCorrectPage(request,response,RestaurantManager.getInstance().addToCartSaleFood(foodInJson));
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("cart.jsp");
-        requestDispatcher.forward(request, response);
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

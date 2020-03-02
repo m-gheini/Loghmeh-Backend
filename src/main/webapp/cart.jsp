@@ -10,7 +10,7 @@
 <%if(userCart.getFoods().size()==0 &&
     userCart.getSaleFoods().size()==0){%>
 <div>Your cart is empty!</div>
-<%}%>
+<%}else{%>
 <div><h4><%=restaurantName%><br></div>
 <ul>
     <%for (int i=0;i< userCart.getFoods().size();i++){%>
@@ -28,8 +28,9 @@
 <form action="Finalize" method="POST">
     <button type="submit">finalize</button>
 </form>
-
+<%}%>
 <form action="index.jsp">
     <button type="submit" name="home" value="">Home</button>
 </form>
+
 <jsp:include page="footer.jsp" />

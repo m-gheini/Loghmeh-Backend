@@ -5,18 +5,9 @@
 <jsp:include page="header.jsp" />
 
 <meta http-equiv="refresh" content="1;URL='finalize.jsp'">
-<%String restaurantName ="";
-    String restaurantId="";
-    int finalIndex = RestaurantManager.getInstance().getCurrentUser().getOrders().size()-1;
+<%int finalIndex = RestaurantManager.getInstance().getCurrentUser().getOrders().size()-1;
     Cart order = RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex);
-    if(order.getFoods().size()>0 ) {
-        restaurantId = order.getFoods().get(0).getRestaurantId();
-        restaurantName = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
-    }
-    else if(RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getSaleFoods().size()>0 ) {
-        restaurantName = order.getSaleFoods().get(0).getRestaurantName();
-    }
-%>
+    String restaurantName =RestaurantManager.getInstance().getRestaurantNameForSpecOrder(order);%>
 <div><%=restaurantName%></div>
 <ul>
     <%for (int i=0;i< order.getFoods().size();i++){%>

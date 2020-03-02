@@ -127,6 +127,18 @@ public class RestaurantManager {
         }
         return restaurantName;
     }
+    public String getRestaurantNameForSpecOrder(Cart order) throws IOException {
+        String restaurantName="";
+        String restaurantId = "";
+        if(order.getFoods().size()>0 ) {
+            restaurantId = order.getFoods().get(0).getRestaurantId();
+            restaurantName = searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
+        }
+        else if(order.getSaleFoods().size()>0 ) {
+            restaurantName = order.getSaleFoods().get(0).getRestaurantName();
+        }
+        return restaurantName;
+    }
     public int makeTotal(){
         int total=0;
         for (int i =0;i<getCurrentUser().getMyCart().getFoods().size();i++){

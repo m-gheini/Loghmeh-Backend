@@ -41,7 +41,8 @@
         <%if(saleFood.getCount()>0){%>
         <td>
             <form action="Cart" method="post">
-                <button type="submit" name="cartFromFoodParty" value="<%=saleFood.getName()%>,<%=saleFood.getRestaurantId()%>,<%=saleFood.getPrice()%>">add To Cart</button>
+                <button type="submit" name="cartFromFoodParty"
+                        value="<%=saleFood.getName()%>,<%=saleFood.getRestaurantId()%>,<%=saleFood.getPrice()%>">add To Cart</button>
             </form>
         </td>
         <%}%>

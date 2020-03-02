@@ -19,8 +19,8 @@
 
 <div><h4><%=restaurantName%><br></div>
 <ul>
-    <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size();i++){%>
-    <li ><%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(i).getName()%></li>
+    <%for (int i=0;i< userCart.getFoods().size();i++){%>
+    <li ><%=userCart.getNumberOfFood().get(i)%> : ‌ <%=userCart.getFoods().get(i).getName()%></li>
     <%}%>
 </ul>
 <%if(userCart.getFoods().size() != 0){%>

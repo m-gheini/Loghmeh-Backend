@@ -23,7 +23,6 @@ public class Cart extends HttpServlet {
             String value = request.getParameter("foodInfo");
             String foodName =new String(value.split(",")[0].getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);
             String restaurantId = value.split(",")[1];
-            int price = Integer.parseInt(value.split(",")[2]);
             foodInJson = "{\"foodName\":\""+foodName+"\","+"\"restaurantId\":\""+restaurantId+"\"}";
             if(RestaurantManager.getInstance().addToCart(foodInJson) == 0){
                 request.setAttribute("foodName",foodName);

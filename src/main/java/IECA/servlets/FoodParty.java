@@ -13,13 +13,20 @@ import java.io.IOException;
 
 @WebServlet("/FoodParty")
 public class FoodParty extends HttpServlet {
+    private ServletHandler servletHandler;
+    public void initial(){
+        servletHandler = new ServletHandler();
+    }
+    public void dispatch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        servletHandler.dispatchTo(request,response,"foodParty.jsp");
+    }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("foodParty.jsp");
-        requestDispatcher.forward(request, response);
+        initial();
+        dispatch(request,response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("foodParty.jsp");
-        requestDispatcher.forward(request, response);
+        initial();
+        dispatch(request,response);
     }
 }

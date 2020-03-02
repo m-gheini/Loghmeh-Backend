@@ -27,11 +27,13 @@ public class Finalize extends HttpServlet {
         for (int i =0;i<RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size();i++){
             total+=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfSaleFood().get(i)*
                     RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(i).getPrice();
-            System.out.println(total+"/*************************************");
         }
-        if(RestaurantManager.getInstance().getCurrentUser().getCredit()>=total &&
-                (RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0)||
-                (RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size()>0)){
+        System.out.println(total+"/*************************************"+RestaurantManager.getInstance().getCurrentUser().getCredit());
+        if(total>RestaurantManager.getInstance().getCurrentUser().getCredit())
+            System.out.println("NOT ENOUGH CREDIT");
+        String restaurantId="";
+        String restaurantName="";
+        if(RestaurantManager.getInstance().getCurrentUser().getCredit()>=total && total!=0){
             RestaurantManager.getInstance().getCurrentUser().addCredit(-total);
             IECA.logic.Cart previousCart = new IECA.logic.Cart();
             ArrayList<Food> foods = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods());
@@ -46,7 +48,6 @@ public class Finalize extends HttpServlet {
             previousCart.setNumberOfSaleFood(saleCounts);
             RestaurantManager.getInstance().getCurrentUser().addOrder(previousCart);
             DeliveryScheduler deliveryScheduler = new DeliveryScheduler();
-            String restaurantId="";
             if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0)
                 restaurantId = (RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId());
             else if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size()>0)
@@ -57,9 +58,16 @@ public class Finalize extends HttpServlet {
         }
         else{
             if(RestaurantManager.getInstance().getCurrentUser().getCredit()<total) {
-                request.setAttribute("foodName", null);
-                request.setAttribute("restaurantId", RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId());
-                request.setAttribute("cart", null);
+                if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0) {
+                    restaurantId = (RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId());
+                    restaurantName =RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
+                }
+                else if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size()>0) {
+                    restaurantId = (RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantId());
+                    restaurantName = (RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantName());
+                }
+                request.setAttribute("restaurantId",restaurantId);
+                request.setAttribute("restaurantName",restaurantName);
                 response.setStatus(400);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("enoughCreditError.jsp");
                 requestDispatcher.forward(request, response);

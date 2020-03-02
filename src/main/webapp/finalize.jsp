@@ -8,7 +8,6 @@
 <meta http-equiv="refresh" content="1;URL='finalize.jsp'">
 <body><%String restaurantName ="";
     String restaurantId="";
-    Restaurant restaurant = new Restaurant();
     int finalIndex = RestaurantManager.getInstance().getCurrentUser().getOrders().size()-1;
     if(RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getFoods().size()>0 ) {
         restaurantId = RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).getFoods().get(0).getRestaurantId();

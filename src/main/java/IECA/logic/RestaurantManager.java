@@ -194,7 +194,7 @@ public class RestaurantManager {
         int success = currentUser.getMyCart().addSaleFood(jsonInString, saleFoods);
         return success;
     }
-    public boolean finalizeOrder() {
+    public boolean finalizeOrder(int credit) {
         int totalCost=0;
         for (int i = 0; i<currentUser.getMyCart().getFoods().size();i++){
             for(int j =0;j<currentUser.getMyCart().getNumberOfFood().get(i);j++){

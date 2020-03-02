@@ -34,10 +34,7 @@ public class ServletHandler {
             request.setAttribute((String) mapElement.getKey(),mapElement.getValue());
         }
     }
-    public void addIntAttributes(String key, Integer value,HttpServletRequest request){
-        intAttributes.put(key,value);
-        request.setAttribute(key, value);
-    }
+
     public void setStrAttributes(HashMap<String, String> strAttributes,HttpServletRequest request) {
         this.strAttributes = strAttributes;
         Iterator iterator = strAttributes.entrySet().iterator();
@@ -46,10 +43,7 @@ public class ServletHandler {
             request.setAttribute((String) mapElement.getKey(),mapElement.getValue());
         }
     }
-    public void addStrAttributes(String key,String value,HttpServletRequest request){
-        strAttributes.put(key,value);
-        request.setAttribute(key, value);
-    }
+
     public void dispatchTo(HttpServletRequest request, HttpServletResponse response, String address) throws ServletException, IOException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(address);
         requestDispatcher.forward(request, response);

@@ -15,9 +15,18 @@ import java.net.InetAddress;
 
 @WebServlet("/GetRestaurants")
 public class GetRestaurants extends HttpServlet {
+    private ServletHandler servletHandler;
+
+    public void initial(){
+        servletHandler = new ServletHandler();
+    }
+
+    public void dispatch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        servletHandler.dispatchTo(request, response,"GetRestaurants.jsp");
+    }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("GetRestaurants.jsp");
-        requestDispatcher.forward(request, response);
+        initial();
+        dispatch(request,response);
         }
 
 

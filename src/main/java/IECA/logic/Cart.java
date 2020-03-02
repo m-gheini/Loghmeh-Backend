@@ -45,14 +45,20 @@ public class Cart {
         }
         for (SaleFood allSaleFood : allSaleFoods) {
             if (foodName.equals(allSaleFood.getName()) && restaurantId.equals(allSaleFood.getRestaurantId())) {
-
-                if (found) {
-                    numberOfSaleFood.set(index, numberOfSaleFood.get(index) + 1);
-                } else {
-                    saleFoods.add(allSaleFood);
-                    numberOfSaleFood.add(1);
+                if(allSaleFood.getCount() > 0) {
+                    if (found) {
+                        numberOfSaleFood.set(index, numberOfSaleFood.get(index) + 1);
+                        allSaleFood.updateCount();
+                    } else {
+                        saleFoods.add(allSaleFood);
+                        numberOfSaleFood.add(1);
+                        allSaleFood.updateCount();
+                    }
+                    return 1;
                 }
-                return 1;
+                else{
+                    System.out.println("NOT ENOUGH COUNT!!!");
+                }
             }
         }
         return 0;

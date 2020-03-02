@@ -10,7 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class FoodPartyScheduler extends TimerTask {
-    private static final int HALFHOUR=30000;//TODO 1800000
+    private static final int HALFHOUR=1800000;//TODO 30000
     private Timer timer;
 
     public FoodPartyScheduler() {

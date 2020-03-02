@@ -47,6 +47,10 @@ public class SaleFood extends Food{
         this.restaurantLocation = restaurantLocation;
     }
 
+    public void updateCount(){
+        this.count--;
+    }
+
     public String toString(){
         return "{ "+"\"count\" : " + getCount() +"\",oldPrice\" : " + getOldPrice() +"\",name\" : " + getName() + ", \"description\" : " + getDescription() + ",\"popularity\" : " + getPopularity() + ", \"price\" : " + getPrice() + ", \"image\" : " + getImage() +" } "  ;
     }

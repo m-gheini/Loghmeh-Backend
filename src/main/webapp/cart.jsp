@@ -20,7 +20,7 @@
     <li ><%=userCart.getNumberOfSaleFood().get(i)%> : ‌ <%=userCart.getSaleFoods().get(i).getName()%></li>
     <%}%>
 </ul>
-<%if(!(restaurantId.equals("")) && request.getParameter("cartFromFoodParty")==null){%>
+<%if(!(restaurantId.equals("")) && userCart.getSaleFoods().size()==0){%>
 <form action="SpecificRestaurant" method="post">
     <button type="submit" name="restaurantInfo" value="<%=restaurantId%>">Go Back To Restaurant To Order More</button>
 </form>

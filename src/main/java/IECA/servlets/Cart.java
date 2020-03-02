@@ -45,6 +45,10 @@ public class Cart extends HttpServlet {
                 request.setAttribute("restaurantId", restaurantId);
                 request.setAttribute("restaurantName", RestaurantManager.getInstance().searchForRestaurant("{\"id\":\"" + restaurantId + "\"}").getName());
             }
+            if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size()>0) {
+                request.setAttribute("restaurantId", RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantId());
+                request.setAttribute("restaurantName", RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantName());
+            }
             else
                 request.setAttribute("restaurantId","");
         }

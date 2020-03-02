@@ -28,14 +28,12 @@ public class Cart extends HttpServlet {
             if(RestaurantManager.getInstance().addToCart(foodInJson) == 0){
                 request.setAttribute("foodName",foodName);
                 request.setAttribute("restaurantId",restaurantId);
-                request.setAttribute("cart",null);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("differentRestaurantError.jsp");
                 requestDispatcher.forward(request, response);
             }
             else {
                 request.setAttribute("foodName", foodName);
                 request.setAttribute("restaurantId", restaurantId);
-                request.setAttribute("cart", null);
             }
         }
         else if(request.getParameter("cartFromHome")!=null){
@@ -44,7 +42,6 @@ public class Cart extends HttpServlet {
                 request.setAttribute("restaurantId",RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId());
             else
                 request.setAttribute("restaurantId","");
-            request.setAttribute("cart",null);
         }
         else if(request.getParameter("cartFromFoodParty")!=null){
             String value = request.getParameter("cartFromFoodParty");

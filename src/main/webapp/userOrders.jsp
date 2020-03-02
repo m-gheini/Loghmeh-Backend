@@ -1,26 +1,34 @@
 <%@ page import="IECA.logic.RestaurantManager" %>
 <%@ page import="IECA.servlets.UserOrders" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="IECA.logic.Food" %>
+<%@ page import="IECA.logic.SaleFood" %>
+<%@ page import="IECA.logic.Cart" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="header.jsp" />
 
-<%Integer index = (Integer) request.getAttribute("i");
-    String restaurantName ="";
-    restaurantName = (String) request.getAttribute("restaurantName");
+<%  RestaurantManager restaurantManager = RestaurantManager.getInstance();
+    Integer index = (Integer) request.getAttribute("i");
+    String restaurantName = (String) request.getAttribute("restaurantName");
+    ArrayList<Food> foods = restaurantManager.getCurrentUser().getOrders().get(index).getFoods();
+    ArrayList<Integer> numberOfFoods = restaurantManager.getCurrentUser().getOrders().get(index).getNumberOfFood();
+    ArrayList<SaleFood> saleFoods = restaurantManager.getCurrentUser().getOrders().get(index).getSaleFoods();
+    ArrayList<Integer> numberOfSaleFoods = restaurantManager.getCurrentUser().getOrders().get(index).getNumberOfSaleFood();
+    Cart order = restaurantManager.getCurrentUser().getOrders().get(index);
 %>
     <div><%=restaurantName%></div>
 <ul>
-    <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getOrders().get(index).getFoods().size();i++){%>
-    <li ><%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(index).getNumberOfFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(index).getFoods().get(i).getName()%></li>
+    <%for (int i=0;i< foods.size();i++){%>
+    <li ><%=numberOfFoods.get(i)%> : ‌ <%=foods.get(i).getName()%></li>
     <%}%>
-    <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getOrders().get(index).getSaleFoods().size();i++){%>
-    <li ><%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(index).getNumberOfSaleFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(index).getSaleFoods().get(i).getName()%></li>
+    <%for (int i=0;i< saleFoods.size();i++){%>
+    <li ><%=numberOfSaleFoods.get(i)%> : ‌ <%=saleFoods.get(i).getName()%></li>
     <%}%>
 </ul>
 <div >your order has been successfully finalized<br></div>
-<div>status: <%=RestaurantManager.getInstance().getCurrentUser().getOrders().get(index).getStatus()%><br></div>
-<%if(RestaurantManager.getInstance().getCurrentUser().getOrders().get(index).getStatus().equals("delivering")){%>
-<div>remained time : <%=(int)(RestaurantManager.getInstance().getBestTime()/60)%> :
-    <%=(int)(RestaurantManager.getInstance().getBestTime()%60)%>s<br></div>
+<div>status: <%=order.getStatus()%><br></div>
+<%if(order.getStatus().equals("delivering")){%>
+<div>remained time : <%=(int)(restaurantManager.getBestTime()/60)%> : <%=(int)(restaurantManager.getBestTime()%60)%>s<br></div>
 <%}%>
 <form action="UserOrders" method="post">
     <script>setInterval(function () {document.getElementById("cart").click();}, 1000);</script>

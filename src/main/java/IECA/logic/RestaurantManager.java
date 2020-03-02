@@ -63,11 +63,11 @@ public class RestaurantManager {
             instance = new RestaurantManager();
         return instance;
     }
-    public int getBestDelivery(Restaurant restaurant){
+    public int getBestDelivery(String restaurantId) throws IOException {
         int min = 999999999;
         for(Delivery delivery:deliveries){
-            if (delivery.getTime(restaurant)<min)
-                min = (int)delivery.getTime(restaurant);
+            if (delivery.getTime(restaurantId)<min)
+                min = (int)delivery.getTime(restaurantId);
         }
         bestTime = min;
         return min;

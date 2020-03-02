@@ -1,5 +1,7 @@
 package IECA.logic;
 
+import java.io.IOException;
+
 public class Delivery {
     private String id;
     private int velocity;
@@ -28,10 +30,16 @@ public class Delivery {
     public void setLocation(Location location) {
         this.location = location;
     }
-    public double getTime(Restaurant restaurant){
-        return  (Math.sqrt(Math.pow(location.getX()-restaurant.getLocation().getX(), 2) +
-                Math.pow(location.getY()-restaurant.getLocation().getY(), 2))+
-                (Math.sqrt(Math.pow(restaurant.getLocation().getX(), 2) +
-                        Math.pow(restaurant.getLocation().getY(), 2))))/velocity;
+    public double getTime(String restaurantId) throws IOException {
+        Location restaurantLocation = new Location();
+        String jsonString = "{\"restaurantId\":\""+restaurantId+"\"}";
+        if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0)
+            restaurantLocation = RestaurantManager.getInstance().searchForRestaurant(jsonString).getLocation();
+        else if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size()>0)
+            restaurantLocation = RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantLocation();
+        return  (Math.sqrt(Math.pow(location.getX()-restaurantLocation.getX(), 2) +
+                Math.pow(location.getY()-restaurantLocation.getY(), 2))+
+                (Math.sqrt(Math.pow(restaurantLocation.getX(), 2) +
+                        Math.pow(restaurantLocation.getY(), 2))))/velocity;
     }
 }

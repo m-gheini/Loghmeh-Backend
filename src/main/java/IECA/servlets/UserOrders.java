@@ -17,7 +17,18 @@ public class UserOrders extends HttpServlet {
         System.out.println(i);
         IECA.logic.Cart previousCart = RestaurantManager.getInstance().getCurrentUser().getOrders().get(i);
         request.setAttribute("cart",previousCart);
-        request.setAttribute("restaurantId",RestaurantManager.getInstance().getCurrentUser().getOrders().get(i).getFoods().get(0).getRestaurantId());
+        String restaurantId = "";
+        String restaurantName = "";
+        if(RestaurantManager.getInstance().getCurrentUser().getOrders().get(i).getFoods().size()>0) {
+            restaurantId = RestaurantManager.getInstance().getCurrentUser().getOrders().get(i).getFoods().get(0).getRestaurantId();
+            restaurantName = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
+        }
+        else if(RestaurantManager.getInstance().getCurrentUser().getOrders().get(i).getSaleFoods().size()>0) {
+            restaurantId = RestaurantManager.getInstance().getCurrentUser().getOrders().get(i).getSaleFoods().get(0).getRestaurantId();
+            restaurantName = RestaurantManager.getInstance().getCurrentUser().getOrders().get(i).getSaleFoods().get(0).getRestaurantName();
+        }
+        request.setAttribute("restaurantId", restaurantId);
+        request.setAttribute("restaurantName",restaurantName);
         request.setAttribute("i",i);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("userOrders.jsp");
         requestDispatcher.forward(request, response);

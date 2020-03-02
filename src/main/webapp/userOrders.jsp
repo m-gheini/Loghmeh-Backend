@@ -3,10 +3,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="header.jsp" />
 
-<%      String restaurantId= (String) request.getAttribute("restaurantId");
+<%  String restaurantId= (String) request.getAttribute("restaurantId");
     Integer index = (Integer) request.getAttribute("i");
     String restaurantName ="";
-    restaurantName = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
+    restaurantName = (String) request.getAttribute("restaurantName");
 %>
     <div><%=restaurantName%></div>
 <ul>

@@ -9,15 +9,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class DeliveryScheduler extends TimerTask{
-    Restaurant restaurant = new Restaurant();
+    String restaurantId = "";
     private Timer timer ;
 
-    public Restaurant getRestaurant() {
-        return restaurant;
+    public String getRestaurant() {
+        return restaurantId;
     }
 
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
+    public void setRestaurant(String restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
     public DeliveryScheduler(){
@@ -40,7 +40,7 @@ public class DeliveryScheduler extends TimerTask{
             try {
                 int finalIndex = RestaurantManager.getInstance().getCurrentUser().getOrders().size()-1;
                 RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).setStatus("delivering");
-                RestaurantManager.getInstance().getBestDelivery(restaurant);
+                RestaurantManager.getInstance().getBestDelivery(restaurantId);
                 TimeScheduler timeScheduler = new TimeScheduler();
             } catch (IOException e) {
                 e.printStackTrace();

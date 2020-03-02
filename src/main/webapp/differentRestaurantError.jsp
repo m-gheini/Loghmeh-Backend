@@ -5,15 +5,19 @@
 <%  Cart userCart = RestaurantManager.getInstance().getCurrentUser().getMyCart();
     String restaurantName ="";
     String restaurantId = "";
-    if(userCart.getFoods().size() != 0)
+    if(userCart.getFoods().size() != 0) {
         restaurantId = userCart.getFoods().get(0).getRestaurantId();
-    else
+        restaurantName = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\"" + restaurantId + "\"}").getName();
+    }
+    else {
         restaurantId = userCart.getSaleFoods().get(0).getRestaurantId();
+        restaurantName = RestaurantManager.getInstance().getSaleFoods().get(0).getRestaurantName();
+    }
 %>
 
 <div>You already have some order from different restaurant!</div>
 
-<div><h4><%=RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName()%><br></div>
+<div><h4><%=restaurantName%><br></div>
 <ul>
     <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size();i++){%>
     <li ><%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(i).getName()%></li>

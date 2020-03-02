@@ -1,26 +1,23 @@
 <%@ page import="IECA.logic.RestaurantManager" %>
 <%@ page import="IECA.logic.Cart" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<jsp:include page="header.jsp" />
 <%
-String restaurantId= (String) request.getAttribute("restaurantId");
+    String restaurantId= (String) request.getAttribute("restaurantId");
+    String restaurantName = (String) request.getAttribute("restaurantName");
+    Cart userCart = RestaurantManager.getInstance().getCurrentUser().getMyCart();
 %>
-<%if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()==0 &&
-    RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size()==0){%>
+<jsp:include page="header.jsp" />
+<%if(userCart.getFoods().size()==0 &&
+    userCart.getSaleFoods().size()==0){%>
 <div>Your cart is empty!</div>
 <%}%>
-<%if(!(restaurantId.equals("")) && request.getParameter("cartFromFoodParty")==null){%>
-<div><h4><%=RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName()%><br></div>
-<%}%>
-<%if(request.getParameter("cartFromFoodParty")!=null){%>
-<div><h4><%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantName()%></h4></div>
-<%}%>
+<div><h4><%=restaurantName%><br></div>
 <ul>
-    <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size();i++){%>
-    <li ><%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(i).getName()%></li>
+    <%for (int i=0;i< userCart.getFoods().size();i++){%>
+    <li ><%=userCart.getNumberOfFood().get(i)%> : ‌ <%=userCart.getFoods().get(i).getName()%></li>
     <%}%>
-    <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size();i++){%>
-    <li ><%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfSaleFood().get(i)%> : ‌ <%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(i).getName()%></li>
+    <%for (int i=0;i< userCart.getSaleFoods().size();i++){%>
+    <li ><%=userCart.getNumberOfSaleFood().get(i)%> : ‌ <%=userCart.getSaleFoods().get(i).getName()%></li>
     <%}%>
 </ul>
 <%if(!(restaurantId.equals("")) && request.getParameter("cartFromFoodParty")==null){%>

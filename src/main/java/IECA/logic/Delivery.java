@@ -32,7 +32,7 @@ public class Delivery {
     }
     public double getTime(String restaurantId) throws IOException {
         Location restaurantLocation = new Location();
-        String jsonString = "{\"restaurantId\":\""+restaurantId+"\"}";
+        String jsonString = "{\"id\":\""+restaurantId+"\"}";
         if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0)
             restaurantLocation = RestaurantManager.getInstance().searchForRestaurant(jsonString).getLocation();
         else if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size()>0)

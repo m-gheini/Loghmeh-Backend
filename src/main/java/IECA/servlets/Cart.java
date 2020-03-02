@@ -20,13 +20,14 @@ import java.util.Iterator;
 @WebServlet("/Cart")
 public class Cart extends HttpServlet {
     private HashMap<String,String> strAttr;
-    private String foodName = "";
-    private String restaurantId = "";
-    private String restaurantName = "";
+    private String foodName;
+    private String restaurantId ;
+    private String restaurantName;
     private String value;
     private ServletHandler servletHandler;
     private ArrayList<Food> foods ;
     private ArrayList<SaleFood> saleFoods;
+
     private void initial(HttpServletRequest request, String from) throws IOException {
         strAttr = new HashMap<>();
         foodName = "";
@@ -43,12 +44,13 @@ public class Cart extends HttpServlet {
         strAttr.put("restaurantName", restaurantName);
         strAttr.put("foodName", foodName);
         servletHandler.setStrAttributes(strAttr,request);
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(address);
-        requestDispatcher.forward(request, response);
+        servletHandler.dispatchTo(request,response,address);
     }
+
     private String createJsonForm(){
         return "{\"foodName\":\""+foodName+"\","+"\"restaurantId\":\""+restaurantId+"\"}";
     }
+
     private void goToCorrectPage(HttpServletRequest request, HttpServletResponse response, int condition) throws ServletException, IOException {
         if(condition == 0){
             dispatch(request,response,"differentRestaurantError.jsp",400);
@@ -69,14 +71,8 @@ public class Cart extends HttpServlet {
         }
         else if(request.getParameter("cartFromHome")!=null){
             initial(request,"cartFromHome");
-            if(foods.size()>0) {
-                restaurantId = foods.get(0).getRestaurantId();
-                restaurantName = RestaurantManager.getInstance().searchForRestaurant("{\"id\":\"" + restaurantId + "\"}").getName();
-            }
-            if(saleFoods.size()>0) {
-                restaurantId = saleFoods.get(0).getRestaurantId();
-                restaurantName = saleFoods.get(0).getRestaurantName();
-            }
+            restaurantId = RestaurantManager.getInstance().setRestaurantId(restaurantId);
+            restaurantName = RestaurantManager.getInstance().setRestaurantName(restaurantName,restaurantId);
             dispatch(request,response,"cart.jsp",200);
         }
         else if(request.getParameter("cartFromFoodParty")!=null){

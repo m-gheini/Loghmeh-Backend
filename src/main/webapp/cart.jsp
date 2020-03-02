@@ -5,11 +5,14 @@
 <%
 String restaurantId= (String) request.getAttribute("restaurantId");
 %>
-<%if(restaurantId==""){%>
+<%if(restaurantId.equals("")){%>
 <div>Your cart is empty!</div>
 <%}%>
-<%if(!(restaurantId=="")){%>
+<%if(!(restaurantId.equals("")) && request.getParameter("cartFromFoodParty")==null){%>
 <div><h4><%=RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName()%><br></div>
+<%}%>
+<%if(request.getParameter("cartFromFoodParty")!=null){%>
+<div><h4><%=RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantName()%></h4></div>
 <%}%>
 <ul>
     <%for (int i=0;i< RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size();i++){%>

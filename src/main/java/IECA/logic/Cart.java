@@ -11,14 +11,14 @@ import IECA.logic.schedulers.*;
 public class Cart {
     private ArrayList<Food> foods ;
     private ArrayList<Integer> numberOfFood ;
-    private ArrayList<Food> saleFoods ;
+    private ArrayList<SaleFood> saleFoods ;
     private ArrayList<Integer> numberOfSaleFood ;
     private String status;
     int index;
     public Cart() {
         foods = new ArrayList<Food>();
         numberOfFood = new ArrayList<Integer>();
-        saleFoods = new ArrayList<Food>();
+        saleFoods = new ArrayList<SaleFood>();
         numberOfSaleFood = new ArrayList<Integer>();
         status = "finding delivery";
         index = 0;
@@ -31,6 +31,7 @@ public class Cart {
         });
         String foodName = (String) jsonMap.get("foodName");
         String restaurantId = (String) jsonMap.get("restaurantId");
+        System.out.println("ID---:>"+restaurantId);
         int index = 0;
         System.out.println("+*+*+*+*+*+*+*+*+()()()()()FoodSaleC------>"+saleFoods.size());
         for (int i = 0; i < saleFoods.size(); i++) {
@@ -48,16 +49,16 @@ public class Cart {
                 if(allSaleFood.getCount() > 0) {
                     if (found) {
                         numberOfSaleFood.set(index, numberOfSaleFood.get(index) + 1);
-                        allSaleFood.updateCount();
                     } else {
                         saleFoods.add(allSaleFood);
                         numberOfSaleFood.add(1);
-                        allSaleFood.updateCount();
                     }
+                    allSaleFood.updateCount();
                     return 1;
                 }
                 else{
                     System.out.println("NOT ENOUGH COUNT!!!");
+                    //TODO:error for count of sale food
                 }
             }
         }
@@ -67,7 +68,7 @@ public class Cart {
         return index;
     }
 
-    public ArrayList<Food> getSaleFoods() {
+    public ArrayList<SaleFood> getSaleFoods() {
         return saleFoods;
     }
 
@@ -90,7 +91,7 @@ public class Cart {
         return numberOfFood;
     }
 
-    public void setSaleFoods(ArrayList<Food> saleFoods) {
+    public void setSaleFoods(ArrayList<SaleFood> saleFoods) {
         this.saleFoods = saleFoods;
     }
 

@@ -28,9 +28,6 @@ public class Finalize extends HttpServlet {
             total+=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfSaleFood().get(i)*
                     RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(i).getPrice();
         }
-        System.out.println(total+"/*************************************"+RestaurantManager.getInstance().getCurrentUser().getCredit());
-        if(total>RestaurantManager.getInstance().getCurrentUser().getCredit())
-            System.out.println("NOT ENOUGH CREDIT");
         String restaurantId="";
         String restaurantName="";
         if(RestaurantManager.getInstance().getCurrentUser().getCredit()>=total && total!=0){

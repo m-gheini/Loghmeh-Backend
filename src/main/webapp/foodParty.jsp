@@ -30,16 +30,21 @@
         <td><%=saleFood.getName()%></td>
         <td><img class="logo" src=" <%= saleFood.getImage()%>" alt="logo"></td>
         <td><%=saleFood.getDescription()%></td>
+        <%if(saleFood.getCount()>0){%>
         <td><%=saleFood.getCount()%></td>
+        <%}else{%>
+        <td> finished </td>
+        <%}%>
         <td class="old-price"><%=saleFood.getOldPrice()%></td>
         <td><%=saleFood.getPrice()%></td>
         <td><%=saleFood.getPopularity()%></td>
-
+        <%if(saleFood.getCount()>0){%>
         <td>
             <form action="Cart" method="post">
                 <button type="submit" name="cartFromFoodParty" value="<%=saleFood.getName()%>,<%=saleFood.getRestaurantId()%>,<%=saleFood.getPrice()%>">add To Cart</button>
             </form>
         </td>
+        <%}%>
     </tr>
     <%}%>
 </table>

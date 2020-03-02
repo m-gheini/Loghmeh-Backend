@@ -16,7 +16,7 @@ public class FoodPartyScheduler extends TimerTask {
 
     public FoodPartyScheduler() {
         timer = new Timer();
-        timer.schedule(this, 0, 30000);
+        timer.schedule(this, 0, HALFHOUR);
     }
 
     @Override

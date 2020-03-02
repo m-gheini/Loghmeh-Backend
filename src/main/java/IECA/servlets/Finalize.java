@@ -14,66 +14,74 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @WebServlet("/Finalize")
 public class Finalize extends HttpServlet {
+    private int total;
+    private String restaurantName;
+    private String restaurantId;
+    private ServletHandler servletHandler;
+
+    private IECA.logic.Cart previousCart;
+    private ArrayList<Food> foods;
+    private ArrayList<SaleFood> saleFoods;
+    private ArrayList<Integer> counts;
+    private ArrayList<Integer> saleCounts;
+    private HashMap<String,String> strAttr;
+
+    public void initial() throws IOException {
+        total = RestaurantManager.getInstance().makeTotal();
+        restaurantId = "";
+        restaurantName = "";
+        servletHandler = new ServletHandler();
+    }
+    public void initForFinalize() throws IOException {
+        previousCart = new IECA.logic.Cart();
+        foods = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods());
+        saleFoods = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods());
+        counts = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood());
+        saleCounts = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfSaleFood());
+        previousCart.setFoods(foods);
+        previousCart.setSaleFoods(saleFoods);
+        previousCart.setNumberOfFood(counts);
+        previousCart.setNumberOfSaleFood(saleCounts);
+        RestaurantManager.getInstance().getCurrentUser().addOrder(previousCart);
+
+    }
+
+    public void initialForErrors(HttpServletRequest request){
+        strAttr = new HashMap<>();
+        strAttr.put("restaurantId", restaurantId);
+        strAttr.put("restaurantName", restaurantName);
+        servletHandler.setStrAttributes(strAttr,request);
+
+    }
+
+    public void dispatch(HttpServletRequest request, HttpServletResponse response,String address,int errorCode) throws ServletException, IOException {
+        response.setStatus(errorCode);
+        servletHandler.dispatchTo(request,response,address);
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int total = 0;
-        for (int i =0;i<RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size();i++){
-            total+=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood().get(i)*
-                    RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(i).getPrice();
-        }
-        for (int i =0;i<RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size();i++){
-            total+=RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfSaleFood().get(i)*
-                    RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(i).getPrice();
-        }
-        String restaurantId="";
-        String restaurantName="";
+        initial();
+        restaurantId =  RestaurantManager.getInstance().setRestaurantId(restaurantId);
+
         if(RestaurantManager.getInstance().getCurrentUser().getCredit()>=total && total!=0){
             RestaurantManager.getInstance().getCurrentUser().addCredit(-total);
-            IECA.logic.Cart previousCart = new IECA.logic.Cart();
-            ArrayList<Food> foods = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods());
-            ArrayList<SaleFood> saleFoods = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods());
-            previousCart.setFoods(foods);
-            previousCart.setSaleFoods(saleFoods);
-
-            ArrayList<Integer> counts = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood());
-            ArrayList<Integer> saleCounts = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfSaleFood());
-
-            previousCart.setNumberOfFood(counts);
-            previousCart.setNumberOfSaleFood(saleCounts);
-            RestaurantManager.getInstance().getCurrentUser().addOrder(previousCart);
+            initForFinalize();
             DeliveryScheduler deliveryScheduler = new DeliveryScheduler();
-            if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0)
-                restaurantId = (RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId());
-            else if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size()>0)
-                restaurantId = (RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantId());
             deliveryScheduler.setRestaurant(restaurantId);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("finalize.jsp");
-            requestDispatcher.forward(request, response);
+            dispatch(request,response,"finalize.jsp",200);
         }
         else{
             if(RestaurantManager.getInstance().getCurrentUser().getCredit()<total) {
-                if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0) {
-                    restaurantId = (RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId());
-                    restaurantName =RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
-                }
-                else if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size()>0) {
-                    restaurantId = (RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantId());
-                    restaurantName = (RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantName());
-                }
-                request.setAttribute("restaurantId",restaurantId);
-                request.setAttribute("restaurantName",restaurantName);
-                response.setStatus(400);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("enoughCreditError.jsp");
-                requestDispatcher.forward(request, response);
+                restaurantName = RestaurantManager.getInstance().setRestaurantName(restaurantName,restaurantId);
+                initialForErrors(request);
+                dispatch(request,response,"enoughCreditError.jsp",400);
             }
-            else{
-                response.setStatus(400);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("emptyCartError.jsp");
-                requestDispatcher.forward(request, response);
-            }
+            else
+                dispatch(request,response,"emptyCartError.jsp",400);
         }
 
     }

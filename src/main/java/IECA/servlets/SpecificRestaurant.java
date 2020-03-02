@@ -22,8 +22,7 @@ public class SpecificRestaurant extends HttpServlet {
 
     public void dispatch(HttpServletRequest request, HttpServletResponse response,String address,int errorCode) throws ServletException, IOException {
         response.setStatus(errorCode);
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(address);
-        requestDispatcher.forward(request, response);
+        servletHandler.dispatchTo(request,response,address);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

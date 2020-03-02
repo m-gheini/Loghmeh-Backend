@@ -110,6 +110,35 @@ public class RestaurantManager {
         }
         return totallyNotFound;
     }
+    public String setRestaurantId(String restaurantId) throws IOException {
+        if(getCurrentUser().getMyCart().getFoods().size()>0)
+            restaurantId = getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId();
+        else if(getCurrentUser().getMyCart().getSaleFoods().size()>0)
+            restaurantId = (RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantId());
+        return restaurantId;
+    }
+    public String setRestaurantName(String restaurantName,String restaurantId) throws IOException {
+        restaurantId = setRestaurantId(restaurantId);
+        if(getCurrentUser().getMyCart().getFoods().size()>0) {
+            restaurantName =RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
+        }
+        else if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().size()>0) {
+            restaurantName = (RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantName());
+        }
+        return restaurantName;
+    }
+    public int makeTotal(){
+        int total=0;
+        for (int i =0;i<getCurrentUser().getMyCart().getFoods().size();i++){
+            total+=getCurrentUser().getMyCart().getNumberOfFood().get(i)*
+                    getCurrentUser().getMyCart().getFoods().get(i).getPrice();
+        }
+        for (int i =0;i<getCurrentUser().getMyCart().getSaleFoods().size();i++){
+            total+=getCurrentUser().getMyCart().getNumberOfSaleFood().get(i)*
+                    getCurrentUser().getMyCart().getSaleFoods().get(i).getPrice();
+        }
+        return total;
+    }
     public boolean searchInProperResById(String resId) throws IOException {
         boolean notFound = true;
         for (Restaurant restaurant : RestaurantManager.getInstance().getRestaurants()) {

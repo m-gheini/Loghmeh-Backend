@@ -42,7 +42,7 @@
         <td>
             <form action="Cart" method="post">
                 <button type="submit" name="cartFromFoodParty"
-                        value="<%=saleFood.getName()%>,<%=saleFood.getRestaurantId()%>,<%=saleFood.getPrice()%>">add To Cart</button>
+                        value="<%=saleFood.getName()%>,<%=saleFood.getRestaurantId()%>,<%=saleFood.getPrice()%>,<%=saleFood.getRestaurantName()%>">add To Cart</button>
             </form>
         </td>
         <%}%>

@@ -120,6 +120,16 @@ public class Cart {
         saleFoods.clear();
         numberOfSaleFood.clear();
     }
+    public void deleteSaleFood(SaleFood saleFood){
+        for (int i=0;i<saleFoods.size();i++){
+            if(saleFood.getName().equals(saleFoods.get(i).getName()) &&
+                    saleFood.getRestaurantId().equals(saleFoods.get(i).getRestaurantId())){
+                saleFoods.remove(i);
+                numberOfSaleFood.remove(i);
+                break;
+            }
+        }
+    }
     public int addFood(String jsonString, ArrayList<Food> allFoods) throws IOException {
         boolean found = false;
         boolean totallyFound = false;

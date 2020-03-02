@@ -3,6 +3,7 @@ import IECA.database.DeliveryDataset;
 import IECA.database.FoodPartyDataset;
 import IECA.logic.Restaurant;
 import IECA.logic.RestaurantManager;
+import IECA.logic.SaleFood;
 
 import java.io.IOException;
 import java.sql.Time;
@@ -28,6 +29,12 @@ public class FoodPartyScheduler extends TimerTask {
         }
         try {
             RestaurantManager.getInstance().setSaleFoods(foodPartyDataset.getFoodsOnSale());
+            for(SaleFood saleFood: RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods()){
+                if(RestaurantManager.getInstance().searchInSaleFoods(saleFood))
+                    continue;
+                else
+                    RestaurantManager.getInstance().getCurrentUser().getMyCart().deleteSaleFood(saleFood);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

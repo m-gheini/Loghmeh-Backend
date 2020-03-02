@@ -207,6 +207,13 @@ public class RestaurantManager {
         }
         return false;
     }
+    public boolean searchInSaleFoods(SaleFood saleFood){
+        for (SaleFood current:saleFoods){
+            if(current.getRestaurantId().equals(saleFood.getRestaurantId()) && current.getName().equals(saleFood.getName()))
+                return true;
+        }
+        return false;
+    }
     public ArrayList<String> getRecommendedRestaurants() {
         Map<Double, String> treemap = new TreeMap<Double, String>(Collections.reverseOrder());
         ArrayList<String> result = new ArrayList<String>();

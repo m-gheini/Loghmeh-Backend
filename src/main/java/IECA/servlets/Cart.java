@@ -1,7 +1,9 @@
 package IECA.servlets;
 
 import IECA.logic.Food;
+import IECA.logic.Restaurant;
 import IECA.logic.RestaurantManager;
+import IECA.logic.SaleFood;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 
 @WebServlet("/Cart")
 public class Cart extends HttpServlet {
@@ -54,7 +57,6 @@ public class Cart extends HttpServlet {
                 requestDispatcher.forward(request, response);
             }
             else {
-                System.out.println("+++"+restaurantId+"+++");
                 request.setAttribute("restaurantId", restaurantId);
             }
         }

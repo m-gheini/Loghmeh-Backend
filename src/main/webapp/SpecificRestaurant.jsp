@@ -2,14 +2,11 @@
 <%@ page import="IECA.logic.RestaurantManager" %>
 <%@ page import="IECA.logic.Food" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%String value = request.getParameter("restaurantInfo");%>
-<%Restaurant thisRes = new Restaurant();%>
-<%for(Restaurant restaurant : RestaurantManager.getInstance().getRestaurants()){
-    if (restaurant.getId().equals(value)) {
-        thisRes = restaurant;
-        break;
-    }
-}%>
+<%
+    String value = request.getParameter("restaurantInfo");
+    String jsonStr = "{\"id\":\""+value+"\"}";
+    Restaurant thisRes = RestaurantManager.getInstance().searchForRestaurant(jsonStr);
+%>
 <jsp:include page="header.jsp" />
 <ul>
     <li>id: <%=thisRes.getId()%></li>
@@ -24,7 +21,7 @@
                 <div><%=foodInMenu.getName()%></div>
                 <div><%=foodInMenu.getPrice()%> Toman</div>
                 <form action="Cart" method="post">
-                    <button type="submit" name="foodInfo" value="<%=foodInMenu.getName()%>,<%=foodInMenu.getRestaurantId()%>,<%=foodInMenu.getPrice()%>">add To Cart</button>
+                    <button type="submit" name="foodInfo" value="<%=foodInMenu.getName()%>,<%=foodInMenu.getRestaurantId()%>%>">add To Cart</button>
                 </form>
             </li>
             <%}%>

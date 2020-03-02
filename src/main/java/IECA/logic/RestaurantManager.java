@@ -100,6 +100,26 @@ public class RestaurantManager {
         this.currentUser = currentUser;
     }
 
+    public boolean searchForResInAllRes(String resId) throws IOException {
+        boolean totallyNotFound = true;
+        for(Restaurant restaurant : RestaurantManager.getInstance().getAllRestaurants()){
+            if (restaurant.getId().equals(resId)) {
+                totallyNotFound = false;
+                break;
+            }
+        }
+        return totallyNotFound;
+    }
+    public boolean searchInProperResById(String resId) throws IOException {
+        boolean notFound = true;
+        for (Restaurant restaurant : RestaurantManager.getInstance().getRestaurants()) {
+            if (restaurant.getId().equals(resId)) {
+                notFound = false;
+                break;
+            }
+        }
+        return notFound;
+    }
     public Restaurant searchForRestaurant(String jsonInString) throws IOException {
         Restaurant nullRest = new Restaurant();
 

@@ -14,34 +14,28 @@ import java.io.IOException;
 
 @WebServlet("/SpecificRestaurant")
 public class SpecificRestaurant extends HttpServlet {
+    private ServletHandler servletHandler;
+
+    public void initial(){
+        servletHandler = new ServletHandler();
+    }
+
+    public void dispatch(HttpServletRequest request, HttpServletResponse response,String address,int errorCode) throws ServletException, IOException {
+        response.setStatus(errorCode);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(address);
+        requestDispatcher.forward(request, response);
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String value = request.getParameter("restaurantInfo");
-        boolean totallyNotFound = true;
-        for(Restaurant restaurant : RestaurantManager.getInstance().getAllRestaurants()){
-            if (restaurant.getId().equals(value)) {
-                totallyNotFound = false;
-                break;
-            }
-        }
-        if (totallyNotFound) {
-            response.setStatus(404);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("validIdError.jsp");
-            requestDispatcher.forward(request, response);
-        }
-        boolean notFound = true;
-        for (Restaurant restaurant : RestaurantManager.getInstance().getRestaurants()) {
-            if (restaurant.getId().equals(value)) {
-                notFound = false;
-                break;
-            }
-        }
-        if (notFound) {
-            response.setStatus(403);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("outOfBindError.jsp");
-            requestDispatcher.forward(request, response);
-        }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("SpecificRestaurant.jsp");
-        requestDispatcher.forward(request, response);
+        initial();
+        boolean totallyNotFound = RestaurantManager.getInstance().searchForResInAllRes(value);
+        if (totallyNotFound)
+            dispatch(request,response,"validIdError.jsp",404);
+        boolean notFound = RestaurantManager.getInstance().searchInProperResById(value);
+        if (notFound)
+            dispatch(request,response,"outOfBindError.jsp",403);
+        dispatch(request,response,"SpecificRestaurant.jsp",200);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

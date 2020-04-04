@@ -4,20 +4,12 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
-<!--  <servlet>-->
-<!--      <servlet-name>getRestaurants</servlet-name>-->
-<!--      <servlet-class>IECA.servlets.GetRestaurants</servlet-class>-->
-<!--  </servlet>-->
-<!--  <servlet-mapping>-->
-<!--    <servlet-name>getRestaurants</servlet-name>-->
-<!--    <url-pattern>/get</url-pattern>-->
-<!--  </servlet-mapping>-->
-<!--  <servlet>-->
-<!--    <servlet-name>userInfo</servlet-name>-->
-<!--    <servlet-class>IECA.servlets.UserInfo</servlet-class>-->
-<!--  </servlet>-->
-<!--  <servlet-mapping>-->
-<!--    <servlet-name>userInfo</servlet-name>-->
-<!--    <url-pattern>/UserInfo</url-pattern>-->
-<!--  </servlet-mapping>-->
+  <filter>
+    <filter-name>CorsFilter</filter-name>
+    <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>CorsFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 </web-app>

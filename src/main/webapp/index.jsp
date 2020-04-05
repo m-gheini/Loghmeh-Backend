@@ -8,7 +8,7 @@
     <form action="FoodParty"  method="post">
         <button type="submit" name="foodPartyButton" value="">Food Party</button>
     </form>
-    <form action="userInfo.jsp">
+    <form action="userInfo">
         <button type="submit" name="userInfo" value="">Profile</button>
     </form>
     <form action="Cart"  method="post">

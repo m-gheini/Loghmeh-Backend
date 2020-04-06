@@ -1,4 +1,4 @@
-package IECA.servlets;
+package IECA.restAPIs;
 
 import IECA.logic.RestaurantManager;
 import IECA.logic.User;

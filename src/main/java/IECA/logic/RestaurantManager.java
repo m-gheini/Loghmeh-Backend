@@ -20,6 +20,7 @@ public class RestaurantManager {
     private User currentUser;
     private ArrayList<Delivery> deliveries;
     private int bestTime;
+    private ArrayList<User> users;
 
     private RestaurantManager() throws IOException {
         RestaurantDataset restaurantDataset = new RestaurantDataset();
@@ -29,6 +30,27 @@ public class RestaurantManager {
         currentUser = new User();
         deliveries = new ArrayList<Delivery>();
         FoodPartyScheduler foodPartyScheduler = new FoodPartyScheduler();
+        users=new ArrayList<User>();
+        users.add(currentUser);
+    }
+
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
+    }
+    public void addUser(User newUser){
+        boolean found=false;
+        for(User user:users){
+            if(user.getId()==newUser.getId()){
+                found=true;
+            }
+        }
+        if(found==false){
+            users.add((newUser));
+        }
     }
 
     public ArrayList<SaleFood> getSaleFoods() {

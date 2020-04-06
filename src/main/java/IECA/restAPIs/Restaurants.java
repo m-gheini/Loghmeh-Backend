@@ -1,9 +1,8 @@
 package IECA.restAPIs;
 
-import IECA.logic.Restaurant;
-import IECA.logic.RestaurantManager;
-import IECA.logic.User;
+import IECA.logic.*;
 import IECA.logic.Error;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -36,6 +35,7 @@ public class Restaurants {
         }
         return RestaurantManager.getInstance().searchResById(id);
     }
+
 
 
 }

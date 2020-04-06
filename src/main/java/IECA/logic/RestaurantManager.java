@@ -161,6 +161,15 @@ public class RestaurantManager {
         }
         return notFound;
     }
+    public Restaurant searchResById(String id) throws IOException {
+        Restaurant nullRest = new Restaurant();
+        for (Restaurant restaurant : RestaurantManager.getInstance().getRestaurants()) {
+            if (restaurant.getId().equals(id)) {
+                return restaurant;
+            }
+        }
+        return nullRest;
+    }
     public Restaurant searchForRestaurant(String jsonInString) throws IOException {
         Restaurant nullRest = new Restaurant();
 

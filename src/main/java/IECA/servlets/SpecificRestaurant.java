@@ -28,13 +28,13 @@ public class SpecificRestaurant extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String value = request.getParameter("restaurantInfo");
         initial();
-        boolean totallyNotFound = RestaurantManager.getInstance().searchForResInAllRes(value);
-        if (totallyNotFound)
-            dispatch(request,response,"validIdError.jsp",404);
-        boolean notFound = RestaurantManager.getInstance().searchInProperResById(value);
-        if (notFound)
-            dispatch(request,response,"outOfBindError.jsp",403);
-        dispatch(request,response,"SpecificRestaurant.jsp",200);
+//        boolean totallyNotFound = RestaurantManager.getInstance().searchForResInAllRes(value);
+//        if (totallyNotFound)
+//            dispatch(request,response,"validIdError.jsp",404);
+//        boolean notFound = RestaurantManager.getInstance().searchInProperResById(value);
+//        if (notFound)
+//            dispatch(request,response,"outOfBindError.jsp",403);
+//        dispatch(request,response,"SpecificRestaurant.jsp",200);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

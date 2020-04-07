@@ -1,8 +1,6 @@
 package IECA.restAPIs;
 
-import IECA.logic.Cart;
-import IECA.logic.RestaurantManager;
-import IECA.logic.User;
+import IECA.logic.*;
 import IECA.logic.Error;
 import org.springframework.web.bind.annotation.*;
 
@@ -178,6 +176,58 @@ public class Users {
             error.setErrorMassage("No such user!");
             return error;
         }
+    }
+    @RequestMapping(value = "/users/{id}/cart", method = RequestMethod.POST)
+    public @ResponseBody
+    Object addToCart(
+            @PathVariable(value = "id") Integer id,
+            @RequestParam(value = "restaurantId") String restaurantId,
+            @RequestParam(value = "foodName") String foodName) throws IOException {
+        ArrayList<Food> foods = new ArrayList<Food>();
+        ArrayList<Cart> orders = new ArrayList<Cart>();
+        boolean found=false;
+        User u = new User();
+        for(User user:RestaurantManager.getInstance().getUsers()){
+            if(user.getId()==id)
+                found=true;
+            u = user;
+        }
+        if (!found) {
+            Error error = new Error();
+            error.setErrorCode(404);
+            error.setErrorMassage("No such user!");
+            return error;
+        }
+        Cart userCart = u.getMyCart();
+        if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0){
+            Cart myCart = new Cart();
+            return myCart;
+        }
+        else{
+            if(userCart.getSaleFoods().size()!=0) {
+                if (restaurantId.equals(userCart.getSaleFoods().get(0).getRestaurantId())){
+                    return userCart;
+                }
+                else{
+                    Error error = new Error();
+                    error.setErrorCode(400);
+                    error.setErrorMassage("You can not order from different restaurant!");
+                    return error;
+                }
+            }
+            if(userCart.getFoods().size()!=0) {
+                if (restaurantId.equals(userCart.getFoods().get(0).getRestaurantId())){
+                    return userCart;
+                }
+                else{
+                    Error error = new Error();
+                    error.setErrorCode(400);
+                    error.setErrorMassage("You can not order from different restaurant!");
+                    return error;
+                }
+            }
+        }
+        return userCart;
     }
 
 }

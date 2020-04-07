@@ -10,13 +10,13 @@ import java.util.ArrayList;
 
 @RestController
 public class Restaurants {
-    @RequestMapping(value = "/restaurantsInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "/restaurants", method = RequestMethod.GET)
     public @ResponseBody
     ArrayList<Restaurant> allRestaurants() throws IOException {
         ArrayList<Restaurant> restaurants = RestaurantManager.getInstance().getRestaurants();
         return restaurants;
     }
-    @RequestMapping(value = "/restaurantsInfo/{id}" , method = RequestMethod.GET)
+    @RequestMapping(value = "/restaurants/{id}" , method = RequestMethod.GET)
     public @ResponseBody
     Object specificRestaurant(@PathVariable(value = "id") String id) throws IOException {
         boolean totallyNotFound = RestaurantManager.getInstance().searchForResInAllRes(id);

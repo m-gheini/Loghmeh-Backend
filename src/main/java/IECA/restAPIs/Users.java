@@ -19,6 +19,7 @@ public class Users {
         users.add(user);
         return users;
     }
+
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public @ResponseBody
     Object specificUser(@PathVariable(value = "id") Integer id) throws IOException {
@@ -67,6 +68,7 @@ public class Users {
             return RestaurantManager.getInstance().getUsers();
         }
     }
+
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
     public @ResponseBody
     Object updateUserCredit(
@@ -91,6 +93,81 @@ public class Users {
             user.addCredit(credit);
         }
         return user;
+    }
+
+    @RequestMapping(value = "/users/{id}/orders",method = RequestMethod.GET)
+    public @ResponseBody
+    ArrayList<Cart> allOrders(@PathVariable(value = "id") Integer id) throws IOException {
+        boolean found=false;
+        User u = new User();
+        for(User user:RestaurantManager.getInstance().getUsers()){
+            if(user.getId()==id)
+                found=true;
+            u = user;
+        }
+        if(found){
+            return u.getOrders();
+        }
+        else{
+            ArrayList<Cart> emptyOrders = new ArrayList<Cart>();
+            return emptyOrders;
+        }
+    }
+
+    @RequestMapping(value = "/users/{id}/orders/{index}",method = RequestMethod.GET)
+    public @ResponseBody
+    Cart allOrders(@PathVariable(value = "id") Integer id,
+                   @PathVariable(value = "index") Integer index) throws IOException {
+        boolean found=false;
+        User u = new User();
+        for(User user:RestaurantManager.getInstance().getUsers()){
+            if(user.getId()==id)
+                found=true;
+            u = user;
+        }
+        if(found){
+            Cart result = new Cart();
+            ArrayList<Cart> orders = u.getOrders();
+            boolean indexFound = false;
+            for (Cart order:orders){
+                if (order.getIndex()==index){
+                    indexFound = true;
+                    result = order;
+                    break;
+                }
+            }
+            if(indexFound){
+                return result;
+            }
+            else{
+                //TODO not existing index
+                return result;
+            }
+        }
+        else{
+            //TODO not existing user
+            Cart emptyOrder = new Cart();
+            return emptyOrder;
+        }
+    }
+
+    @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.GET)
+    public @ResponseBody
+    Cart userCart(@PathVariable(value = "id") Integer id) throws IOException {
+        boolean found=false;
+        User u = new User();
+        for(User user:RestaurantManager.getInstance().getUsers()){
+            if(user.getId()==id)
+                found=true;
+            u = user;
+        }
+        if(found){
+            return u.getMyCart();
+        }
+        else{
+            Cart emptyCart = new Cart();
+            return emptyCart;
+        }
     }
 
 }

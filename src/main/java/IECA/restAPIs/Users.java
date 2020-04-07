@@ -153,7 +153,7 @@ public class Users {
 
     @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.GET)
     public @ResponseBody
-    Cart userCart(@PathVariable(value = "id") Integer id) throws IOException {
+    Object userCart(@PathVariable(value = "id") Integer id) throws IOException {
         boolean found=false;
         User u = new User();
         for(User user:RestaurantManager.getInstance().getUsers()){
@@ -162,11 +162,21 @@ public class Users {
             u = user;
         }
         if(found){
-            return u.getMyCart();
+            Cart userCart = u.getMyCart();
+            if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0) {
+                Error error = new Error();
+                error.setErrorCode(404);
+                error.setErrorMassage("Your cart is empty!");
+                return error;
+            }
+            else
+                return userCart;
         }
         else{
-            Cart emptyCart = new Cart();
-            return emptyCart;
+            Error error = new Error();
+            error.setErrorCode(404);
+            error.setErrorMassage("No such user!");
+            return error;
         }
     }
 

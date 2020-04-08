@@ -2,6 +2,7 @@ package IECA.restAPIs;
 
 import IECA.logic.*;
 import IECA.logic.Error;
+import IECA.logic.schedulers.DeliveryScheduler;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -297,6 +298,65 @@ public class Users {
         else{
             u.getMyCart().deleteSpecificFood(orderFood);
             return u.getMyCart();
+        }
+    }
+    @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.POST)
+    public @ResponseBody
+    Object finalizeCart(@PathVariable(value = "id") Integer id) throws IOException {
+        boolean found=false;
+        User u = new User();
+        for(User user:RestaurantManager.getInstance().getUsers()){
+            if(user.getId()==id) {
+                found = true;
+                u = user;
+            }
+        }
+        if(found){
+            Cart userCart = u.getMyCart();
+            if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0) {
+                Error error = new Error();
+                error.setErrorCode(404);
+                error.setErrorMassage("Your cart is empty!");
+                return error;
+            }
+            else {
+                Integer total = RestaurantManager.getInstance().makeTotal();
+                String restaurantId = u.getMyCart().getFoods().get(0).getRestaurantId();
+                if(u.getCredit()>=total && total!=0){
+                    Cart previousCart = new Cart();
+                    u.addCredit(-total);
+                    DeliveryScheduler deliveryScheduler = new DeliveryScheduler();
+                    deliveryScheduler.setRestaurant(restaurantId);
+                    previousCart.setFoods(u.getMyCart().getFoods());
+                    previousCart.setSaleFoods(u.getMyCart().getSaleFoods());
+                    previousCart.setNumberOfFood(u.getMyCart().getNumberOfFood());
+                    previousCart.setNumberOfSaleFood(u.getMyCart().getNumberOfSaleFood());
+                    u.addOrder(previousCart);
+                    u.getMyCart().clearCart();
+                    return u.getMyCart();
+                }
+                else{
+                    if(u.getCredit()<total) {
+                        Error error = new Error();
+                        error.setErrorCode(400);
+                        error.setErrorMassage("not enough credit");
+                        return error;
+                    }
+                    else{
+                        Error error = new Error();
+                        error.setErrorCode(400);
+                        error.setErrorMassage("empty cart");
+                        return error;
+
+                    }
+                }
+            }
+        }
+        else{
+            Error error = new Error();
+            error.setErrorCode(404);
+            error.setErrorMassage("No such user!");
+            return error;
         }
     }
 

@@ -327,10 +327,14 @@ public class Users {
                     u.addCredit(-total);
                     DeliveryScheduler deliveryScheduler = new DeliveryScheduler();
                     deliveryScheduler.setRestaurant(restaurantId);
-                    previousCart.setFoods(u.getMyCart().getFoods());
-                    previousCart.setSaleFoods(u.getMyCart().getSaleFoods());
-                    previousCart.setNumberOfFood(u.getMyCart().getNumberOfFood());
-                    previousCart.setNumberOfSaleFood(u.getMyCart().getNumberOfSaleFood());
+                    ArrayList<Food> foods = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods());
+                    ArrayList<SaleFood> saleFoods = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods());
+                    ArrayList<Integer> counts = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood());
+                    ArrayList<Integer> saleCounts = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfSaleFood());
+                    previousCart.setFoods(foods);
+                    previousCart.setSaleFoods(saleFoods);
+                    previousCart.setNumberOfFood(counts);
+                    previousCart.setNumberOfSaleFood(saleCounts);
                     u.addOrder(previousCart);
                     u.getMyCart().clearCart();
                     return u.getMyCart();

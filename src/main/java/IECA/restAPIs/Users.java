@@ -12,9 +12,7 @@ public class Users {
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public @ResponseBody
     ArrayList<User> allUsers() throws IOException {
-        ArrayList<User> users = new ArrayList<User>();
-        User user = RestaurantManager.getInstance().getCurrentUser();
-        users.add(user);
+        ArrayList<User> users = RestaurantManager.getInstance().getUsers();
         return users;
     }
 
@@ -23,6 +21,23 @@ public class Users {
     Object specificUser(@PathVariable(value = "id") Integer id) throws IOException {
         for(User u:RestaurantManager.getInstance().getUsers()){
             if(u.getId()==id){
+                return u;
+            }
+        }
+
+        Error error = new Error();
+        error.setErrorCode(404);
+        error.setErrorMassage("no such id");
+        return error;
+
+    }
+
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
+    public @ResponseBody
+    Object deleteUser(@PathVariable(value = "id") Integer id) throws IOException {
+        for(User u:RestaurantManager.getInstance().getUsers()){
+            if(u.getId()==id){
+                RestaurantManager.getInstance().getUsers().remove(u);
                 return u;
             }
         }
@@ -155,9 +170,10 @@ public class Users {
         boolean found=false;
         User u = new User();
         for(User user:RestaurantManager.getInstance().getUsers()){
-            if(user.getId()==id)
-                found=true;
-            u = user;
+            if(user.getId()==id) {
+                found = true;
+                u = user;
+            }
         }
         if(found){
             Cart userCart = u.getMyCart();
@@ -177,57 +193,111 @@ public class Users {
             return error;
         }
     }
-    @RequestMapping(value = "/users/{id}/cart", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/{id}/cart", method = RequestMethod.PUT)
     public @ResponseBody
     Object addToCart(
             @PathVariable(value = "id") Integer id,
             @RequestParam(value = "restaurantId") String restaurantId,
             @RequestParam(value = "foodName") String foodName) throws IOException {
-        ArrayList<Food> foods = new ArrayList<Food>();
-        ArrayList<Cart> orders = new ArrayList<Cart>();
-        boolean found=false;
+        boolean restaurantFound = false;
+        boolean foodFound = false;
+        boolean userFound = false;
         User u = new User();
         for(User user:RestaurantManager.getInstance().getUsers()){
-            if(user.getId()==id)
-                found=true;
-            u = user;
+            if(user.getId()==id) {
+                userFound = true;
+                u = user;
+            }
         }
-        if (!found) {
+
+        Food orderFood = new Food();
+        for (Restaurant restaurant:RestaurantManager.getInstance().getRestaurants()){
+            if(restaurant.getId().equals(restaurantId)){
+                restaurantFound = true;
+                for(Food food:restaurant.getMenu()){
+                    if(food.getName().equals(foodName)){
+                        foodFound = true;
+                        orderFood = food;
+                    }
+                }
+            }
+        }
+        if (!userFound){
             Error error = new Error();
+            error.setErrorMassage("no such id");
             error.setErrorCode(404);
-            error.setErrorMassage("No such user!");
             return error;
         }
-        Cart userCart = u.getMyCart();
-        if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0){
-            Cart myCart = new Cart();
-            return myCart;
+        if(!restaurantFound){
+            Error error = new Error();
+            error.setErrorMassage("no such restaurantId");
+            error.setErrorCode(404);
+            return error;
+        }
+        if(!foodFound){
+            Error error = new Error();
+            error.setErrorMassage("no such foodName");
+            error.setErrorCode(404);
+            return error;
         }
         else{
-            if(userCart.getSaleFoods().size()!=0) {
-                if (restaurantId.equals(userCart.getSaleFoods().get(0).getRestaurantId())){
-                    return userCart;
-                }
-                else{
-                    Error error = new Error();
-                    error.setErrorCode(400);
-                    error.setErrorMassage("You can not order from different restaurant!");
-                    return error;
-                }
+            String jsonInString = "{\"foodName\":\""+foodName+"\",\"restaurantId\":\""+restaurantId+"\"}";
+            u.getMyCart().addFood(jsonInString,RestaurantManager.getInstance().getFoods());
+            return u.getMyCart();
+        }
+    }
+
+    @RequestMapping(value = "/users/{id}/cart", method = RequestMethod.DELETE)
+    public @ResponseBody
+    Object deleteFromCart(
+            @PathVariable(value = "id") Integer id,
+            @RequestParam(value = "restaurantId") String restaurantId,
+            @RequestParam(value = "foodName") String foodName) throws IOException {
+        boolean restaurantFound = false;
+        boolean foodFound = false;
+        boolean userFound = false;
+        User u = new User();
+        for(User user:RestaurantManager.getInstance().getUsers()){
+            if(user.getId()==id) {
+                userFound = true;
+                u = user;
             }
-            if(userCart.getFoods().size()!=0) {
-                if (restaurantId.equals(userCart.getFoods().get(0).getRestaurantId())){
-                    return userCart;
-                }
-                else{
-                    Error error = new Error();
-                    error.setErrorCode(400);
-                    error.setErrorMassage("You can not order from different restaurant!");
-                    return error;
+        }
+
+        Food orderFood = new Food();
+        for (Restaurant restaurant:RestaurantManager.getInstance().getRestaurants()){
+            if(restaurant.getId().equals(restaurantId)){
+                restaurantFound = true;
+                for(Food food:restaurant.getMenu()){
+                    if(food.getName().equals(foodName)){
+                        foodFound = true;
+                        orderFood = food;
+                    }
                 }
             }
         }
-        return userCart;
+        if (!userFound){
+            Error error = new Error();
+            error.setErrorMassage("no such id");
+            error.setErrorCode(404);
+            return error;
+        }
+        if(!restaurantFound){
+            Error error = new Error();
+            error.setErrorMassage("no such restaurantId");
+            error.setErrorCode(404);
+            return error;
+        }
+        if(!foodFound){
+            Error error = new Error();
+            error.setErrorMassage("no such foodName");
+            error.setErrorCode(404);
+            return error;
+        }
+        else{
+            u.getMyCart().deleteSpecificFood(orderFood);
+            return u.getMyCart();
+        }
     }
 
 }

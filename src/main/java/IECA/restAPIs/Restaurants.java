@@ -80,6 +80,34 @@ public class Restaurants {
         }
         return RestaurantManager.getInstance().searchResById(id);
     }
+    @RequestMapping(value = "/restaurants/{id}" , params = "foodName",method = RequestMethod.GET)
+    public @ResponseBody
+    Object specificFood(@PathVariable(value = "id") String id,
+                        @RequestParam(value = "foodName") String foodName) throws IOException {
+        boolean totallyNotFound = RestaurantManager.getInstance().searchForResInAllRes(id);
+        if (totallyNotFound) {
+            Error error = new Error();
+            error.setErrorCode(404);
+            error.setErrorMassage("no such id");
+            return error;
+        }
+        boolean notFound = RestaurantManager.getInstance().searchInProperResById(id);
+        if (notFound) {
+            Error error = new Error();
+            error.setErrorCode(403);
+            error.setErrorMassage("no such restaurant near you");
+            return error;
+        }
+        Restaurant restaurant = RestaurantManager.getInstance().searchResById(id);
+        for(Food food:restaurant.getMenu()){
+            if(food.getName().equals(foodName))
+                return food;
+        }
+        Error error = new Error();
+        error.setErrorMassage("no such food in this restaurants");
+        error.setErrorCode(404);
+        return  error;
+    }
 
 
 

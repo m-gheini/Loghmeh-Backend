@@ -194,7 +194,7 @@ public class Users {
             return error;
         }
     }
-    @RequestMapping(value = "/users/{id}/cart", method = RequestMethod.PUT)
+    @RequestMapping(value = "/users/{id}/cart", params = "foodName",method = RequestMethod.PUT)
     public @ResponseBody
     Object addToCart(
             @PathVariable(value = "id") Integer id,
@@ -247,8 +247,58 @@ public class Users {
             return u.getMyCart();
         }
     }
+    @RequestMapping(value = "/users/{id}/cart", params = "saleFoodName",method = RequestMethod.PUT)
+    public @ResponseBody
+    Object addSaleFoodToCart(
+            @PathVariable(value = "id") Integer id,
+            @RequestParam(value = "restaurantId") String restaurantId,
+            @RequestParam(value = "saleFoodName") String foodName) throws IOException {
+        boolean restaurantFound = false;
+        boolean foodFound = false;
+        boolean userFound = false;
+        User u = new User();
+        for(User user:RestaurantManager.getInstance().getUsers()){
+            if(user.getId()==id) {
+                userFound = true;
+                u = user;
+            }
+        }
 
-    @RequestMapping(value = "/users/{id}/cart", method = RequestMethod.DELETE)
+        SaleFood orderFood = new SaleFood();
+        for(SaleFood food:RestaurantManager.getInstance().getSaleFoods()){
+            if(food.getRestaurantId().equals(restaurantId)){
+                restaurantFound = true;
+                if(food.getName().equals(foodName)){
+                    foodFound = true;
+                }
+            }
+        }
+        if (!userFound){
+            Error error = new Error();
+            error.setErrorMassage("no such id");
+            error.setErrorCode(404);
+            return error;
+        }
+        if(!restaurantFound){
+            Error error = new Error();
+            error.setErrorMassage("no such restaurantId");
+            error.setErrorCode(404);
+            return error;
+        }
+        if(!foodFound){
+            Error error = new Error();
+            error.setErrorMassage("no such foodName");
+            error.setErrorCode(404);
+            return error;
+        }
+        else{
+            String jsonInString = "{\"foodName\":\""+foodName+"\",\"restaurantId\":\""+restaurantId+"\"}";
+            u.getMyCart().addSaleFood(jsonInString,RestaurantManager.getInstance().getSaleFoods());
+            return u.getMyCart();
+        }
+    }
+
+    @RequestMapping(value = "/users/{id}/cart", params = "foodName",method = RequestMethod.DELETE)
     public @ResponseBody
     Object deleteFromCart(
             @PathVariable(value = "id") Integer id,
@@ -300,6 +350,56 @@ public class Users {
             return u.getMyCart();
         }
     }
+    @RequestMapping(value = "/users/{id}/cart", params = "saleFoodName",method = RequestMethod.DELETE)
+    public @ResponseBody
+    Object deleteSaleFoodFromCart(
+            @PathVariable(value = "id") Integer id,
+            @RequestParam(value = "restaurantId") String restaurantId,
+            @RequestParam(value = "saleFoodName") String foodName) throws IOException {
+        boolean restaurantFound = false;
+        boolean foodFound = false;
+        boolean userFound = false;
+        User u = new User();
+        for(User user:RestaurantManager.getInstance().getUsers()){
+            if(user.getId()==id) {
+                userFound = true;
+                u = user;
+            }
+        }
+        u=RestaurantManager.getInstance().getCurrentUser();
+        SaleFood orderFood = new SaleFood();
+        for(SaleFood food:RestaurantManager.getInstance().getSaleFoods()){
+            if(food.getRestaurantId().equals(restaurantId)){
+                restaurantFound = true;
+                if(food.getName().equals(foodName)){
+                    foodFound = true;
+                    orderFood = food;
+                }
+            }
+        }
+        if (!userFound){
+            Error error = new Error();
+            error.setErrorMassage("no such id");
+            error.setErrorCode(404);
+            return error;
+        }
+        if(!restaurantFound){
+            Error error = new Error();
+            error.setErrorMassage("no such restaurantId");
+            error.setErrorCode(404);
+            return error;
+        }
+        if(!foodFound){
+            Error error = new Error();
+            error.setErrorMassage("no such foodName");
+            error.setErrorCode(404);
+            return error;
+        }
+        else{
+            u.getMyCart().deleteSpecificFood(orderFood);
+            return u.getMyCart();
+        }
+    }
     @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.POST)
     public @ResponseBody
     Object finalizeCart(@PathVariable(value = "id") Integer id) throws IOException {
@@ -311,6 +411,7 @@ public class Users {
                 u = user;
             }
         }
+        u = RestaurantManager.getInstance().getCurrentUser();
         if(found){
             Cart userCart = u.getMyCart();
             if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0) {

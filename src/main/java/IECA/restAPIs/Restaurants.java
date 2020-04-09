@@ -16,6 +16,12 @@ public class Restaurants {
         ArrayList<Restaurant> restaurants = RestaurantManager.getInstance().getRestaurants();
         return restaurants;
     }
+    @RequestMapping(value = "/saleFoods", method = RequestMethod.GET)
+    public @ResponseBody
+    ArrayList<SaleFood> allSaleFoods() throws IOException {
+        ArrayList<SaleFood> saleFoods = RestaurantManager.getInstance().getSaleFoods();
+        return saleFoods;
+    }
     @RequestMapping(value = "/restaurants/{id}" , method = RequestMethod.GET)
     public @ResponseBody
     Object specificRestaurant(@PathVariable(value = "id") String id) throws IOException {

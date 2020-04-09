@@ -402,7 +402,7 @@ input, .submit-btn{
 .overlay{
     width: 100%;
     height: 25%;
-    background-image: linear-gradient(0deg, rgba(230, 121, 116, 0.6), rgba(230, 121, 116, 0.6)), url("Assets/Cover Photo.jpg");
+    background-image: linear-gradient(0deg, rgba(230, 121, 116, 0.6), rgba(230, 121, 116, 0.6)), url("../Assets/Cover Photo.jpg");
     object-fit:cover;
     background-repeat: no-repeat;
     background-size: cover;

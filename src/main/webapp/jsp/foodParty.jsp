@@ -4,7 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <meta http-equiv="refresh" content="30;URL='FoodParty'">
 
-<jsp:include page="header.jsp" />
+<jsp:include page="../../../../target/IECA/header.jsp" />
 <table>
     <tr>
         <th>restaurant id</th>
@@ -54,5 +54,5 @@
         <button type="submit" name="home" value="">Home</button>
     </form>
 </div>
-<jsp:include page="footer.jsp" />
+<jsp:include page="../../../../target/IECA/footer.jsp" />
 

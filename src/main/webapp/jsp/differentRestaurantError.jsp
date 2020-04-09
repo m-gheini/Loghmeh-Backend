@@ -1,7 +1,7 @@
 <%@ page import="IECA.logic.RestaurantManager" %>
 <%@ page import="IECA.logic.Cart" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<jsp:include page="header.jsp" />
+<jsp:include page="../../../../target/IECA/header.jsp" />
 <%  Cart userCart = RestaurantManager.getInstance().getCurrentUser().getMyCart();
     String restaurantName ="";
     String restaurantId = "";
@@ -24,7 +24,7 @@
     <%}%>
 </ul>
 <%if(userCart.getFoods().size() != 0){%>
-<form action="SpecificRestaurant.jsp">
+<form action="../../../../target/IECA/SpecificRestaurant.jsp">
     <button type="submit" name="restaurantInfo" value="<%=restaurantId%>">Go Back To Restaurant To Order More</button>
 </form>
 <%}%>
@@ -32,7 +32,7 @@
     <button type="submit">finalize</button>
 </form>
 
-<form action="index.jsp">
+<form action="../../../../target/IECA/index.jsp">
     <button type="submit" name="home" value="">Home</button>
 </form>
-<jsp:include page="footer.jsp" />
+<jsp:include page="../../../../target/IECA/footer.jsp" />

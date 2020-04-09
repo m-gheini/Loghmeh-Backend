@@ -1,5 +1,5 @@
 <%@ page import="IECA.logic.RestaurantManager" %>
-<jsp:include page="header.jsp" />
+<jsp:include page="../../../../target/IECA/header.jsp" />
 <%RestaurantManager.getInstance();%>
 <ul>
     <form action="GetRestaurants" method="post">
@@ -8,14 +8,14 @@
     <form action="FoodParty"  method="post">
         <button type="submit" name="foodPartyButton" value="">Food Party</button>
     </form>
-    <form action="userInfo.jsp">
+    <form action="../../../../target/IECA/userInfo.jsp">
         <button type="submit" name="userInfo" value="">Profile</button>
     </form>
     <form action="Cart"  method="post">
         <button type="submit" name="cartFromHome" value="">Cart</button>
     </form>
 </ul>
-<jsp:include page="footer.jsp" />
+<jsp:include page="../../../../target/IECA/footer.jsp" />
 <%--<%@ page language="java" contentType="text/html; charset=UTF-8"--%>
 <%--         pageEncoding="UTF-8"%>--%>
 <%--<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">--%>

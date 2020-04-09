@@ -2,7 +2,7 @@
 <%@ page import="IECA.logic.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%User currentUser = RestaurantManager.getInstance().getCurrentUser();%>
-<jsp:include page="header.jsp" />
+<jsp:include page="../../../../target/IECA/header.jsp" />
 
     <ul>
         <li>id: <%=currentUser.getId()%></li>
@@ -20,10 +20,10 @@
     <button type="submit" name="cart" value="<%=i%>">order <%=i+1%></button>
 </form>
 <%}%>
-<form action="index.jsp">
+<form action="../../../../target/IECA/index.jsp">
     <button type="submit" name="home" value="">Home</button>
 </form>
-<jsp:include page="footer.jsp" />
+<jsp:include page="../../../../target/IECA/footer.jsp" />
 
 
 

@@ -2,7 +2,7 @@
 <%@ page import="IECA.logic.Cart" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<jsp:include page="header.jsp" />
+<jsp:include page="../../../../target/IECA/header.jsp" />
 
 <meta http-equiv="refresh" content="1;URL='finalize.jsp'">
 <%int finalIndex = RestaurantManager.getInstance().getCurrentUser().getOrders().size()-1;
@@ -27,4 +27,4 @@
 <form action="index.jsp">
     <button type="submit" name="home" value="">Home</button>
 </form>
-<jsp:include page="footer.jsp" />
+<jsp:include page="../../../../target/IECA/footer.jsp" />

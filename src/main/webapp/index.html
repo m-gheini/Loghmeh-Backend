@@ -27,14 +27,13 @@
 
 </head>
 <body>
-
-<!--<div id="header"></div>-->
-<!--<div id="app"></div>-->
-<div id="footer"></div>
-<script type="text/babel">
-// <!--    // ReactDOM.render(<MenuSection />, document.getElementById('menu'));-->
-// <!--    // ReactDOM.render(<BodySection />, document.getElementById('app'));-->
-    ReactDOM.render(<FooterSection />, document.getElementById('footer'));
-</script>
+    <div id="header"></div>
+    <div id="app"></div>
+    <div id="footer"></div>
+    <script type="text/babel">
+        ReactDOM.render(<MenuSection />, document.getElementById('header'));
+        ReactDOM.render(<BodySection />, document.getElementById('app'));
+        ReactDOM.render(<FooterSection />, document.getElementById('footer'));
+    </script>
 </body>
 </html>

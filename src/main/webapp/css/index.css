@@ -106,7 +106,7 @@ ul{
 }
 @media (max-width: 768px) {
     .content {
-        height: 78.85%;
+        height: 100%;
     }
 }
 .new-content{

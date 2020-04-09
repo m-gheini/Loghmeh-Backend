@@ -350,6 +350,7 @@ public class Users {
             return u.getMyCart();
         }
     }
+
     @RequestMapping(value = "/users/{id}/cart", params = "saleFoodName",method = RequestMethod.DELETE)
     public @ResponseBody
     Object deleteSaleFoodFromCart(
@@ -366,7 +367,6 @@ public class Users {
                 u = user;
             }
         }
-        u=RestaurantManager.getInstance().getCurrentUser();
         SaleFood orderFood = new SaleFood();
         for(SaleFood food:RestaurantManager.getInstance().getSaleFoods()){
             if(food.getRestaurantId().equals(restaurantId)){
@@ -396,10 +396,11 @@ public class Users {
             return error;
         }
         else{
-            u.getMyCart().deleteSpecificFood(orderFood);
+            u.getMyCart().deleteSpecificSaleFood(orderFood);
             return u.getMyCart();
         }
     }
+
     @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.POST)
     public @ResponseBody
     Object finalizeCart(@PathVariable(value = "id") Integer id) throws IOException {
@@ -411,7 +412,6 @@ public class Users {
                 u = user;
             }
         }
-        u = RestaurantManager.getInstance().getCurrentUser();
         if(found){
             Cart userCart = u.getMyCart();
             if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0) {
@@ -422,7 +422,11 @@ public class Users {
             }
             else {
                 Integer total = RestaurantManager.getInstance().makeTotal();
-                String restaurantId = u.getMyCart().getFoods().get(0).getRestaurantId();
+                String restaurantId = "";
+                if(u.getMyCart().getFoods().size()>0)
+                    restaurantId = u.getMyCart().getFoods().get(0).getRestaurantId();
+                else
+                    restaurantId = u.getMyCart().getSaleFoods().get(0).getRestaurantId();
                 if(u.getCredit()>=total && total!=0){
                     Cart previousCart = new Cart();
                     u.addCredit(-total);

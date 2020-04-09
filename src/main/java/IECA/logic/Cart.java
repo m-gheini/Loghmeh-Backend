@@ -133,13 +133,27 @@ public class Cart {
     public void deleteSpecificFood(Food food){
         for (int i=0;i<foods.size();i++){
             if(foods.get(i).getRestaurantId().equals(food.getRestaurantId()) &&
-            foods.get(i).getName().equals(food.getName())){
+                    foods.get(i).getName().equals(food.getName())){
                 if(numberOfFood.get(i)>1) {
                     numberOfFood.set(i, numberOfFood.get(i) - 1);
                 }
                 else{
                     foods.remove(i);
                     numberOfFood.remove(i);
+                }
+            }
+        }
+    }
+    public void deleteSpecificSaleFood(SaleFood saleFood){
+        for (int i=0;i<saleFoods.size();i++){
+            if(saleFoods.get(i).getRestaurantId().equals(saleFood.getRestaurantId()) &&
+                    saleFoods.get(i).getName().equals(saleFood.getName())){
+                if(numberOfSaleFood.get(i)>1) {
+                    numberOfSaleFood.set(i, numberOfSaleFood.get(i) - 1);
+                }
+                else{
+                    saleFoods.remove(i);
+                    numberOfSaleFood.remove(i);
                 }
             }
         }

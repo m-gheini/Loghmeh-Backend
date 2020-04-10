@@ -168,44 +168,6 @@ public class Users {
         if (status==0)
             return new Error(400,"you can not choose from different restaurants");
         return u.getMyCart();
-
-//        boolean restaurantFound = false;
-//        boolean foodFound = false;
-//        boolean userFound = false;
-//        User u = new User();
-//        for(User user:RestaurantManager.getInstance().getUsers()){
-//            if(user.getId()==id) {
-//                userFound = true;
-//                u = user;
-//            }
-//        }
-//
-//        SaleFood orderFood = new SaleFood();
-//        for(SaleFood food:RestaurantManager.getInstance().getSaleFoods()){
-//            if(food.getRestaurantId().equals(restaurantId)){
-//                restaurantFound = true;
-//                if(food.getName().equals(foodName)){
-//                    foodFound = true;
-//                }
-//            }
-//        }
-//        if (!userFound){
-//            Error error = new Error(404,"no such id");
-//            return error;
-//        }
-//        if(!restaurantFound){
-//            Error error = new Error(404,"no such restaurantId");
-//            return error;
-//        }
-//        if(!foodFound){
-//            Error error = new Error(404,"no such foodName");
-//            return error;
-//        }
-//        else{
-//            String jsonInString = "{\"foodName\":\""+foodName+"\",\"restaurantId\":\""+restaurantId+"\"}";
-//            u.getMyCart().addSaleFood(jsonInString,RestaurantManager.getInstance().getSaleFoods());
-//            return u.getMyCart();
-//        }
     }
 
     @RequestMapping(value = "/users/{id}/cart", params = "foodName",method = RequestMethod.DELETE)
@@ -214,45 +176,18 @@ public class Users {
             @PathVariable(value = "id") Integer id,
             @RequestParam(value = "restaurantId") String restaurantId,
             @RequestParam(value = "foodName") String foodName) throws IOException {
-        boolean restaurantFound = false;
-        boolean foodFound = false;
-        boolean userFound = false;
-        User u = new User();
-        for(User user:RestaurantManager.getInstance().getUsers()){
-            if(user.getId()==id) {
-                userFound = true;
-                u = user;
-            }
-        }
-
-        Food orderFood = new Food();
-        for (Restaurant restaurant:RestaurantManager.getInstance().getRestaurants()){
-            if(restaurant.getId().equals(restaurantId)){
-                restaurantFound = true;
-                for(Food food:restaurant.getMenu()){
-                    if(food.getName().equals(foodName)){
-                        foodFound = true;
-                        orderFood = food;
-                    }
-                }
-            }
-        }
-        if (!userFound){
-            Error error = new Error(404,"no such id");
-            return error;
-        }
-        if(!restaurantFound){
-            Error error = new Error(404,"no such restaurantId");
-            return error;
-        }
-        if(!foodFound){
-            Error error = new Error(404,"no such foodName");
-            return error;
-        }
-        else{
-            u.getMyCart().deleteSpecificFood(orderFood);
-            return u.getMyCart();
-        }
+        boolean restaurantNotFound = RestaurantManager.getInstance().searchInProperResById(restaurantId);
+        if(restaurantNotFound)
+            return new Error(404,"no such restaurantId");
+        User u = RestaurantManager.getInstance().findSpecUser(id);
+        if(u==null)
+            return new Error(404,"no such id");
+        String jsonInString = "{\"foodName\":\""+foodName+"\",\"restaurantId\":\""+restaurantId+"\"}";
+        Food orderFood = RestaurantManager.getInstance().searchForFood(jsonInString);
+        if(orderFood.getName()==null)
+            return new Error(404,"no such foodName");
+        u.getMyCart().deleteSpecificFood(orderFood);
+        return u.getMyCart();
     }
 
     @RequestMapping(value = "/users/{id}/cart", params = "saleFoodName",method = RequestMethod.DELETE)
@@ -261,42 +196,19 @@ public class Users {
             @PathVariable(value = "id") Integer id,
             @RequestParam(value = "restaurantId") String restaurantId,
             @RequestParam(value = "saleFoodName") String foodName) throws IOException {
-        boolean restaurantFound = false;
+        boolean restaurantFound = RestaurantManager.getInstance().restaurantIdOfSaleFoodFound(restaurantId);
+        if(!restaurantFound)
+            return new Error(404,"no such restaurantId");
         boolean foodFound = false;
-        boolean userFound = false;
-        User u = new User();
-        for(User user:RestaurantManager.getInstance().getUsers()){
-            if(user.getId()==id) {
-                userFound = true;
-                u = user;
-            }
-        }
-        SaleFood orderFood = new SaleFood();
-        for(SaleFood food:RestaurantManager.getInstance().getSaleFoods()){
-            if(food.getRestaurantId().equals(restaurantId)){
-                restaurantFound = true;
-                if(food.getName().equals(foodName)){
-                    foodFound = true;
-                    orderFood = food;
-                }
-            }
-        }
-        if (!userFound){
-            Error error = new Error(404,"no such id");
-            return error;
-        }
-        if(!restaurantFound){
-            Error error = new Error(404,"no such restaurantId");
-            return error;
-        }
-        if(!foodFound){
-            Error error = new Error(404,"no such foodName");
-            return error;
-        }
-        else{
-            u.getMyCart().deleteSpecificSaleFood(orderFood);
-            return u.getMyCart();
-        }
+        User u = RestaurantManager.getInstance().findSpecUser(id);
+        if(u==null)
+            return new Error(404,"no such id");
+        String jsonInString = "{\"foodName\":\""+foodName+"\",\"restaurantId\":\""+restaurantId+"\"}";
+        SaleFood orderFood = RestaurantManager.getInstance().findSpecialSaleFood(restaurantId,foodName);
+        if(orderFood==null)
+            return new Error(404,"no such foodName");
+        u.getMyCart().deleteSpecificSaleFood(orderFood);
+        return u.getMyCart();
     }
 
     @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.POST)

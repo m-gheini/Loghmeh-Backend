@@ -6,6 +6,7 @@ import IECA.logic.schedulers.DeliveryScheduler;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 @RestController
@@ -113,77 +114,43 @@ public class Users {
     @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.GET)
     public @ResponseBody
     Object userCart(@PathVariable(value = "id") Integer id) throws IOException {
-        boolean found=false;
-        User u = new User();
-        for(User user:RestaurantManager.getInstance().getUsers()){
-            if(user.getId()==id) {
-                found = true;
-                u = user;
-            }
+        User user = RestaurantManager.getInstance().findSpecUser(id);
+        if(user!=null){
+            Cart userCart = user.getMyCart();
+            if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0)
+                return new Error(404,"Your cart is empty!");
+            return userCart;
         }
-        if(found){
-            Cart userCart = u.getMyCart();
-            if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0) {
-                Error error = new Error(404,"Your cart is empty!");
-                return error;
-            }
-            else
-                return userCart;
-        }
-        else{
-            Error error = new Error(404,"No such user!");
-            error.setErrorCode(404);
-            error.setErrorMassage("No such user!");
-            return error;
-        }
+        else
+            return new Error(404,"No such user!");
     }
+
     @RequestMapping(value = "/users/{id}/cart", params = "foodName",method = RequestMethod.PUT)
     public @ResponseBody
     Object addToCart(
             @PathVariable(value = "id") Integer id,
             @RequestParam(value = "restaurantId") String restaurantId,
             @RequestParam(value = "foodName") String foodName) throws IOException {
-        boolean restaurantFound = false;
+        boolean restaurantNotFound = RestaurantManager.getInstance().searchInProperResById(restaurantId);
+        if(restaurantNotFound)
+            return new Error(404,"no such restaurantId");
         boolean foodFound = false;
-        boolean userFound = false;
-        User u = new User();
-        for(User user:RestaurantManager.getInstance().getUsers()){
-            if(user.getId()==id) {
-                userFound = true;
-                u = user;
-            }
-        }
-
-        Food orderFood = new Food();
-        for (Restaurant restaurant:RestaurantManager.getInstance().getRestaurants()){
-            if(restaurant.getId().equals(restaurantId)){
-                restaurantFound = true;
-                for(Food food:restaurant.getMenu()){
-                    if(food.getName().equals(foodName)){
-                        foodFound = true;
-                        orderFood = food;
-                    }
-                }
-            }
-        }
-        if (!userFound){
-            Error error = new Error(404,"no such id");
-            return error;
-        }
-        if(!restaurantFound){
-            Error error = new Error(404,"no such restaurantId");
-            return error;
-        }
-        if(!foodFound){
-            Error error = new Error(404,"no such foodName");
-            return error;
-        }
-        else{
-            String jsonInString = "{\"foodName\":\""+foodName+"\",\"restaurantId\":\""+restaurantId+"\"}";
-            u.getMyCart().addFood(jsonInString,RestaurantManager.getInstance().getFoods());
-            return u.getMyCart();
-        }
+        User u = RestaurantManager.getInstance().findSpecUser(id);
+        if(u==null)
+            return new Error(404,"no such id");
+        String jsonInString = "{\"foodName\":\""+foodName+"\",\"restaurantId\":\""+restaurantId+"\"}";
+        Food orderFood = RestaurantManager.getInstance().searchForFood(jsonInString);
+        System.out.println(foodName);
+        if(orderFood.getName()==null)
+            return new Error(404,"no such foodName");
+        ArrayList<Food> cartFoods = u.getMyCart().getFoods();
+        ArrayList<Integer> numbers = u.getMyCart().getNumberOfFood();
+        int status = u.getMyCart().addFood(jsonInString,RestaurantManager.getInstance().getFoods());
+        if (status==0)
+            return new Error(400,"you can not choose from different restaurants");
+        return u.getMyCart();
     }
+
     @RequestMapping(value = "/users/{id}/cart", params = "saleFoodName",method = RequestMethod.PUT)
     public @ResponseBody
     Object addSaleFoodToCart(

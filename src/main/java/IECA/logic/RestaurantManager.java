@@ -234,6 +234,38 @@ public class RestaurantManager {
         }
         return null;
     }
+    public boolean restaurantIdOfSaleFoodFound(String restaurantId){
+        boolean restaurantFound = false;
+        for(SaleFood sf:saleFoods){
+            if(sf.getRestaurantId().equals(restaurantId)) {
+                restaurantFound = true;
+            }
+        }
+        return restaurantFound;
+    }
+    public boolean foodNameOfSaleFoodFound(String restaurantId,String saleFoodName){
+        boolean found = false;
+        for(SaleFood sf:saleFoods){
+            if(sf.getRestaurantId().equals(restaurantId) && sf.getName().equals(saleFoodName)) {
+                found = true;
+            }
+        }
+    return found;
+    }
+    public Error errorForRestaurant(String id) throws IOException {
+        boolean totallyNotFound = searchForResInAllRes(id);
+        if (totallyNotFound) {
+            Error error = new Error(404,"no such id");
+            return error;
+        }
+        boolean notFound = searchInProperResById(id);
+        if (notFound) {
+            Error error = new Error(403,"no such restaurant near you");
+            return error;
+        }
+        return null;
+    }
+
     public void addRestaurant(String jsonInString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Restaurant newRestaurant= mapper.readValue(jsonInString, Restaurant.class);

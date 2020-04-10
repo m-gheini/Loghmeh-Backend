@@ -23,27 +23,21 @@ public class Restaurants {
         ArrayList<SaleFood> saleFoods = RestaurantManager.getInstance().getSaleFoods();
         return saleFoods;
     }
+
     @RequestMapping(value = "/saleFoods/{id}", method = RequestMethod.GET)
     public @ResponseBody
     ArrayList<SaleFood> allSaleFoodsOfRestaurant(@PathVariable(value = "id") String id) throws IOException {
         ArrayList<SaleFood> result = RestaurantManager.getInstance().saleFoodsOfSpecialRestaurant(id);
         return result;
     }
+
     @RequestMapping(value = "/saleFoods/{id}",params = "saleFoodName",method = RequestMethod.GET)
     public @ResponseBody
     Object specificSaleFood(@PathVariable(value = "id") String id,
                               @RequestParam(value = "saleFoodName") String saleFoodName) throws IOException {
         ArrayList<SaleFood> saleFoods = RestaurantManager.getInstance().getSaleFoods();
-        boolean restaurantFound = false;
-        boolean foodFound = false;
-        for(SaleFood sf:saleFoods){
-            if(sf.getRestaurantId().equals(id)) {
-                restaurantFound = true;
-                if(sf.getName().equals(saleFoodName)) {
-                    foodFound = true;
-                }
-            }
-        }
+        boolean restaurantFound = RestaurantManager.getInstance().restaurantIdOfSaleFoodFound(id);
+        boolean foodFound = RestaurantManager.getInstance().foodNameOfSaleFoodFound(id,saleFoodName);
         if (!restaurantFound) {
             Error error = new Error(404,"this restaurant is not on foodParty or not existed");
             return error;
@@ -59,32 +53,18 @@ public class Restaurants {
     @RequestMapping(value = "/restaurants/{id}" , method = RequestMethod.GET)
     public @ResponseBody
     Object specificRestaurant(@PathVariable(value = "id") String id) throws IOException {
-        boolean totallyNotFound = RestaurantManager.getInstance().searchForResInAllRes(id);
-        if (totallyNotFound) {
-            Error error = new Error(404,"no such id");
-            return error;
+        if(RestaurantManager.getInstance().errorForRestaurant(id)!=null)
+            return RestaurantManager.getInstance().errorForRestaurant(id);
+        else {
+            return RestaurantManager.getInstance().searchResById(id);
         }
-        boolean notFound = RestaurantManager.getInstance().searchInProperResById(id);
-        if (notFound) {
-            Error error = new Error(403,"no such restaurant near you");
-            return error;
-        }
-        return RestaurantManager.getInstance().searchResById(id);
     }
     @RequestMapping(value = "/restaurants/{id}" , params = "foodName",method = RequestMethod.GET)
     public @ResponseBody
     Object specificFood(@PathVariable(value = "id") String id,
                         @RequestParam(value = "foodName") String foodName) throws IOException {
-        boolean totallyNotFound = RestaurantManager.getInstance().searchForResInAllRes(id);
-        if (totallyNotFound) {
-            Error error = new Error(404,"no such id");
-            return error;
-        }
-        boolean notFound = RestaurantManager.getInstance().searchInProperResById(id);
-        if (notFound) {
-            Error error = new Error(403,"no such restaurant near you");
-            return error;
-        }
+        if(RestaurantManager.getInstance().errorForRestaurant(id)!=null)
+            return RestaurantManager.getInstance().errorForRestaurant(id);
         Restaurant restaurant = RestaurantManager.getInstance().searchResById(id);
         for(Food food:restaurant.getMenu()){
             if(food.getName().equals(foodName))
@@ -93,7 +73,5 @@ public class Restaurants {
         Error error = new Error(404,"no such food in this restaurants");
         return  error;
     }
-
-
 
 }

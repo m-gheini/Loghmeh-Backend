@@ -34,6 +34,7 @@ li{
     height: 4.5%;
 }
 .logo{
+    background-image: url('./Assets/LOGO.png');
     height: 30px;
     align-content: center;
 }
@@ -129,6 +130,9 @@ ul{
     padding-bottom: 1%;
     width: 100%;
     bottom: 0;
+    top: 100%;
+    left:50%;
+    right: 50%;
 }
 @media (max-width: 768px) {
     .for-party{

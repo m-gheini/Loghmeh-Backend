@@ -265,7 +265,22 @@ public class RestaurantManager {
         }
         return null;
     }
-
+    public User findSpecUser(int id){
+        for(User u:users){
+            if(u.getId()==id){
+                return u;
+            }
+        }
+        return null;
+    }
+    public Cart findSpecOrder(int index,User user) {
+        for (Cart order : user.getOrders()) {
+            if (order.getIndex() == index) {
+                return order;
+            }
+        }
+        return null;
+    }
     public void addRestaurant(String jsonInString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Restaurant newRestaurant= mapper.readValue(jsonInString, Restaurant.class);

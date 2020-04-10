@@ -20,12 +20,9 @@ public class Users {
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public @ResponseBody
     Object specificUser(@PathVariable(value = "id") Integer id) throws IOException {
-        for(User u:RestaurantManager.getInstance().getUsers()){
-            if(u.getId()==id){
-                return u;
-            }
-        }
-
+        User result = RestaurantManager.getInstance().findSpecUser(id);
+        if(result != null)
+            return result;
         Error error = new Error(404,"no such id");
         return error;
 
@@ -37,10 +34,10 @@ public class Users {
         for(User u:RestaurantManager.getInstance().getUsers()){
             if(u.getId()==id){
                 RestaurantManager.getInstance().getUsers().remove(u);
-                return u;
+                Error error = new Error(200,"user deleted successfully");
+                return error;
             }
         }
-
         Error error = new Error(404,"no such id");
         return error;
 
@@ -56,16 +53,7 @@ public class Users {
             @RequestParam(value = "email") String email,
             @RequestParam(value = "phoneNumber") String phoneNumber) throws IOException {
         User user = new User();
-        Cart myCart = new Cart();
-        ArrayList<Cart> orders = new ArrayList<Cart>();
-        user.setId(id);
-        user.setName(name);
-        user.setFamilyName(familyName);
-        user.setCredit(credit);
-        user.setEmail(email);
-        user.setPhoneNumber(phoneNumber);
-        user.setMyCart(myCart);
-        user.setOrders(orders);
+        user.setAllParameters(id,name,familyName,email,credit,phoneNumber);
         Integer prevSize=RestaurantManager.getInstance().getUsers().size();
         RestaurantManager.getInstance().addUser(user);
         if(prevSize==RestaurantManager.getInstance().getUsers().size()){
@@ -82,16 +70,8 @@ public class Users {
     Object updateUserCredit(
             @PathVariable(value = "id") Integer id,
             @RequestParam(value = "credit") Integer credit) throws IOException {
-        boolean found=false;
-        User user = new User();
-        for(User u:RestaurantManager.getInstance().getUsers()){
-            if(u.getId()==id){
-                found = true;
-                user = u;
-                break;
-            }
-        }
-        if(found==false){
+        User user = RestaurantManager.getInstance().findSpecUser(id);
+        if(user == null){
             Error error=new Error(400,"no such id");
             return error;
         }
@@ -103,58 +83,31 @@ public class Users {
 
     @RequestMapping(value = "/users/{id}/orders",method = RequestMethod.GET)
     public @ResponseBody
-    ArrayList<Cart> allOrders(@PathVariable(value = "id") Integer id) throws IOException {
-        boolean found=false;
-        User u = new User();
-        for(User user:RestaurantManager.getInstance().getUsers()){
-            if(user.getId()==id)
-                found=true;
-            u = user;
-        }
-        if(found){
-            return u.getOrders();
+    Object allOrders(@PathVariable(value = "id") Integer id) throws IOException {
+        User user = RestaurantManager.getInstance().findSpecUser(id);
+        if(user!=null){
+            return user.getOrders();
         }
         else{
-            ArrayList<Cart> emptyOrders = new ArrayList<Cart>();
-            return emptyOrders;
+            Error error = new Error(400,"no such id");
+            return error;
         }
     }
 
     @RequestMapping(value = "/users/{id}/orders/{index}",method = RequestMethod.GET)
     public @ResponseBody
-    Cart allOrders(@PathVariable(value = "id") Integer id,
+    Object allOrders(@PathVariable(value = "id") Integer id,
                    @PathVariable(value = "index") Integer index) throws IOException {
-        boolean found=false;
-        User u = new User();
-        for(User user:RestaurantManager.getInstance().getUsers()){
-            if(user.getId()==id)
-                found=true;
-            u = user;
-        }
-        if(found){
-            Cart result = new Cart();
-            ArrayList<Cart> orders = u.getOrders();
-            boolean indexFound = false;
-            for (Cart order:orders){
-                if (order.getIndex()==index){
-                    indexFound = true;
-                    result = order;
-                    break;
-                }
-            }
-            if(indexFound){
+        User user = RestaurantManager.getInstance().findSpecUser(id);
+        if(user!=null){
+            Cart result = RestaurantManager.getInstance().findSpecOrder(index,user);
+            if(result!=null){
                 return result;
             }
-            else{
-                //TODO not existing index
-                return result;
-            }
+            return new Error(400,"no such index of orders");
         }
-        else{
-            //TODO not existing user
-            Cart emptyOrder = new Cart();
-            return emptyOrder;
-        }
+        else
+            return new Error(400,"no such user id");
     }
 
     @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.GET)

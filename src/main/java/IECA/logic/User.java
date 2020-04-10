@@ -23,7 +23,16 @@ public class User {
         myCart = new Cart();
         orders = new ArrayList<>();
     }
-
+    public void setAllParameters(int id,String name,String familyName,String email,int credit,String phoneNumber){
+        this.id = id;
+        this.name = name;
+        this.familyName = familyName;
+        this.email = email;
+        this.credit = credit;
+        this.phoneNumber = phoneNumber;
+        this.myCart = new Cart();
+        this.orders = new ArrayList<Cart>();
+    }
     public ArrayList<Cart> getOrders() {
         return orders;
     }

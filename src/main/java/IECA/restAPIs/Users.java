@@ -214,20 +214,11 @@ public class Users {
     @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.POST)
     public @ResponseBody
     Object finalizeCart(@PathVariable(value = "id") Integer id) throws IOException {
-        boolean found=false;
-        User u = new User();
-        for(User user:RestaurantManager.getInstance().getUsers()){
-            if(user.getId()==id) {
-                found = true;
-                u = user;
-            }
-        }
-        if(found){
+        User u = RestaurantManager.getInstance().findSpecUser(id);
+        if(u!=null){
             Cart userCart = u.getMyCart();
-            if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0) {
-                Error error = new Error(404,"Your cart is empty!");
-                return error;
-            }
+            if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0)
+                return new Error(404,"Your cart is empty!");
             else {
                 Integer total = RestaurantManager.getInstance().makeTotal();
                 String restaurantId = "";
@@ -240,35 +231,19 @@ public class Users {
                     u.addCredit(-total);
                     DeliveryScheduler deliveryScheduler = new DeliveryScheduler();
                     deliveryScheduler.setRestaurant(restaurantId);
-                    ArrayList<Food> foods = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods());
-                    ArrayList<SaleFood> saleFoods = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods());
-                    ArrayList<Integer> counts = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfFood());
-                    ArrayList<Integer> saleCounts = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getNumberOfSaleFood());
-                    previousCart.setFoods(foods);
-                    previousCart.setSaleFoods(saleFoods);
-                    previousCart.setNumberOfFood(counts);
-                    previousCart.setNumberOfSaleFood(saleCounts);
+                    previousCart.setAllParameters(u);
                     u.addOrder(previousCart);
                     u.getMyCart().clearCart();
                     return u.getMyCart();
                 }
                 else{
-                    if(u.getCredit()<total) {
-                        Error error = new Error(400,"not enough credit");
-                        return error;
-                    }
-                    else{
-                        Error error = new Error(400,"empty cart");
-                        return error;
-
-                    }
+                    if(u.getCredit()<total)
+                        return new Error(400,"not enough credit");
+                    else
+                        return new Error(400,"empty cart");
                 }
             }
         }
-        else{
-            Error error = new Error(404,"No such user!");
-            return error;
-        }
+        return new Error(404,"No such user!");
     }
-
 }

@@ -23,6 +23,17 @@ public class Cart {
         status = "finding delivery";
         index = 0;
     }
+    public void setAllParameters(User u){
+        ArrayList<Food> foods = new ArrayList<>(u.getMyCart().getFoods());
+        ArrayList<SaleFood> saleFoods = new ArrayList<>(u.getMyCart().getSaleFoods());
+        ArrayList<Integer> counts = new ArrayList<>(u.getMyCart().getNumberOfFood());
+        ArrayList<Integer> saleCounts = new ArrayList<>(u.getMyCart().getNumberOfSaleFood());
+        setFoods(foods);
+        setSaleFoods(saleFoods);
+        setNumberOfFood(counts);
+        setNumberOfSaleFood(saleCounts);
+
+    }
     public int addSaleFood(String jsonString, ArrayList<SaleFood> allSaleFoods) throws IOException {
         System.out.println("+*+*+*+*+*+*+*+*+()()()()()FoodSaleB------>"+saleFoods.size());
         boolean found = false;

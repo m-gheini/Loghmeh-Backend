@@ -3,7 +3,10 @@ package IECA.logic;
 public class Error {
     int errorCode;
     String errorMassage;
-
+    public Error(int errorCode,String errorMassage){
+        this.errorCode = errorCode;
+        this.errorMassage = errorMassage;
+    }
     public void setErrorCode(int errorCode) {
         this.errorCode = errorCode;
     }

@@ -26,9 +26,7 @@ public class Users {
             }
         }
 
-        Error error = new Error();
-        error.setErrorCode(404);
-        error.setErrorMassage("no such id");
+        Error error = new Error(404,"no such id");
         return error;
 
     }
@@ -43,9 +41,7 @@ public class Users {
             }
         }
 
-        Error error = new Error();
-        error.setErrorCode(404);
-        error.setErrorMassage("no such id");
+        Error error = new Error(404,"no such id");
         return error;
 
     }
@@ -73,9 +69,7 @@ public class Users {
         Integer prevSize=RestaurantManager.getInstance().getUsers().size();
         RestaurantManager.getInstance().addUser(user);
         if(prevSize==RestaurantManager.getInstance().getUsers().size()){
-            Error error = new Error();
-            error.setErrorCode(400);
-            error.setErrorMassage("already existed");
+            Error error = new Error(404,"already existed");
             return error;
         }
         else {
@@ -98,9 +92,7 @@ public class Users {
             }
         }
         if(found==false){
-            Error error=new Error();
-            error.setErrorCode(400);
-            error.setErrorMassage("no such id");
+            Error error=new Error(400,"no such id");
             return error;
         }
         else{
@@ -179,16 +171,14 @@ public class Users {
         if(found){
             Cart userCart = u.getMyCart();
             if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0) {
-                Error error = new Error();
-                error.setErrorCode(404);
-                error.setErrorMassage("Your cart is empty!");
+                Error error = new Error(404,"Your cart is empty!");
                 return error;
             }
             else
                 return userCart;
         }
         else{
-            Error error = new Error();
+            Error error = new Error(404,"No such user!");
             error.setErrorCode(404);
             error.setErrorMassage("No such user!");
             return error;
@@ -224,21 +214,15 @@ public class Users {
             }
         }
         if (!userFound){
-            Error error = new Error();
-            error.setErrorMassage("no such id");
-            error.setErrorCode(404);
+            Error error = new Error(404,"no such id");
             return error;
         }
         if(!restaurantFound){
-            Error error = new Error();
-            error.setErrorMassage("no such restaurantId");
-            error.setErrorCode(404);
+            Error error = new Error(404,"no such restaurantId");
             return error;
         }
         if(!foodFound){
-            Error error = new Error();
-            error.setErrorMassage("no such foodName");
-            error.setErrorCode(404);
+            Error error = new Error(404,"no such foodName");
             return error;
         }
         else{
@@ -274,21 +258,15 @@ public class Users {
             }
         }
         if (!userFound){
-            Error error = new Error();
-            error.setErrorMassage("no such id");
-            error.setErrorCode(404);
+            Error error = new Error(404,"no such id");
             return error;
         }
         if(!restaurantFound){
-            Error error = new Error();
-            error.setErrorMassage("no such restaurantId");
-            error.setErrorCode(404);
+            Error error = new Error(404,"no such restaurantId");
             return error;
         }
         if(!foodFound){
-            Error error = new Error();
-            error.setErrorMassage("no such foodName");
-            error.setErrorCode(404);
+            Error error = new Error(404,"no such foodName");
             return error;
         }
         else{
@@ -328,21 +306,15 @@ public class Users {
             }
         }
         if (!userFound){
-            Error error = new Error();
-            error.setErrorMassage("no such id");
-            error.setErrorCode(404);
+            Error error = new Error(404,"no such id");
             return error;
         }
         if(!restaurantFound){
-            Error error = new Error();
-            error.setErrorMassage("no such restaurantId");
-            error.setErrorCode(404);
+            Error error = new Error(404,"no such restaurantId");
             return error;
         }
         if(!foodFound){
-            Error error = new Error();
-            error.setErrorMassage("no such foodName");
-            error.setErrorCode(404);
+            Error error = new Error(404,"no such foodName");
             return error;
         }
         else{
@@ -378,21 +350,15 @@ public class Users {
             }
         }
         if (!userFound){
-            Error error = new Error();
-            error.setErrorMassage("no such id");
-            error.setErrorCode(404);
+            Error error = new Error(404,"no such id");
             return error;
         }
         if(!restaurantFound){
-            Error error = new Error();
-            error.setErrorMassage("no such restaurantId");
-            error.setErrorCode(404);
+            Error error = new Error(404,"no such restaurantId");
             return error;
         }
         if(!foodFound){
-            Error error = new Error();
-            error.setErrorMassage("no such foodName");
-            error.setErrorCode(404);
+            Error error = new Error(404,"no such foodName");
             return error;
         }
         else{
@@ -415,9 +381,7 @@ public class Users {
         if(found){
             Cart userCart = u.getMyCart();
             if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0) {
-                Error error = new Error();
-                error.setErrorCode(404);
-                error.setErrorMassage("Your cart is empty!");
+                Error error = new Error(404,"Your cart is empty!");
                 return error;
             }
             else {
@@ -446,15 +410,11 @@ public class Users {
                 }
                 else{
                     if(u.getCredit()<total) {
-                        Error error = new Error();
-                        error.setErrorCode(400);
-                        error.setErrorMassage("not enough credit");
+                        Error error = new Error(400,"not enough credit");
                         return error;
                     }
                     else{
-                        Error error = new Error();
-                        error.setErrorCode(400);
-                        error.setErrorMassage("empty cart");
+                        Error error = new Error(400,"empty cart");
                         return error;
 
                     }
@@ -462,9 +422,7 @@ public class Users {
             }
         }
         else{
-            Error error = new Error();
-            error.setErrorCode(404);
-            error.setErrorMassage("No such user!");
+            Error error = new Error(404,"No such user!");
             return error;
         }
     }

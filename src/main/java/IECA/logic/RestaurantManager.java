@@ -218,6 +218,22 @@ public class RestaurantManager {
         }
         return nullFood;
     }
+    public ArrayList<SaleFood> saleFoodsOfSpecialRestaurant(String restaurantId){
+        ArrayList<SaleFood> result = new ArrayList<SaleFood>();
+        for(SaleFood sf:saleFoods) {
+        if (sf.getRestaurantId().equals(restaurantId))
+            result.add(sf);
+        }
+        return result;
+    }
+    public SaleFood findSpecialSaleFood(String restaurantId,String foodName){
+        ArrayList<SaleFood> allSaleFoodsOfSpecRes = saleFoodsOfSpecialRestaurant(restaurantId);
+        for(SaleFood saleFood:allSaleFoodsOfSpecRes){
+            if (saleFood.getName().equals(foodName))
+                return saleFood;
+        }
+        return null;
+    }
     public void addRestaurant(String jsonInString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Restaurant newRestaurant= mapper.readValue(jsonInString, Restaurant.class);

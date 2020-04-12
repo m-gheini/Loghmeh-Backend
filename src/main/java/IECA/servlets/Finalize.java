@@ -33,7 +33,7 @@ public class Finalize extends HttpServlet {
     public void initial() throws IOException {
         total = RestaurantManager.getInstance().makeTotal();
         restaurantId = "";
-        restaurantName = "";
+        restaurantName =RestaurantManager.getInstance().getCurrentUser().getMyCart().getRestaurantName();;
         servletHandler = new ServletHandler();
     }
     public void initForFinalize() throws IOException {
@@ -46,6 +46,7 @@ public class Finalize extends HttpServlet {
         previousCart.setSaleFoods(saleFoods);
         previousCart.setNumberOfFood(counts);
         previousCart.setNumberOfSaleFood(saleCounts);
+        previousCart.setRestaurantName(restaurantName);
         RestaurantManager.getInstance().getCurrentUser().addOrder(previousCart);
 
     }
@@ -72,6 +73,7 @@ public class Finalize extends HttpServlet {
             initForFinalize();
             DeliveryScheduler deliveryScheduler = new DeliveryScheduler();
             deliveryScheduler.setRestaurant(restaurantId);
+
             dispatch(request,response,"finalize.jsp",200);
         }
         else{

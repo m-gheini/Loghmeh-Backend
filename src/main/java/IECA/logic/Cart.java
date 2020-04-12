@@ -14,6 +14,7 @@ public class Cart {
     private ArrayList<SaleFood> saleFoods ;
     private ArrayList<Integer> numberOfSaleFood ;
     private String status;
+    private String restaurantName;
     int index;
     public Cart() {
         foods = new ArrayList<Food>();
@@ -21,17 +22,29 @@ public class Cart {
         saleFoods = new ArrayList<SaleFood>();
         numberOfSaleFood = new ArrayList<Integer>();
         status = "finding delivery";
+        restaurantName = "";
         index = 0;
     }
+
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
     public void setAllParameters(User u){
         ArrayList<Food> foods = new ArrayList<>(u.getMyCart().getFoods());
         ArrayList<SaleFood> saleFoods = new ArrayList<>(u.getMyCart().getSaleFoods());
         ArrayList<Integer> counts = new ArrayList<>(u.getMyCart().getNumberOfFood());
         ArrayList<Integer> saleCounts = new ArrayList<>(u.getMyCart().getNumberOfSaleFood());
+        String restaurantName = u.getMyCart().getRestaurantName();
         setFoods(foods);
         setSaleFoods(saleFoods);
         setNumberOfFood(counts);
         setNumberOfSaleFood(saleCounts);
+        setRestaurantName(restaurantName);
 
     }
     public int addSaleFood(String jsonString, ArrayList<SaleFood> allSaleFoods) throws IOException {
@@ -68,6 +81,7 @@ public class Cart {
                         numberOfSaleFood.add(1);
                     }
                     allSaleFood.updateCount();
+
                     return 1;
                 }
                 else{

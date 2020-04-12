@@ -343,10 +343,26 @@ public class RestaurantManager {
 
     public int addToCart(String jsonInString) throws IOException {
         int success = currentUser.getMyCart().addFood(jsonInString, foods);
+        if(success==1) {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> jsonMap = mapper.readValue(jsonInString, new TypeReference<Map<String, Object>>() {});
+            String restaurantId = (String) jsonMap.get("restaurantId");
+            System.out.println(currentUser.getMyCart().getRestaurantName());
+            currentUser.getMyCart().setRestaurantName(RestaurantManager.getInstance().searchForRestaurant("{\"id\":\"" + restaurantId + "\"}").getName());
+            System.out.println(currentUser.getMyCart().getRestaurantName());
+        }
         return success;
     }
     public int addToCartSaleFood(String jsonInString) throws IOException {
         int success = currentUser.getMyCart().addSaleFood(jsonInString, saleFoods);
+        if(success==1) {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> jsonMap = mapper.readValue(jsonInString, new TypeReference<Map<String, Object>>() {
+            });
+            String restaurantId = (String) jsonMap.get("restaurantId");
+            currentUser.getMyCart().setRestaurantName(RestaurantManager.getInstance().searchForRestaurant("{\"id\":\"" + restaurantId + "\"}").getName());
+        }
+
         return success;
     }
     public boolean finalizeOrder(int credit) {

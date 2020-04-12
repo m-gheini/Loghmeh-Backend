@@ -4,7 +4,7 @@
 <%@ page import="IECA.logic.Food" %>
 <%@ page import="IECA.logic.SaleFood" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<jsp:include page="../../../../target/IECA/header.jsp" />
+<jsp:include page="header.jsp" />
 <%
     String restaurantName = (String) request.getAttribute("restaurantName");
     String restaurantId= (String) request.getAttribute("restaurantId");
@@ -25,7 +25,7 @@
     <%}%>
 </ul>
 <%if(!(restaurantId.equals(""))){%>
-<form action="../../../../target/IECA/SpecificRestaurant.jsp">
+<form action="SpecificRestaurant.jsp">
     <button type="submit" name="restaurantInfo" value="<%=restaurantId%>">Go Back To Restaurant To Order More</button>
 </form>
 <form action="Finalize" method="POST">
@@ -36,4 +36,4 @@
 <form action="index.jsp">
     <button type="submit" name="home" value="">Home</button>
 </form>
-<jsp:include page="../../../../target/IECA/footer.jsp" />
+<jsp:include page="footer.jsp" />

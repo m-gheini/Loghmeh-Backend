@@ -6,9 +6,9 @@
     String restaurantName = (String) request.getAttribute("restaurantName");
     Cart userCart = RestaurantManager.getInstance().getCurrentUser().getMyCart();
 %>
-<jsp:include page="../../../../target/IECA/header.jsp" />
+<jsp:include page="header.jsp" />
 <%if(userCart.getFoods().size()==0 &&
-    userCart.getSaleFoods().size()==0){%>
+        userCart.getSaleFoods().size()==0){%>
 <div>Your cart is empty!</div>
 <%}else{%>
 <div><h4><%=restaurantName%><br></div>
@@ -29,8 +29,8 @@
     <button type="submit">finalize</button>
 </form>
 <%}%>
-<form action="../../../../target/IECA/index.jsp">
+<form action="index.jsp">
     <button type="submit" name="home" value="">Home</button>
 </form>
 
-<jsp:include page="../../../../target/IECA/footer.jsp" />
+<jsp:include page="footer.jsp" />

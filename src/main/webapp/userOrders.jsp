@@ -5,7 +5,7 @@
 <%@ page import="IECA.logic.SaleFood" %>
 <%@ page import="IECA.logic.Cart" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<jsp:include page="../../../../target/IECA/header.jsp" />
+<jsp:include page="header.jsp" />
 
 <%  RestaurantManager restaurantManager = RestaurantManager.getInstance();
     Integer index = (Integer) request.getAttribute("i");
@@ -36,8 +36,8 @@
     <button type="submit" hidden="hidden" id="cart" name="cart" value="<%=index%>">update</button>
 </form>
 
-<form action="../../../../target/IECA/index.jsp">
+<form action="index.jsp">
     <button type="submit" name="home" value="">Home</button>
 </form>
 <%%>
-<jsp:include page="../../../../target/IECA/footer.jsp" />
+<jsp:include page="footer.jsp" />

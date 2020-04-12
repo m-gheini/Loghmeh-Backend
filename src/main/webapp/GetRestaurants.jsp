@@ -2,7 +2,7 @@
 <%@ page import="IECA.logic.Restaurant" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<jsp:include page="../../../../target/IECA/header.jsp" />
+<jsp:include page="header.jsp" />
 <table>
     <tr>
         <th>id</th>
@@ -33,4 +33,4 @@
     <button type="submit" name="home" value="">Home</button>
 </form>
 </div>
-<jsp:include page="../../../../target/IECA/footer.jsp" />
+<jsp:include page="footer.jsp" />

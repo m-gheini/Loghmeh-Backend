@@ -10,7 +10,7 @@
         break;
     }
 }%>
-<jsp:include page="../../../../target/IECA/header.jsp" />
+<jsp:include page="header.jsp" />
 <ul>
     <li>id: <%=thisRes.getId()%></li>
     <li>name: <%=thisRes.getName()%></li>
@@ -31,8 +31,8 @@
         </ul>
     </li>
 </ul>
-<form action="../../../../target/IECA/index.jsp">
+<form action="index.jsp">
     <button type="submit" name="home" value="">Home</button>
 </form>
-<jsp:include page="../../../../target/IECA/footer.jsp" />
+<jsp:include page="footer.jsp" />
 

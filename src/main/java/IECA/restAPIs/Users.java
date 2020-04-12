@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 @RestController
 public class Users {
+
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public @ResponseBody
     ArrayList<User> allUsers() throws IOException {

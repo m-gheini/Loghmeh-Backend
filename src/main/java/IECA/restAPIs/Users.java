@@ -29,6 +29,17 @@ public class Users {
 
     }
 
+    @RequestMapping(value = "/users/{id}/credit", method = RequestMethod.GET)
+    public @ResponseBody
+    Object specificUserCredit(@PathVariable(value = "id") Integer id) throws IOException {
+        User result = RestaurantManager.getInstance().findSpecUser(id);
+        if(result != null)
+            return result.getCredit();
+        Error error = new Error(404,"no such id");
+        return error;
+
+    }
+
     @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
     public @ResponseBody
     Object deleteUser(@PathVariable(value = "id") Integer id) throws IOException {

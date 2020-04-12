@@ -15,8 +15,8 @@ public class User {
     private ArrayList<Cart> orders;
     public User(){
         id = 1;
-        name = "leila";
-        familyName = "fakheri";
+        name = "لیلا";
+        familyName = "قینی";
         email ="fakheri90@gmail.com";
         credit = 5000;
         phoneNumber = "09121111111";

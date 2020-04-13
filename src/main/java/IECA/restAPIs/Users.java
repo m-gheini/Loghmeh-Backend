@@ -17,7 +17,6 @@ public class Users {
     public @ResponseBody
     ArrayList<User> allUsers() throws IOException, InterruptedException {
         ArrayList<User> users = RestaurantManager.getInstance().getUsers();
-        Thread.sleep(990000000);
         return users;
     }
 
@@ -49,7 +48,7 @@ public class Users {
         for(User u:RestaurantManager.getInstance().getUsers()){
             if(u.getId()==id){
                 RestaurantManager.getInstance().getUsers().remove(u);
-                Error error = new Error(200,"user deleted successfully");
+                Error error = new Error(202,"user deleted successfully");
                 return error;
             }
         }
@@ -72,11 +71,12 @@ public class Users {
         Integer prevSize=RestaurantManager.getInstance().getUsers().size();
         RestaurantManager.getInstance().addUser(user);
         if(prevSize==RestaurantManager.getInstance().getUsers().size()){
-            Error error = new Error(404,"already existed");
+            Error error = new Error(403,"already existed");
             return error;
         }
         else {
-            return RestaurantManager.getInstance().getUsers();
+            Error error = new Error(201,"added successfully");
+            return error;
         }
     }
 
@@ -87,12 +87,12 @@ public class Users {
             @RequestParam(value = "credit") Integer credit) throws IOException {
         User user = RestaurantManager.getInstance().findSpecUser(id);
         if(user == null){
-            Error error=new Error(400,"no such id");
+            Error error=new Error(404,"no such id");
             return error;
         }
         else{
             if(credit<0 )
-                return new Error(400,"please enter a positive number");
+                return new Error(403,"please enter a positive number");
             user.addCredit(credit);
             Error error=new Error(200,"successful");
             return error;
@@ -107,7 +107,7 @@ public class Users {
             return user.getOrders();
         }
         else{
-            Error error = new Error(400,"no such id");
+            Error error = new Error(404,"no such id");
             return error;
         }
     }
@@ -122,10 +122,10 @@ public class Users {
             if(result!=null){
                 return result;
             }
-            return new Error(400,"no such index of orders");
+            return new Error(404,"no such index of orders");
         }
         else
-            return new Error(400,"no such user id");
+            return new Error(404,"no such user id");
     }
 
     @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.GET)
@@ -160,8 +160,8 @@ public class Users {
             return new Error(404,"no such foodName");
         int status = u.getMyCart().addFood(jsonInString,RestaurantManager.getInstance().getFoods());
         if (status==0)
-            return new Error(400,"you can not choose from different restaurants");
-        return new Error(200,"ok");
+            return new Error(403,"you can not choose from different restaurants");
+        return new Error(201,"ok");
     }
 
     @RequestMapping(value = "/users/{id}/cart", params = "saleFoodName",method = RequestMethod.PUT)
@@ -183,8 +183,8 @@ public class Users {
             return new Error(404,"no such foodName");
         int status = u.getMyCart().addSaleFood(jsonInString,RestaurantManager.getInstance().getSaleFoods());
         if (status==0)
-            return new Error(400,"you can not choose from different restaurants");
-        return u.getMyCart();
+            return new Error(403,"you can not choose from different restaurants");
+        return new Error(201,"successful");
     }
 
     @RequestMapping(value = "/users/{id}/cart", params = "foodName",method = RequestMethod.DELETE)
@@ -204,7 +204,7 @@ public class Users {
         if(orderFood.getName()==null)
             return new Error(404,"no such foodName");
         u.getMyCart().deleteSpecificFood(orderFood);
-        return u.getMyCart();
+        return new Error(202,"successful");
     }
 
     @RequestMapping(value = "/users/{id}/cart", params = "saleFoodName",method = RequestMethod.DELETE)
@@ -225,7 +225,7 @@ public class Users {
         if(orderFood==null)
             return new Error(404,"no such foodName");
         u.getMyCart().deleteSpecificSaleFood(orderFood);
-        return u.getMyCart();
+        return new Error(201,"no such foodName");
     }
 
     @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.POST)
@@ -255,9 +255,9 @@ public class Users {
                 }
                 else{
                     if(u.getCredit()<total)
-                        return new Error(400,"not enough credit");
+                        return new Error(403,"not enough credit");
                     else
-                        return new Error(400,"empty cart");
+                        return new Error(404,"empty cart");
                 }
             }
         }

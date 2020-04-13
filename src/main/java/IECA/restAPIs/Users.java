@@ -5,6 +5,7 @@ import IECA.logic.Error;
 import IECA.logic.schedulers.DeliveryScheduler;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -90,9 +91,9 @@ public class Users {
             return error;
         }
         else{
-            user.addCredit(credit);
+            Error error=new Error(200,"successful");
+            return error;
         }
-        return user;
     }
 
     @RequestMapping(value = "/users/{id}/orders",method = RequestMethod.GET)
@@ -157,7 +158,7 @@ public class Users {
         int status = u.getMyCart().addFood(jsonInString,RestaurantManager.getInstance().getFoods());
         if (status==0)
             return new Error(400,"you can not choose from different restaurants");
-        return u.getMyCart();
+        return new Error(200,"ok");
     }
 
     @RequestMapping(value = "/users/{id}/cart", params = "saleFoodName",method = RequestMethod.PUT)

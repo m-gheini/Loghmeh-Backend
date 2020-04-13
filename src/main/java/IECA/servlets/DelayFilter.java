@@ -11,7 +11,7 @@ public class DelayFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(60000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

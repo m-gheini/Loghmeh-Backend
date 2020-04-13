@@ -91,6 +91,8 @@ public class Users {
             return error;
         }
         else{
+            if(credit<0 )
+                return new Error(400,"please enter a positive number");
             Error error=new Error(200,"successful");
             return error;
         }

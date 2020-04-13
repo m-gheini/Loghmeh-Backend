@@ -13,14 +13,17 @@ import java.util.TimerTask;
 public class FoodPartyScheduler extends TimerTask {
     private static final int HALFHOUR=1800000;//TODO 30000
     private Timer timer;
+    private RemainingTime remainingTime;
 
     public FoodPartyScheduler() {
         timer = new Timer();
+        remainingTime = new RemainingTime();
         timer.schedule(this, 0, HALFHOUR);
     }
 
     @Override
     public void run() {
+        remainingTime.run();
         try {
             RestaurantManager.getInstance().setRemainingTime(HALFHOUR);
         } catch (IOException e) {
@@ -29,7 +32,6 @@ public class FoodPartyScheduler extends TimerTask {
         FoodPartyDataset foodPartyDataset = new FoodPartyDataset();
         try {
             RestaurantManager.getInstance().setRemainingTime(HALFHOUR);
-            RemainingTime remainingTime = new RemainingTime();
         } catch (IOException e) {
             e.printStackTrace();
         }

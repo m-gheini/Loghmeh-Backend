@@ -93,6 +93,7 @@ public class Users {
         else{
             if(credit<0 )
                 return new Error(400,"please enter a positive number");
+            user.addCredit(credit);
             Error error=new Error(200,"successful");
             return error;
         }

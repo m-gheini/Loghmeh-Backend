@@ -23,6 +23,12 @@ public class FoodPartyScheduler extends TimerTask {
     public void run() {
         FoodPartyDataset foodPartyDataset = new FoodPartyDataset();
         try {
+            RestaurantManager.getInstance().setRemainingTime(HALFHOUR);
+            RemainingTime remainingTime = new RemainingTime();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
             foodPartyDataset.addToDataset(foodPartyDataset.readFromWeb("http://138.197.181.131:8080/foodparty"));
         } catch (IOException e) {
             e.printStackTrace();
@@ -34,6 +40,8 @@ public class FoodPartyScheduler extends TimerTask {
                     continue;
                 else
                     RestaurantManager.getInstance().getCurrentUser().getMyCart().deleteSaleFood(saleFood);
+                System.out.println(timer);
+
             }
         } catch (IOException e) {
             e.printStackTrace();

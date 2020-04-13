@@ -2,11 +2,14 @@ package IECA.restAPIs;
 
 import IECA.logic.*;
 import IECA.logic.Error;
+import org.codehaus.jackson.map.util.JSONPObject;
+import org.json.JSONObject;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @RestController
 public class Restaurants {
@@ -73,5 +76,13 @@ public class Restaurants {
         Error error = new Error(404,"no such food in this restaurants");
         return  error;
     }
+    @RequestMapping(value = "/foodPartyTime", method = RequestMethod.GET)
+    public @ResponseBody
+    HashMap<String,Integer> foodPartyRemainingTime() throws IOException {
+        HashMap<String,Integer> result = new HashMap<>();
+        result.put("remainingTime",RestaurantManager.getInstance().getRemainingTime());
+        return result;
+    }
+
 
 }

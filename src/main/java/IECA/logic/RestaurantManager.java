@@ -21,7 +21,7 @@ public class RestaurantManager {
     private ArrayList<Delivery> deliveries;
     private int bestTime;
     private ArrayList<User> users;
-
+    private int remainingTime;
     private RestaurantManager() throws IOException {
         RestaurantDataset restaurantDataset = new RestaurantDataset();
         restaurantDataset.addToDataset(restaurantDataset.readFromWeb("http://138.197.181.131:8080/restaurants"));
@@ -29,6 +29,7 @@ public class RestaurantManager {
         foods = restaurantDataset.getFoods();
         currentUser = new User();
         deliveries = new ArrayList<Delivery>();
+        remainingTime = 0;
         FoodPartyScheduler foodPartyScheduler = new FoodPartyScheduler();
         users=new ArrayList<User>();
         users.add(currentUser);
@@ -78,6 +79,17 @@ public class RestaurantManager {
 
     public int getBestTime() {
         return bestTime;
+    }
+
+    public int getRemainingTime() {
+        return remainingTime;
+    }
+
+    public void setRemainingTime(int remainingTime) {
+        this.remainingTime = remainingTime;
+    }
+    public void updateRemainingTime(){
+        remainingTime = remainingTime-1000;
     }
 
     public static RestaurantManager getInstance() throws IOException {

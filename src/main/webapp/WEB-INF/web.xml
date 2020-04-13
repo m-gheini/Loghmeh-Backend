@@ -18,7 +18,15 @@
   </filter-mapping>
   <filter-mapping>
     <filter-name>DelayFilter</filter-name>
-    <url-pattern>/restaurants/*,/saleFoods/*,users/*</url-pattern>
+    <url-pattern>/restaurants/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>DelayFilter</filter-name>
+    <url-pattern>/saleFoods/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>DelayFilter</filter-name>
+    <url-pattern>/users/*</url-pattern>
   </filter-mapping>
   <servlet>
     <servlet-name>dispatcher</servlet-name>

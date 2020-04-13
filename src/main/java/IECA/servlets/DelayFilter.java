@@ -11,13 +11,10 @@ public class DelayFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         try {
-            System.out.println("HEREEEE");
-            Thread.sleep(60000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
-            System.out.println("HEREEEE");
             e.printStackTrace();
         }
-
         chain.doFilter(req, resp);
     }
 

@@ -14,8 +14,9 @@ public class Users {
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public @ResponseBody
-    ArrayList<User> allUsers() throws IOException {
+    ArrayList<User> allUsers() throws IOException, InterruptedException {
         ArrayList<User> users = RestaurantManager.getInstance().getUsers();
+        Thread.sleep(990000000);
         return users;
     }
 

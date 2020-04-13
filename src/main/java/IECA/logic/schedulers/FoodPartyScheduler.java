@@ -21,6 +21,11 @@ public class FoodPartyScheduler extends TimerTask {
 
     @Override
     public void run() {
+        try {
+            RestaurantManager.getInstance().setRemainingTime(HALFHOUR);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         FoodPartyDataset foodPartyDataset = new FoodPartyDataset();
         try {
             RestaurantManager.getInstance().setRemainingTime(HALFHOUR);

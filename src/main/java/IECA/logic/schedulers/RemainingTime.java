@@ -16,8 +16,9 @@ public class RemainingTime extends TimerTask {
     @Override
     public void run() {
         try {
+            if (RestaurantManager.getInstance().getRemainingTime()<=0)
+                timer.cancel();
             RestaurantManager.getInstance().updateRemainingTime();
-            System.out.println("--------------------------------------------------");
             System.out.println(RestaurantManager.getInstance().getRemainingTime());
         } catch (IOException e) {
             e.printStackTrace();

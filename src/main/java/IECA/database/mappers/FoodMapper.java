@@ -41,8 +41,8 @@ public class FoodMapper extends Mapper<Food, String> implements IFoodMapper {
 
     @Override
     protected String getFindStatement(ArrayList<String> keys) {
-        String name = "keys.get(0)";
-        String resId = "keys.get(1)";
+        String name = keys.get(0);
+        String resId = keys.get(1);
         return "SELECT " + COLUMNS +
                 " FROM " + TABLE_NAME +
                 " WHERE name = "+ "'" + name + "'" + "and restaurantId = " + "'" + resId + "'" +";";

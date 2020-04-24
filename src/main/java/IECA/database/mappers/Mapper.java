@@ -35,7 +35,9 @@ public abstract class Mapper<T, I> implements IMapper<T, I> {
             ResultSet resultSet;
             try {
                 resultSet = st.executeQuery();
-                resultSet.next();
+                Object res = resultSet.next();
+                if(!(Boolean)res)
+                    return null;
                 return convertResultSetToObject(resultSet);
             } catch (SQLException ex) {
                 System.out.println("error in Mapper.findByID query.");

@@ -41,6 +41,12 @@ public class FoodMapper extends Mapper<Food, String> implements IFoodMapper {
 
     @Override
     protected String getFindStatement(ArrayList<String> keys) {
+        if(keys.size() == 1){
+            String resId = keys.get(0);
+            return "SELECT " + COLUMNS +
+                    " FROM " + TABLE_NAME +
+                    " WHERE restaurantId = " + "'" + resId + "'" +";";
+        }
         String name = keys.get(0);
         String resId = keys.get(1);
         return "SELECT " + COLUMNS +

@@ -45,6 +45,27 @@ public abstract class Mapper<T, I> implements IMapper<T, I> {
             }
         }
     }
+    public ArrayList<T> findByForeignKey(ArrayList<I> keys) throws SQLException {
+        try (Connection con = ConnectionPool.getConnection();
+             PreparedStatement st = con.prepareStatement(getFindStatement(keys))
+        ) {
+            ArrayList <T> result = new ArrayList<T>();
+            ResultSet resultSet;
+            try {
+                resultSet = st.executeQuery();
+                while (true) {
+                    Object res = resultSet.next();
+                    if (!(Boolean) res) {
+                        return result;
+                    }
+                    result.add(convertResultSetToObject(resultSet));
+                }
+            } catch (SQLException ex) {
+                System.out.println("error in Mapper.findByID query.");
+                throw ex;
+            }
+        }
+    }
 
     public void insert(T obj) throws SQLException {
         try (Connection con = ConnectionPool.getConnection();

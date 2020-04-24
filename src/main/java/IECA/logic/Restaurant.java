@@ -76,14 +76,14 @@ public class Restaurant {
         result = (distanceResCustomer/5) + (distanceDeliveryRes/5) + 60;
         return result;
     }
-    @Override
-    public String toString(){
-        String restaurantInString = "{ ";
-        restaurantInString = restaurantInString + "\"id\" : " + id + ",\"name\" : " + name +"\"location\" : " +location.toString()
-           +",\"logo\" : "+logo + "\"menu\" :[\\n";
-        for(Food current:menu)
-            restaurantInString+=current.toString();
-
-        return restaurantInString+"]\\n}";
-    }
+//    @Override
+//    public String toString(){
+//        String restaurantInString = "{ ";
+//        restaurantInString = restaurantInString + "\"id\" : " + id + ",\"name\" : " + name +"\"location\" : " +location.toString()
+//           +",\"logo\" : "+logo + "\"menu\" :[\\n";
+//        for(Food current:menu)
+//            restaurantInString+=current.toString();
+//
+//        return restaurantInString+"]\\n}";
+//    }
 }

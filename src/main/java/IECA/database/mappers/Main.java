@@ -22,9 +22,10 @@ public class Main {
 
         ArrayList<String> keys = new ArrayList<String>();
         keys.add("پیتزل مخصوص");
-        keys.add("5e4fcf14af68ed25d5900ebc");
+        keys.add("5e4fcf14af68ed25d5900ebb");
         Food f = fm.find(keys);
         System.out.println(f);
+        fm.delete(keys);
 //        Location l = lm.find(1);
 //        System.out.println(l);
 //        lm.delete(2);

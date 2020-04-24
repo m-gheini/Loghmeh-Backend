@@ -67,7 +67,7 @@ public class FoodMapper extends Mapper<Food, String> implements IFoodMapper {
         String primary_key = keys.get(0);
         String foreign_key = keys.get(1);
         return "DELETE FROM " + TABLE_NAME +
-                " WHERE name = " + primary_key + "and restaurantId = " + foreign_key + ";";
+                " WHERE name = '" + primary_key + "' and restaurantId = '" + foreign_key + "';";
     }
 
     @Override

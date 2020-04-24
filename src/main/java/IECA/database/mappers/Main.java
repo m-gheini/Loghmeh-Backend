@@ -2,6 +2,7 @@ package IECA.database.mappers;
 
 import IECA.logic.Food;
 import IECA.logic.Location;
+import IECA.logic.SaleFood;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,21 +10,23 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-        FoodMapper fm = new FoodMapper(false);
+        FoodPartyMapper fm = new FoodPartyMapper(false);
         Connection connection = ConnectionPool.getConnection();
-        Food f1 = new Food();
-        f1.setName("همبرگر");
+        SaleFood f1 = new SaleFood();
+        f1.setName("پیتزا مخصوص");
         f1.setDescription("تهیه شده از بهترین مواد اولیه");
         f1.setPopularity((float) 0.9);
+        f1.setOldPrice(20000);
         f1.setPrice(17000);
-        f1.setRestaurantId("5e4fcf14af68ed25d5900ebb");
+        f1.setCount(3);
+        f1.setRestaurantId("5e4fcf14af68ed25d5900ebc");
         f1.setImage("https://static.snapp-food.com/200x201/cdn/29/26/9/vendor/5d346019a73f7.jpg");
         fm.insert(f1);
 
         ArrayList<String> keys = new ArrayList<String>();
         keys.add("5e4fcf14af68ed25d5900ebc");
-        ArrayList<Food> f = fm.findByForeignKey(keys);
-        for(Food food: f){
+        ArrayList<SaleFood> f = fm.findByForeignKey(keys);
+        for(SaleFood food: f){
             System.out.println(food);
 
         }

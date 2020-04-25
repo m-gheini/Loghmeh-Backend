@@ -5,7 +5,6 @@ import IECA.database.mappers.FoodMapper;
 import IECA.database.mappers.RestaurantMapper;
 import IECA.logic.Food;
 import IECA.logic.Restaurant;
-import com.sun.tools.javac.util.List;
 
 import java.io.IOException;
 import java.sql.*;

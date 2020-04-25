@@ -1,7 +1,6 @@
 package IECA.database.mappers;
 
-import IECA.logic.Cart;
-import IECA.logic.User;
+import IECA.logic.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class CartMapper extends Mapper<Cart, Integer> implements ICartMapper {
-    private static final String COLUMNS = " id, restaurantId, name, number";
+    private static final String COLUMNS = " id, number, restaurantId, name";
     private static final String TABLE_NAME = "cart_table";
 
     private Boolean doManage;
@@ -24,9 +23,9 @@ public class CartMapper extends Mapper<Cart, Integer> implements ICartMapper {
                     "CREATE TABLE  %s " +
                             "(" +
                             "id int, " +
+                            "number int, " +
                             "restaurantId varchar(255), " +
                             "name varchar(255), " +
-                            "number int, " +
                             "PRIMARY KEY(id, restaurantId, name), " +
                             "foreign key(restaurantId, name) references food_table(restaurantId, name) on delete  cascade, " +
                             "foreign key(id) references user_table(id) on delete  cascade" +
@@ -47,14 +46,22 @@ public class CartMapper extends Mapper<Cart, Integer> implements ICartMapper {
 
     @Override
     protected String getInsertStatement(Cart cart) {
+        System.out.println("INSERT IGNORE INTO " + TABLE_NAME +
+                "(" + COLUMNS + ")" + " VALUES "+
+                "("+
+                cart.getUserId()+ "," +
+                cart.getNumberOfFood().get(0) + "," +
+                "'" + cart.getFoods().get(0).getRestaurantId() + "'," +
+                "'" + cart.getFoods().get(0).getName() + "'" +
+                ") ON DUPLICATE KEY UPDATE number = " + cart.getNumberOfFood().get(0) +";");
         return "INSERT IGNORE INTO " + TABLE_NAME +
                 "(" + COLUMNS + ")" + " VALUES "+
                 "("+
                 cart.getUserId()+ "," +
+                cart.getNumberOfFood().get(0) + "," +
                 "'" + cart.getFoods().get(0).getRestaurantId() + "'," +
-                "'" + cart.getFoods().get(0).getName() + "'," +
-                 cart.getNumberOfFood().get(0) + "," +
-                ") ON DUPLICATE KEY UPDATE number = " + cart.getNumberOfFood().get(0) +";" ;
+                "'" + cart.getFoods().get(0).getName() + "'" +
+                ") ON DUPLICATE KEY UPDATE number = " + cart.getNumberOfFood().get(0) +";";
     }
     @Override
     protected String getDeleteStatement(ArrayList<Integer> keys) {
@@ -66,6 +73,23 @@ public class CartMapper extends Mapper<Cart, Integer> implements ICartMapper {
     @Override
     protected Cart convertResultSetToObject(ResultSet rs) throws SQLException {
         Cart cart = new Cart();
+        cart.setUserId(rs.getInt(1));
+        FoodMapper foodMapper = new FoodMapper(false);
+        RestaurantMapper restaurantMapper = new RestaurantMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<String > resId = new ArrayList<String>();
+        resId.add(rs.getString(3));
+        cart.setRestaurantName(restaurantMapper.find(resId).getName());
+        ArrayList<String> keys = new ArrayList<String>();
+        keys.add(rs.getString(4));
+        keys.add(rs.getString(3));
+        ArrayList<Food> foods = new ArrayList<Food>();
+        ArrayList<Integer> numberOfFoods = new ArrayList<Integer>();
+        foods.add(foodMapper.find(keys));
+        numberOfFoods.add(rs.getInt(2));
+        cart.setFoods(foods);
+        cart.setNumberOfFood(numberOfFoods);
+        connection.close();
         return  cart;
     }
 

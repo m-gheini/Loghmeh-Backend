@@ -1,12 +1,10 @@
 package IECA.database.mappers;
 
+import IECA.logic.Cart;
 import IECA.logic.Food;
 import IECA.logic.User;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
@@ -65,6 +63,32 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
         return "DELETE FROM " + TABLE_NAME +
                 " WHERE id = " + id + ";";
     }
+    @Override
+    public User find(ArrayList<Integer> keys) throws SQLException {
+        Integer primaryKey = (Integer) keys.get(0);
+//        String foreignKey = "";
+//        if(keys.size()==2)
+//            foreignKey = (String) keys.get(1);
+        User result = loadedMap.get(primaryKey);
+        if (result != null)
+            return result;
+
+        try (Connection con = ConnectionPool.getConnection();
+             PreparedStatement st = con.prepareStatement(getFindStatement(keys))
+        ) {
+            ResultSet resultSet;
+            try {
+                resultSet = st.executeQuery();
+                Object res = resultSet.next();
+                if(!(Boolean)res)
+                    return null;
+                return convertResultSetToObject(resultSet);
+            } catch (SQLException ex) {
+                System.out.println("error in Mapper.findByID query.");
+                throw ex;
+            }
+        }
+    }
 
     @Override
     protected User convertResultSetToObject(ResultSet rs) throws SQLException {
@@ -75,6 +99,26 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
         user.setEmail(rs.getString(4));
         user.setCredit(rs.getInt(5));
         user.setPhoneNumber(rs.getString(6));
+        CartMapper cartMapper = new CartMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<Integer> id = new ArrayList<Integer>();
+        id.add(rs.getInt(1));
+        ArrayList<Cart> foods = cartMapper.findByForeignKey(id);
+        if(foods.size()>0) {
+            Cart tempCart = new Cart();
+            tempCart.setUserId(rs.getInt(1));
+            tempCart.setRestaurantName(foods.get(0).getRestaurantName());
+            ArrayList<Food> allFoods = new ArrayList<Food>();
+            ArrayList<Integer> numberOfFoods = new ArrayList<Integer>();
+            for(Cart c:foods){
+                allFoods.add(c.getFoods().get(0));
+                numberOfFoods.add(c.getNumberOfFood().get(0));
+            }
+            tempCart.setFoods(allFoods);
+            tempCart.setNumberOfFood(numberOfFoods);
+            user.setMyCart(tempCart);
+        }
+        connection.close();
         return  user;
     }
 

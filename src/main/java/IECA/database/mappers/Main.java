@@ -1,10 +1,7 @@
 package IECA.database.mappers;
 
 import IECA.database.DatabaseManager;
-import IECA.logic.Food;
-import IECA.logic.Location;
-import IECA.logic.Restaurant;
-import IECA.logic.SaleFood;
+import IECA.logic.*;
 import IECA.servlets.FoodParty;
 
 import java.io.IOException;
@@ -16,9 +13,28 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws SQLException, IOException {
+        UserMapper userMapper = new UserMapper(false);
+        CartMapper cartMapper = new CartMapper(true);
+        FoodMapper foodMapper = new FoodMapper(false);
         Connection connection = ConnectionPool.getConnection();
-        DatabaseManager dbm = new DatabaseManager();
-        dbm.createDatabases();
+        Cart cart = new Cart();
+        cart.setUserId(1);
+        cart.setRestaurantName("تهیه غذای زیگورات");
+        ArrayList<Food> f = new ArrayList<Food>();
+        Food tempFood = new Food();
+        ArrayList<String> k = new ArrayList<String>();
+        k.add("چلو جوجه کباب");
+        k.add("5e4fcf14af68ed25d5900e95");
+        f.add(foodMapper.find(k));
+        cart.setFoods(f);
+        ArrayList<Integer> n = new ArrayList<Integer>();
+        n.add(1);
+        cart.setNumberOfFood(n);
+        cartMapper.insert(cart);
+        User u = userMapper.find(n);
+        System.out.println(u.getMyCart());
+//        DatabaseManager dbm = new DatabaseManager();
+//        dbm.createDatabases();
 //        RestaurantMapper rm = new RestaurantMapper(false);
 //        Restaurant R1 = new Restaurant();
 //        R1.setId("5e4fcf14af68ed25d5900ebc");

@@ -1,13 +1,16 @@
 package IECA.database;
 
 import IECA.database.mappers.ConnectionPool;
+import IECA.database.mappers.FoodMapper;
 import IECA.database.mappers.RestaurantMapper;
 import IECA.logic.Food;
 import IECA.logic.Restaurant;
+import com.sun.tools.javac.util.List;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.*;
+
 
 public class DatabaseManager {
     private ArrayList<Restaurant> restaurants;
@@ -61,13 +64,21 @@ public class DatabaseManager {
 //    }
 
     public void createDatabases() throws SQLException {
-        boolean doManage;
-        doManage = !(existInDatabase("restaurant_table"));
-        RestaurantMapper rm = new RestaurantMapper(doManage);
+        boolean resDoManage, foodDoManage;
+        resDoManage = !(existInDatabase("restaurant_table"));
+        foodDoManage = !(existInDatabase("food_table"));
+        RestaurantMapper rm = new RestaurantMapper(resDoManage);
+        FoodMapper fm = new FoodMapper(foodDoManage);
         Connection connection = ConnectionPool.getConnection();
         for(Restaurant res: restaurants){
             rm.insert(res);
         }
+        for(Food food: foods){
+            fm.insert(food);
+        }
+//        ArrayList<Restaurant> res;
+//        res = (ArrayList<Restaurant>) rm.findRestaurantsInRadius();
+//        System.out.println(res.size());
         connection.close();
     }
 }

@@ -1,7 +1,9 @@
 package IECA.database.mappers;
 
+import IECA.logic.Food;
 import IECA.logic.Location;
 import IECA.logic.Restaurant;
+import IECA.logic.SaleFood;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -75,6 +77,16 @@ public class RestaurantMapper extends Mapper<Restaurant, String> implements IRes
         location.setY(rs.getInt(5));
         restaurant.setLocation(location);
         restaurant.setLogo(rs.getString(6));
+        ArrayList<String > input = new ArrayList<>();
+        input.add(restaurant.getId());
+        FoodMapper foodMapper = new FoodMapper(false);
+        FoodPartyMapper foodPartyMapper = new FoodPartyMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<Food> foods = foodMapper.findByForeignKey(input);
+        ArrayList<SaleFood> saleFoods = foodPartyMapper.findByForeignKey(input);
+        restaurant.setMenu(foods);
+        restaurant.setSaleMenu(saleFoods);
+        connection.close();
         return  restaurant;
     }
 

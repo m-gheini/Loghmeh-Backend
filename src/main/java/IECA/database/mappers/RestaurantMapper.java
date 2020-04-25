@@ -80,21 +80,37 @@ public class RestaurantMapper extends Mapper<Restaurant, String> implements IRes
 
     @Override
     public List<Restaurant> findRestaurantsInRadius() throws SQLException {
-        List<Restaurant> nearRestaurants = new ArrayList<Restaurant>();
         String statement = "SELECT " + COLUMNS + " FROM " + TABLE_NAME +
                 " Where SQRT(POWER(x, 2) + POWER(y, 2)) <= 170";
-        return executingGivenQuery(nearRestaurants, statement);
+        return executingGivenQuery(statement);
     }
 
     @Override
     public List<Restaurant> searchRestaurantByName(String inName) throws SQLException {
-        List<Restaurant> nearRestaurants = new ArrayList<Restaurant>();
         String statement = "SELECT " + COLUMNS + " FROM " + TABLE_NAME +
                 " Where name LIKE " + "'%" + inName + "%'";
-        return executingGivenQuery(nearRestaurants, statement);
+        return executingGivenQuery(statement);
     }
 
-    private List<Restaurant> executingGivenQuery(List<Restaurant> result, String statement) throws SQLException {
+//    @Override
+//    public int getSizeOfDatabase() throws SQLException {
+//        String statement = "SELECT count(id) FROM " + TABLE_NAME ;
+//        try (Connection con = ConnectionPool.getConnection();
+//             PreparedStatement st = con.prepareStatement(statement);
+//        ) {
+//            int result;
+//            try {
+//                result = st.executeQuery();
+//                return result;
+//            } catch (SQLException ex) {
+//                System.out.println("error in Mapper.findByID query.");
+//                throw ex;
+//            }
+//        }
+//    }
+
+    private List<Restaurant> executingGivenQuery(String statement) throws SQLException {
+        List<Restaurant> result = new ArrayList<Restaurant>();
         try (Connection con = ConnectionPool.getConnection();
              PreparedStatement st = con.prepareStatement(statement);
         ) {

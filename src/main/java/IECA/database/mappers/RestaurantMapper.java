@@ -83,9 +83,9 @@ public class RestaurantMapper extends Mapper<Restaurant, String> implements IRes
         FoodPartyMapper foodPartyMapper = new FoodPartyMapper(false);
         Connection connection = ConnectionPool.getConnection();
         ArrayList<Food> foods = foodMapper.findByForeignKey(input);
-        ArrayList<SaleFood> saleFoods = foodPartyMapper.findByForeignKey(input);
+//        ArrayList<SaleFood> saleFoods = foodPartyMapper.findByForeignKey(input);
         restaurant.setMenu(foods);
-        restaurant.setSaleMenu(saleFoods);
+//        restaurant.setSaleMenu(saleFoods);
         connection.close();
         return  restaurant;
     }

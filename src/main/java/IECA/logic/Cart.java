@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import IECA.logic.schedulers.*;
 public class Cart {
+    private Integer userId;
     private ArrayList<Food> foods ;
     private ArrayList<Integer> numberOfFood ;
     private ArrayList<SaleFood> saleFoods ;
@@ -17,6 +18,7 @@ public class Cart {
     private String restaurantName;
     int index;
     public Cart() {
+        userId = 1;
         foods = new ArrayList<Food>();
         numberOfFood = new ArrayList<Integer>();
         saleFoods = new ArrayList<SaleFood>();
@@ -24,6 +26,14 @@ public class Cart {
         status = "finding delivery";
         restaurantName = "";
         index = 0;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getUserId() {
+        return userId;
     }
 
     public String getRestaurantName() {
@@ -86,7 +96,6 @@ public class Cart {
                 }
                 else{
                     System.out.println("NOT ENOUGH COUNT!!!");
-                    //TODO:error for count of sale food
                 }
             }
         }

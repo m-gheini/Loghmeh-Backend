@@ -21,6 +21,7 @@ public class User {
         credit = 5000;
         phoneNumber = "09121111111";
         myCart = new Cart();
+        myCart.setUserId(id);
         orders = new ArrayList<>();
     }
     public void setAllParameters(int id,String name,String familyName,String email,int credit,String phoneNumber){
@@ -31,6 +32,7 @@ public class User {
         this.credit = credit;
         this.phoneNumber = phoneNumber;
         this.myCart = new Cart();
+        myCart.setUserId(id);
         this.orders = new ArrayList<Cart>();
     }
     public ArrayList<Cart> getOrders() {

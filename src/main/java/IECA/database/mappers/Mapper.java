@@ -20,6 +20,8 @@ public abstract class Mapper<T, I> implements IMapper<T, I> {
 
     abstract protected T convertResultSetToObject(ResultSet rs) throws SQLException;
 
+    abstract protected String getAllRows();
+
     public T find(ArrayList<I> keys) throws SQLException {
         String primaryKey = (String) keys.get(0);
         String foreignKey = "";
@@ -49,21 +51,34 @@ public abstract class Mapper<T, I> implements IMapper<T, I> {
         try (Connection con = ConnectionPool.getConnection();
              PreparedStatement st = con.prepareStatement(getFindStatement(keys))
         ) {
-            ArrayList <T> result = new ArrayList<T>();
-            ResultSet resultSet;
-            try {
-                resultSet = st.executeQuery();
-                while (true) {
-                    Object res = resultSet.next();
-                    if (!(Boolean) res) {
-                        return result;
-                    }
-                    result.add(convertResultSetToObject(resultSet));
+            return getResultOfQuery(st);
+        }
+    }
+
+    public ArrayList<T> convertAllResultToObject() throws SQLException {
+        try (Connection con = ConnectionPool.getConnection();
+             PreparedStatement st = con.prepareStatement(getAllRows())
+        ) {
+            return getResultOfQuery(st);
+        }
+    }
+
+
+    private ArrayList<T> getResultOfQuery(PreparedStatement st) throws SQLException {
+        ArrayList <T> result = new ArrayList<T>();
+        ResultSet resultSet;
+        try {
+            resultSet = st.executeQuery();
+            while (true) {
+                Object res = resultSet.next();
+                if (!(Boolean) res) {
+                    return result;
                 }
-            } catch (SQLException ex) {
-                System.out.println("error in Mapper.findByID query.");
-                throw ex;
+                result.add(convertResultSetToObject(resultSet));
             }
+        } catch (SQLException ex) {
+            System.out.println("error in Mapper.findByID query.");
+            throw ex;
         }
     }
 

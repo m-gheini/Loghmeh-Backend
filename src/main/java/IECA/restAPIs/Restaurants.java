@@ -8,6 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,21 +16,21 @@ import java.util.HashMap;
 public class Restaurants {
     @RequestMapping(value = "/restaurants", method = RequestMethod.GET)
     public @ResponseBody
-    ArrayList<Restaurant> allRestaurants() throws IOException {
+    ArrayList<Restaurant> allRestaurants() throws IOException, SQLException {
         ArrayList<Restaurant> restaurants = RestaurantManager.getInstance().getRestaurants();
         return restaurants;
     }
 
     @RequestMapping(value = "/saleFoods", method = RequestMethod.GET)
     public @ResponseBody
-    ArrayList<SaleFood> allSaleFoods() throws IOException {
+    ArrayList<SaleFood> allSaleFoods() throws IOException, SQLException {
         ArrayList<SaleFood> saleFoods = RestaurantManager.getInstance().getSaleFoods();
         return saleFoods;
     }
 
     @RequestMapping(value = "/saleFoods/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    ArrayList<SaleFood> allSaleFoodsOfRestaurant(@PathVariable(value = "id") String id) throws IOException {
+    ArrayList<SaleFood> allSaleFoodsOfRestaurant(@PathVariable(value = "id") String id) throws IOException, SQLException {
         ArrayList<SaleFood> result = RestaurantManager.getInstance().saleFoodsOfSpecialRestaurant(id);
         return result;
     }
@@ -37,7 +38,7 @@ public class Restaurants {
     @RequestMapping(value = "/saleFoods/{id}",params = "saleFoodName",method = RequestMethod.GET)
     public @ResponseBody
     Object specificSaleFood(@PathVariable(value = "id") String id,
-                              @RequestParam(value = "saleFoodName") String saleFoodName) throws IOException {
+                              @RequestParam(value = "saleFoodName") String saleFoodName) throws IOException, SQLException {
         ArrayList<SaleFood> saleFoods = RestaurantManager.getInstance().getSaleFoods();
         boolean restaurantFound = RestaurantManager.getInstance().restaurantIdOfSaleFoodFound(id);
         boolean foodFound = RestaurantManager.getInstance().foodNameOfSaleFoodFound(id,saleFoodName);
@@ -55,7 +56,7 @@ public class Restaurants {
 
     @RequestMapping(value = "/restaurants/{id}" , method = RequestMethod.GET)
     public @ResponseBody
-    Object specificRestaurant(@PathVariable(value = "id") String id) throws IOException {
+    Object specificRestaurant(@PathVariable(value = "id") String id) throws IOException, SQLException {
         if(RestaurantManager.getInstance().errorForRestaurant(id)!=null)
             return RestaurantManager.getInstance().errorForRestaurant(id);
         else {
@@ -65,7 +66,7 @@ public class Restaurants {
     @RequestMapping(value = "/restaurants/{id}" , params = "foodName",method = RequestMethod.GET)
     public @ResponseBody
     Object specificFood(@PathVariable(value = "id") String id,
-                        @RequestParam(value = "foodName") String foodName) throws IOException {
+                        @RequestParam(value = "foodName") String foodName) throws IOException, SQLException {
         if(RestaurantManager.getInstance().errorForRestaurant(id)!=null)
             return RestaurantManager.getInstance().errorForRestaurant(id);
         Restaurant restaurant = RestaurantManager.getInstance().searchResById(id);
@@ -78,7 +79,7 @@ public class Restaurants {
     }
     @RequestMapping(value = "/foodPartyTime", method = RequestMethod.GET)
     public @ResponseBody
-    HashMap<String,Integer> foodPartyRemainingTime() throws IOException {
+    HashMap<String,Integer> foodPartyRemainingTime() throws IOException, SQLException {
         HashMap<String,Integer> result = new HashMap<>();
         result.put("remainingTime",RestaurantManager.getInstance().getRemainingTime());
         return result;

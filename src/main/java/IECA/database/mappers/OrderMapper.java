@@ -101,4 +101,10 @@ public class OrderMapper extends Mapper<Cart, Integer> implements IOrderMapper {
         return  cart;
     }
 
+    @Override
+    protected String getAllRows() {
+        return "SELECT " + COLUMNS +
+                " FROM " + TABLE_NAME ;
+    }
+
 }

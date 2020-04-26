@@ -137,4 +137,10 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
         return  user;
     }
 
+    @Override
+    protected String getAllRows() {
+        return "SELECT " + COLUMNS +
+                " FROM " + TABLE_NAME ;
+    }
+
 }

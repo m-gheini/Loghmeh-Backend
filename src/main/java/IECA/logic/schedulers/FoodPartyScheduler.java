@@ -31,13 +31,13 @@ public class FoodPartyScheduler extends TimerTask {
         remainingTime.run();
         try {
             RestaurantManager.getInstance().setRemainingTime(HALFHOUR);
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
         FoodPartyDataset foodPartyDataset = new FoodPartyDataset();
         try {
             RestaurantManager.getInstance().setRemainingTime(HALFHOUR);
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
         try {
@@ -71,7 +71,7 @@ public class FoodPartyScheduler extends TimerTask {
                 //System.out.println(timer);
 
             }
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }

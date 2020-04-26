@@ -93,4 +93,9 @@ public class CartMapper extends Mapper<Cart, Integer> implements ICartMapper {
         return  cart;
     }
 
+    @Override
+    protected String getAllRows() {
+        return "SELECT " + COLUMNS +
+                " FROM " + TABLE_NAME ;
+    }
 }

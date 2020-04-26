@@ -1,17 +1,18 @@
 package IECA.logic;
 import IECA.database.*;
+import IECA.database.mappers.RestaurantMapper;
 import IECA.logic.schedulers.FoodPartyScheduler;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 
 public class RestaurantManager {
     private static RestaurantManager instance;
-
 
     private ArrayList<Restaurant> restaurants;
     private ArrayList<Food> foods ;
@@ -22,17 +23,20 @@ public class RestaurantManager {
     private int bestTime;
     private ArrayList<User> users;
     private int remainingTime;
-    private RestaurantManager() throws IOException {
+    private RestaurantManager() throws IOException, SQLException {
+        DatabaseManager db = new DatabaseManager();
+        db.createDatabases();
         RestaurantDataset restaurantDataset = new RestaurantDataset();
         restaurantDataset.addToDataset(restaurantDataset.readFromWeb("http://138.197.181.131:8080/restaurants"));
-        restaurants = restaurantDataset.getRestaurants();
-        foods = restaurantDataset.getFoods();
+        restaurants = db.getPermanentRestaurants();
+        foods = db.getPermanentFoods();
         currentUser = new User();
         deliveries = new ArrayList<Delivery>();
         remainingTime = 0;
         FoodPartyScheduler foodPartyScheduler = new FoodPartyScheduler();
-        users=new ArrayList<User>();
-        users.add(currentUser);
+        users = db.getPermanentUser();
+//        users=new ArrayList<User>();
+//        users.add(currentUser);
     }
 
     public ArrayList<User> getUsers() {
@@ -92,7 +96,7 @@ public class RestaurantManager {
         remainingTime = remainingTime-1000;
     }
 
-    public static RestaurantManager getInstance() throws IOException {
+    public static RestaurantManager getInstance() throws IOException, SQLException {
         if (instance == null)
             instance = new RestaurantManager();
         return instance;
@@ -134,7 +138,7 @@ public class RestaurantManager {
         this.currentUser = currentUser;
     }
 
-    public boolean searchForResInAllRes(String resId) throws IOException {
+    public boolean searchForResInAllRes(String resId) throws IOException, SQLException {
         boolean totallyNotFound = true;
         for(Restaurant restaurant : RestaurantManager.getInstance().getAllRestaurants()){
             if (restaurant.getId().equals(resId)) {
@@ -144,14 +148,14 @@ public class RestaurantManager {
         }
         return totallyNotFound;
     }
-    public String setRestaurantId(String restaurantId) throws IOException {
+    public String setRestaurantId(String restaurantId) throws IOException, SQLException {
         if(getCurrentUser().getMyCart().getFoods().size()>0)
             restaurantId = getCurrentUser().getMyCart().getFoods().get(0).getRestaurantId();
         else if(getCurrentUser().getMyCart().getSaleFoods().size()>0)
             restaurantId = (RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods().get(0).getRestaurantId());
         return restaurantId;
     }
-    public String setRestaurantName(String restaurantName,String restaurantId) throws IOException {
+    public String setRestaurantName(String restaurantName,String restaurantId) throws IOException, SQLException {
         restaurantId = setRestaurantId(restaurantId);
         if(getCurrentUser().getMyCart().getFoods().size()>0) {
             restaurantName =RestaurantManager.getInstance().searchForRestaurant("{\"id\":\""+restaurantId+"\"}").getName();
@@ -185,7 +189,7 @@ public class RestaurantManager {
         }
         return total;
     }
-    public boolean searchInProperResById(String resId) throws IOException {
+    public boolean searchInProperResById(String resId) throws IOException, SQLException {
         boolean notFound = true;
         for (Restaurant restaurant : RestaurantManager.getInstance().getRestaurants()) {
             if (restaurant.getId().equals(resId)) {
@@ -195,7 +199,7 @@ public class RestaurantManager {
         }
         return notFound;
     }
-    public Restaurant searchResById(String id) throws IOException {
+    public Restaurant searchResById(String id) throws IOException, SQLException {
         Restaurant nullRest = new Restaurant();
         for (Restaurant restaurant : RestaurantManager.getInstance().getRestaurants()) {
             if (restaurant.getId().equals(id)) {
@@ -264,7 +268,7 @@ public class RestaurantManager {
         }
     return found;
     }
-    public Error errorForRestaurant(String id) throws IOException {
+    public Error errorForRestaurant(String id) throws IOException, SQLException {
         boolean totallyNotFound = searchForResInAllRes(id);
         if (totallyNotFound) {
             Error error = new Error(404,"no such id");
@@ -353,7 +357,7 @@ public class RestaurantManager {
         }
     }
 
-    public int addToCart(String jsonInString) throws IOException {
+    public int addToCart(String jsonInString) throws IOException, SQLException {
         int success = currentUser.getMyCart().addFood(jsonInString, foods);
         if(success==1) {
             ObjectMapper mapper = new ObjectMapper();
@@ -365,7 +369,7 @@ public class RestaurantManager {
         }
         return success;
     }
-    public int addToCartSaleFood(String jsonInString) throws IOException {
+    public int addToCartSaleFood(String jsonInString) throws IOException, SQLException {
         int success = currentUser.getMyCart().addSaleFood(jsonInString, saleFoods);
         if(success==1) {
             ObjectMapper mapper = new ObjectMapper();

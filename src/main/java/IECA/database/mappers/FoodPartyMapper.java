@@ -102,6 +102,12 @@ public class FoodPartyMapper extends Mapper<SaleFood, String> implements IFoodPa
         executingGivenQuery(statement);
     }
 
+    @Override
+    protected String getAllRows() {
+        return "SELECT " + COLUMNS +
+                " FROM " + TABLE_NAME ;
+    }
+
     private void executingGivenQuery(String statement) throws SQLException {
         try (Connection con = ConnectionPool.getConnection();
              PreparedStatement st = con.prepareStatement(statement);

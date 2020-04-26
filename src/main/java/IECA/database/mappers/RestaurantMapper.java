@@ -138,4 +138,10 @@ public class RestaurantMapper extends Mapper<Restaurant, String> implements IRes
             }
         }
     }
+
+    @Override
+    protected String getAllRows() {
+        return "SELECT " + COLUMNS +
+                " FROM " + TABLE_NAME ;
+    }
 }

@@ -97,4 +97,41 @@ public class DatabaseManager {
 //        System.out.println(res.size());
         connection.close();
     }
+
+    public ArrayList<Restaurant> getPermanentRestaurants() throws SQLException {
+        ArrayList<Restaurant> result;
+        RestaurantMapper rm = new RestaurantMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        result = rm.convertAllResultToObject();
+        connection.close();
+        return result;
+    }
+
+    public ArrayList<Food> getPermanentFoods() throws SQLException {
+        ArrayList<Food> result;
+        FoodMapper fm = new FoodMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        result = fm.convertAllResultToObject();
+        connection.close();
+        return result;
+    }
+
+    public ArrayList<SaleFood> getPermanentSaleFoods() throws SQLException {
+        ArrayList<SaleFood> result;
+        FoodPartyMapper fpm = new FoodPartyMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        result = fpm.convertAllResultToObject();
+        connection.close();
+        return result;
+    }
+
+    public ArrayList<User> getPermanentUser() throws SQLException {
+        ArrayList<User> result;
+        UserMapper um = new UserMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        result = um.convertAllResultToObject();
+        connection.close();
+        return result;
+    }
+
 }

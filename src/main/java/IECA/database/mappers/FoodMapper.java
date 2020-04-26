@@ -88,4 +88,10 @@ public class FoodMapper extends Mapper<Food, String> implements IFoodMapper {
         return  food;
     }
 
+    @Override
+    protected String getAllRows() {
+        return "SELECT " + COLUMNS +
+                " FROM " + TABLE_NAME ;
+    }
+
 }

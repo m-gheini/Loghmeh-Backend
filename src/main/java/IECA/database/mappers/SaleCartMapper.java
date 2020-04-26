@@ -99,4 +99,10 @@ public class SaleCartMapper extends Mapper<Cart, Integer> implements ISaleCartMa
         return  cart;
     }
 
+    @Override
+    protected String getAllRows() {
+        return "SELECT " + COLUMNS +
+                " FROM " + TABLE_NAME ;
+    }
+
 }

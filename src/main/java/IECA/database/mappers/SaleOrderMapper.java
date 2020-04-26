@@ -102,4 +102,10 @@ public class SaleOrderMapper extends Mapper<Cart, Integer> implements ISaleCartM
         return  cart;
     }
 
+    @Override
+    protected String getAllRows() {
+        return "SELECT " + COLUMNS +
+                " FROM " + TABLE_NAME ;
+    }
+
 }

@@ -31,8 +31,13 @@ public class Main {
         n.add(1);
         cart.setNumberOfFood(n);
         cartMapper.insert(cart);
+        ArrayList<Integer> nn = new ArrayList<Integer>();
+        nn.add(2);
+        cart.setNumberOfFood(nn);
+        cartMapper.insert(cart);
         User u = userMapper.find(n);
-        System.out.println(u.getMyCart());
+        System.out.println(u.getMyCart().getFoods());
+        System.out.println(u.getMyCart().getNumberOfFood());
 //        DatabaseManager dbm = new DatabaseManager();
 //        dbm.createDatabases();
 //        RestaurantMapper rm = new RestaurantMapper(false);

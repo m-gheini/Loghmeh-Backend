@@ -2,6 +2,7 @@ package IECA.database.mappers;
 
 import IECA.logic.Cart;
 import IECA.logic.Food;
+import IECA.logic.SaleFood;
 import IECA.logic.User;
 
 import java.sql.*;
@@ -100,12 +101,14 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
         user.setCredit(rs.getInt(5));
         user.setPhoneNumber(rs.getString(6));
         CartMapper cartMapper = new CartMapper(false);
+        SaleCartMapper saleCartMapper = new SaleCartMapper(false);
         Connection connection = ConnectionPool.getConnection();
         ArrayList<Integer> id = new ArrayList<Integer>();
         id.add(rs.getInt(1));
         ArrayList<Cart> foods = cartMapper.findByForeignKey(id);
+        ArrayList<Cart> saleFoods = saleCartMapper.findByForeignKey(id);
+        Cart tempCart = new Cart();
         if(foods.size()>0) {
-            Cart tempCart = new Cart();
             tempCart.setUserId(rs.getInt(1));
             tempCart.setRestaurantName(foods.get(0).getRestaurantName());
             ArrayList<Food> allFoods = new ArrayList<Food>();
@@ -116,8 +119,20 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
             }
             tempCart.setFoods(allFoods);
             tempCart.setNumberOfFood(numberOfFoods);
-            user.setMyCart(tempCart);
         }
+        if(saleFoods.size()>0) {
+            tempCart.setUserId(rs.getInt(1));
+            tempCart.setRestaurantName(saleFoods.get(0).getRestaurantName());
+            ArrayList<SaleFood> allSaleFoods = new ArrayList<SaleFood>();
+            ArrayList<Integer> numberOfSaleFoods = new ArrayList<Integer>();
+            for(Cart c:saleFoods){
+                allSaleFoods.add(c.getSaleFoods().get(0));
+                numberOfSaleFoods.add(c.getNumberOfSaleFood().get(0));
+            }
+            tempCart.setSaleFoods(allSaleFoods);
+            tempCart.setNumberOfSaleFood(numberOfSaleFoods);
+        }
+        user.setMyCart(tempCart);
         connection.close();
         return  user;
     }

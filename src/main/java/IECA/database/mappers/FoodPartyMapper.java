@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FoodPartyMapper extends Mapper<SaleFood, String> implements IFoodPartyMapper {
-    private static final String COLUMNS = " restaurantId, restaurantName, name, description, count, oldPrice, price, popularity, image ";
+    private static final String COLUMNS = " restaurantId, count, oldPrice, price, popularity, x, y, image, restaurantImage, restaurantName, name, description";
     private static final String TABLE_NAME = "foodParty_table";
 
     private Boolean doManage;
@@ -25,14 +25,17 @@ public class FoodPartyMapper extends Mapper<SaleFood, String> implements IFoodPa
                     "CREATE TABLE  %s " +
                             "(" +
                             "restaurantId varchar(50) not null , " +
-                            "restaurantName varchar(100), " +
-                            "name varchar(100), " +
-                            "description varchar(500), "+
                             "count integer, "+
                             "oldPrice integer, "+
                             "price integer, "+
                             "popularity float, "+
+                            "x int, "+
+                            "y int, "+
                             "image varchar(500), "+
+                            "restaurantImage varchar(500), "+
+                            "restaurantName varchar(100), " +
+                            "name varchar(100), " +
+                            "description varchar(500), "+
                             "primary key(restaurantId, name) "+
                             ");",
                     TABLE_NAME));
@@ -58,18 +61,37 @@ public class FoodPartyMapper extends Mapper<SaleFood, String> implements IFoodPa
 
     @Override
     protected String getInsertStatement(SaleFood saleFood) {
-        return "INSERT IGNORE INTO " + TABLE_NAME +
+        System.out.println("INSERT IGNORE INTO " + TABLE_NAME +
                 "(" + COLUMNS + ")" + " VALUES "+
                 "("+
                 "'" + saleFood.getRestaurantId()+ "'," +
-                "'" + saleFood.getRestaurantName()+ "'," +
-                "'" + saleFood.getName() + "'," +
-                "'" + saleFood.getDescription() + "'," +
                 saleFood.getCount() + "," +
                 saleFood.getOldPrice() + "," +
                 saleFood.getPrice() + "," +
                 saleFood.getPopularity() + "," +
-                "'" +saleFood.getImage() + "'" +
+                saleFood.getRestaurantLocation().getX() + ","+
+                saleFood.getRestaurantLocation().getY() + ","+
+                "'" +saleFood.getImage() + "'," +
+                "'" + saleFood.getRestaurantImage() + "',"+
+                "'" + saleFood.getRestaurantName()+ "'," +
+                "'" + saleFood.getName() + "'," +
+                "'" + saleFood.getDescription() + "'" +
+                ");");
+        return "INSERT IGNORE INTO " + TABLE_NAME +
+                "(" + COLUMNS + ")" + " VALUES "+
+                "("+
+                "'" + saleFood.getRestaurantId()+ "'," +
+                saleFood.getCount() + "," +
+                saleFood.getOldPrice() + "," +
+                saleFood.getPrice() + "," +
+                saleFood.getPopularity() + "," +
+                saleFood.getRestaurantLocation().getX() + ","+
+                saleFood.getRestaurantLocation().getY() + ","+
+                "'" +saleFood.getImage() + "'," +
+                "'" + saleFood.getRestaurantImage() + "',"+
+                "'" + saleFood.getRestaurantName()+ "'," +
+                "'" + saleFood.getName() + "'," +
+                "'" + saleFood.getDescription() + "'" +
                 ");";
     }
 
@@ -85,14 +107,19 @@ public class FoodPartyMapper extends Mapper<SaleFood, String> implements IFoodPa
     protected SaleFood convertResultSetToObject(ResultSet rs) throws SQLException {
         SaleFood saleFood = new SaleFood();
         saleFood.setRestaurantId(rs.getString(1));
-        saleFood.setRestaurantName(rs.getString(2));
-        saleFood.setName(rs.getString(3));
-        saleFood.setDescription(rs.getString(4));
-        saleFood.setCount(rs.getInt(5));
-        saleFood.setOldPrice(rs.getInt(6));
-        saleFood.setPrice(rs.getInt(7));
-        saleFood.setPopularity(rs.getFloat(8));
-        saleFood.setImage(rs.getString(9));
+        saleFood.setRestaurantName(rs.getString(10));
+        saleFood.setName(rs.getString(11));
+        saleFood.setDescription(rs.getString(12));
+        saleFood.setCount(rs.getInt(2));
+        saleFood.setOldPrice(rs.getInt(3));
+        saleFood.setPrice(rs.getInt(4));
+        saleFood.setPopularity(rs.getFloat(5));
+        saleFood.setImage(rs.getString(8));
+        saleFood.setRestaurantImage(rs.getString(9));
+        Location l = new Location();
+        l.setX(rs.getInt(6));
+        l.setY(rs.getInt(7));
+        saleFood.setRestaurantLocation(l);
         return  saleFood;
     }
 

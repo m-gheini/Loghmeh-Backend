@@ -16,7 +16,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class FoodPartyScheduler extends TimerTask {
-    private static final int HALFHOUR=1800000;//TODO 30000
+    private static final int HALFHOUR=60000;//TODO 30000
     private Timer timer;
     private RemainingTime remainingTime;
 
@@ -52,6 +52,7 @@ public class FoodPartyScheduler extends TimerTask {
             //boolean DoManage = ! DatabaseManager.getInstance().existInDatabase("foodParty_table");
             //System.out.println("HII"+DoManage);
             FoodPartyMapper fpm = new FoodPartyMapper(false);
+            fpm.emptyTable();
             System.out.println("AA");
             for(SaleFood saleFood : foodPartyDataset.getFoodsOnSale()) {
                 fpm.insert(saleFood);

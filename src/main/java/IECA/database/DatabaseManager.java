@@ -22,7 +22,6 @@ public class DatabaseManager {
     private ArrayList<SaleFood> saleFoods;
 
     public DatabaseManager() throws IOException {
-        FoodPartyScheduler foodPartyScheduler = new FoodPartyScheduler();
         RestaurantDataset restaurantDataset = new RestaurantDataset();
         restaurantDataset.addToDataset(restaurantDataset.readFromWeb("http://138.197.181.131:8080/restaurants"));
         restaurants = restaurantDataset.getRestaurants();
@@ -80,10 +79,11 @@ public class DatabaseManager {
         boolean resDoManage, foodDoManage, saleFoodDoManage;
         resDoManage = !(existInDatabase("restaurant_table"));
         foodDoManage = !(existInDatabase("food_table"));
-        //saleFoodDoManage = !(existInDatabase("foodParty_table"));
+        saleFoodDoManage = !(existInDatabase("foodParty_table"));
         RestaurantMapper rm = new RestaurantMapper(resDoManage);
         FoodMapper fm = new FoodMapper(foodDoManage);
-//        FoodPartyMapper fpm = new FoodPartyMapper(saleFoodDoManage);
+        FoodPartyMapper fpm = new FoodPartyMapper(saleFoodDoManage);
+        FoodPartyScheduler foodPartyScheduler = new FoodPartyScheduler();
         Connection connection = ConnectionPool.getConnection();
         for(Restaurant res: restaurants){
             rm.insert(res);

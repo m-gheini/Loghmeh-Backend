@@ -49,14 +49,15 @@ public class FoodPartyScheduler extends TimerTask {
             Connection connection = ConnectionPool.getConnection();
             System.out.println("HEREEEE.");
             System.out.println("NOWWW");
-            boolean DoManage = ! DatabaseManager.getInstance().existInDatabase("foodParty_table");
-            System.out.println("HII"+DoManage);
-            FoodPartyMapper fpm = new FoodPartyMapper(DoManage);
+            //boolean DoManage = ! DatabaseManager.getInstance().existInDatabase("foodParty_table");
+            //System.out.println("HII"+DoManage);
+            FoodPartyMapper fpm = new FoodPartyMapper(false);
+            System.out.println("AA");
             for(SaleFood saleFood : foodPartyDataset.getFoodsOnSale()) {
                 fpm.insert(saleFood);
             }
             connection.close();
-        } catch (IOException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         try {

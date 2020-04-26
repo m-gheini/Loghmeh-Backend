@@ -90,7 +90,6 @@ public class DatabaseManager {
         //OrderMapper om = new OrderMapper(orderDoManage);
         SaleCartMapper scm = new SaleCartMapper(saleCDoManage);
         //SaleOrderMapper som = new SaleOrderMapper(saleOManage);
-        FoodPartyScheduler foodPartyScheduler = new FoodPartyScheduler();
         Connection connection = ConnectionPool.getConnection();
         for(Restaurant res: restaurants){
             rm.insert(res);
@@ -100,7 +99,8 @@ public class DatabaseManager {
         }
         um.insert(currentUser);
         System.out.println("HEREE");
-        System.out.println(um.convertAllResultToObject().get(0).getName());
+        System.out.println(um.convertAllResultToObject().get(0).getCredit());
+        FoodPartyScheduler foodPartyScheduler = new FoodPartyScheduler();
         connection.close();
     }
 

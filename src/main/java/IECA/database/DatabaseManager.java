@@ -1,13 +1,7 @@
 package IECA.database;
 
-import IECA.database.mappers.ConnectionPool;
-import IECA.database.mappers.FoodMapper;
-import IECA.database.mappers.FoodPartyMapper;
-import IECA.database.mappers.RestaurantMapper;
-import IECA.logic.Food;
-import IECA.logic.Restaurant;
-import IECA.logic.RestaurantManager;
-import IECA.logic.SaleFood;
+import IECA.database.mappers.*;
+import IECA.logic.*;
 import IECA.logic.schedulers.FoodPartyScheduler;
 
 import java.io.IOException;
@@ -19,6 +13,7 @@ public class DatabaseManager {
     private static DatabaseManager instance;
     private ArrayList<Restaurant> restaurants;
     private ArrayList<Food> foods ;
+    private User currentUser = new User();
     private ArrayList<SaleFood> saleFoods;
 
     public DatabaseManager() throws IOException {
@@ -76,14 +71,16 @@ public class DatabaseManager {
 //    }
 
     public void createDatabases() throws SQLException {
-        boolean resDoManage, foodDoManage, saleFoodDoManage;
+        boolean resDoManage, foodDoManage, saleFoodDoManage, userDoManage;
         resDoManage = !(existInDatabase("restaurant_table"));
         foodDoManage = !(existInDatabase("food_table"));
         saleFoodDoManage = !(existInDatabase("foodParty_table"));
+        userDoManage = !(existInDatabase("user_table"));
         RestaurantMapper rm = new RestaurantMapper(resDoManage);
         FoodMapper fm = new FoodMapper(foodDoManage);
         FoodPartyMapper fpm = new FoodPartyMapper(saleFoodDoManage);
         FoodPartyScheduler foodPartyScheduler = new FoodPartyScheduler();
+        UserMapper um = new UserMapper(userDoManage);
         Connection connection = ConnectionPool.getConnection();
         for(Restaurant res: restaurants){
             rm.insert(res);
@@ -91,6 +88,7 @@ public class DatabaseManager {
         for(Food food: foods){
             fm.insert(food);
         }
+        um.insert(currentUser);
 //        for(SaleFood saleFood: saleFoods){
 //            fpm.insert(saleFood);
 //        }

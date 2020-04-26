@@ -34,9 +34,9 @@ public class RestaurantManager {
         deliveries = new ArrayList<Delivery>();
         remainingTime = 0;
         FoodPartyScheduler foodPartyScheduler = new FoodPartyScheduler();
-        users = db.getPermanentUser();
-//        users=new ArrayList<User>();
-//        users.add(currentUser);
+//        users = db.getPermanentUser();
+        users=new ArrayList<User>();
+        users.add(currentUser);
     }
 
     public ArrayList<User> getUsers() {

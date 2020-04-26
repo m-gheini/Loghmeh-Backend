@@ -71,16 +71,26 @@ public class DatabaseManager {
 //    }
 
     public void createDatabases() throws SQLException {
-        boolean resDoManage, foodDoManage, saleFoodDoManage, userDoManage;
+        System.out.println("IN DATABASE MANAGER!!!");
+        boolean resDoManage, foodDoManage, saleFoodDoManage, userDoManage, cartDoManage, orderDoManage, saleCDoManage, saleOManage;
         resDoManage = !(existInDatabase("restaurant_table"));
         foodDoManage = !(existInDatabase("food_table"));
         saleFoodDoManage = !(existInDatabase("foodParty_table"));
         userDoManage = !(existInDatabase("user_table"));
+        cartDoManage = !(existInDatabase("cart_table"));
+        orderDoManage = !(existInDatabase("order_table"));
+        saleCDoManage = !(existInDatabase("saleCart_table"));
+        saleOManage = !(existInDatabase("saleOrder_table"));
         RestaurantMapper rm = new RestaurantMapper(resDoManage);
         FoodMapper fm = new FoodMapper(foodDoManage);
+        System.out.println("AA::"+saleFoodDoManage);
         FoodPartyMapper fpm = new FoodPartyMapper(saleFoodDoManage);
-        FoodPartyScheduler foodPartyScheduler = new FoodPartyScheduler();
         UserMapper um = new UserMapper(userDoManage);
+        CartMapper cm = new CartMapper(cartDoManage);
+        //OrderMapper om = new OrderMapper(orderDoManage);
+        SaleCartMapper scm = new SaleCartMapper(saleCDoManage);
+        //SaleOrderMapper som = new SaleOrderMapper(saleOManage);
+        FoodPartyScheduler foodPartyScheduler = new FoodPartyScheduler();
         Connection connection = ConnectionPool.getConnection();
         for(Restaurant res: restaurants){
             rm.insert(res);
@@ -89,12 +99,8 @@ public class DatabaseManager {
             fm.insert(food);
         }
         um.insert(currentUser);
-//        for(SaleFood saleFood: saleFoods){
-//            fpm.insert(saleFood);
-//        }
-//        ArrayList<Restaurant> res;
-//        res = (ArrayList<Restaurant>) rm.findRestaurantsInRadius();
-//        System.out.println(res.size());
+        System.out.println("HEREE");
+        System.out.println(um.convertAllResultToObject().get(0).getName());
         connection.close();
     }
 

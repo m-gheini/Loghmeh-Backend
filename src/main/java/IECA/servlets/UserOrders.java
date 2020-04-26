@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -34,7 +35,7 @@ public class UserOrders extends HttpServlet {
         servletHandler.dispatchTo(request,response,"userOrders.jsp");
     }
 
-    private void initial(HttpServletRequest request) throws IOException {
+    private void initial(HttpServletRequest request) throws IOException, SQLException {
         strAttr = new HashMap<>();
         intAtr = new HashMap<>();
         restaurantId = "";
@@ -49,11 +50,19 @@ public class UserOrders extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        initial(request);
+        try {
+            initial(request);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         if(foods.size()>0) {
             restaurantId = foods.get(0).getRestaurantId();
             String jsonInString = "{\"id\":\""+restaurantId+"\"}";
-            restaurantName = RestaurantManager.getInstance().searchForRestaurant(jsonInString).getName();
+            try {
+                restaurantName = RestaurantManager.getInstance().searchForRestaurant(jsonInString).getName();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         else if(saleFoods.size()>0) {
             restaurantId = saleFoods.get(0).getRestaurantId();

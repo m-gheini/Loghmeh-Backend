@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/SpecificRestaurant")
 public class SpecificRestaurant extends HttpServlet {
@@ -28,10 +29,20 @@ public class SpecificRestaurant extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String value = request.getParameter("restaurantInfo");
         initial();
-        boolean totallyNotFound = RestaurantManager.getInstance().searchForResInAllRes(value);
+        boolean totallyNotFound = false;
+        try {
+            totallyNotFound = RestaurantManager.getInstance().searchForResInAllRes(value);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         if (totallyNotFound)
             dispatch(request,response,"validIdError.jsp",404);
-        boolean notFound = RestaurantManager.getInstance().searchInProperResById(value);
+        boolean notFound = false;
+        try {
+            notFound = RestaurantManager.getInstance().searchInProperResById(value);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         if (notFound)
             dispatch(request,response,"outOfBindError.jsp",403);
         dispatch(request,response,"SpecificRestaurant.jsp",200);

@@ -101,7 +101,7 @@ public class RestaurantManager {
             instance = new RestaurantManager();
         return instance;
     }
-    public int getBestDelivery(String restaurantId) throws IOException {
+    public int getBestDelivery(String restaurantId) throws IOException, SQLException {
         int min = 999999999;
         for(Delivery delivery:deliveries){
             if (delivery.getTime(restaurantId)<min)

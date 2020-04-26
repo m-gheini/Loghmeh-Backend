@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/UserInfo")
 public class UserInfo extends HttpServlet {
@@ -27,7 +28,11 @@ public class UserInfo extends HttpServlet {
         String value = request.getParameter("credit");
         initial();
         if(!(value.equals(""))){
-            RestaurantManager.getInstance().getCurrentUser().addCredit(Integer.valueOf(value));
+            try {
+                RestaurantManager.getInstance().getCurrentUser().addCredit(Integer.valueOf(value));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         dispatch(request,response);
     }

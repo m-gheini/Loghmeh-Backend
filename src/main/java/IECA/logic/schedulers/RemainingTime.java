@@ -3,6 +3,7 @@ package IECA.logic.schedulers;
 import IECA.logic.RestaurantManager;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,7 +22,7 @@ public class RemainingTime extends TimerTask {
             }
             RestaurantManager.getInstance().updateRemainingTime();
             //System.out.println(RestaurantManager.getInstance().getRemainingTime());
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }

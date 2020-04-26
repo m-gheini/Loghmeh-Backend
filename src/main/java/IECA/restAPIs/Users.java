@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 @RestController
@@ -15,14 +16,14 @@ public class Users {
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public @ResponseBody
-    ArrayList<User> allUsers() throws IOException, InterruptedException {
+    ArrayList<User> allUsers() throws IOException, InterruptedException, SQLException {
         ArrayList<User> users = RestaurantManager.getInstance().getUsers();
         return users;
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Object specificUser(@PathVariable(value = "id") Integer id) throws IOException {
+    Object specificUser(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
         User result = RestaurantManager.getInstance().findSpecUser(id);
         if(result != null)
             return result;
@@ -33,7 +34,7 @@ public class Users {
 
     @RequestMapping(value = "/users/{id}/credit", method = RequestMethod.GET)
     public @ResponseBody
-    Object specificUserCredit(@PathVariable(value = "id") Integer id) throws IOException {
+    Object specificUserCredit(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
         User result = RestaurantManager.getInstance().findSpecUser(id);
         if(result != null)
             return result.getCredit();
@@ -44,7 +45,7 @@ public class Users {
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
     public @ResponseBody
-    Object deleteUser(@PathVariable(value = "id") Integer id) throws IOException {
+    Object deleteUser(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
         for(User u:RestaurantManager.getInstance().getUsers()){
             if(u.getId()==id){
                 RestaurantManager.getInstance().getUsers().remove(u);
@@ -65,7 +66,7 @@ public class Users {
             @RequestParam(value = "familyName") String familyName,
             @RequestParam(value = "credit") Integer credit,
             @RequestParam(value = "email") String email,
-            @RequestParam(value = "phoneNumber") String phoneNumber) throws IOException {
+            @RequestParam(value = "phoneNumber") String phoneNumber) throws IOException, SQLException {
         User user = new User();
         user.setAllParameters(id,name,familyName,email,credit,phoneNumber);
         Integer prevSize=RestaurantManager.getInstance().getUsers().size();
@@ -84,7 +85,7 @@ public class Users {
     public @ResponseBody
     Object updateUserCredit(
             @PathVariable(value = "id") Integer id,
-            @RequestParam(value = "credit") Integer credit) throws IOException {
+            @RequestParam(value = "credit") Integer credit) throws IOException, SQLException {
         User user = RestaurantManager.getInstance().findSpecUser(id);
         if(user == null){
             Error error=new Error(404,"no such id");
@@ -101,7 +102,7 @@ public class Users {
 
     @RequestMapping(value = "/users/{id}/orders",method = RequestMethod.GET)
     public @ResponseBody
-    Object allOrders(@PathVariable(value = "id") Integer id) throws IOException {
+    Object allOrders(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
         User user = RestaurantManager.getInstance().findSpecUser(id);
         if(user!=null){
             return user.getOrders();
@@ -115,7 +116,7 @@ public class Users {
     @RequestMapping(value = "/users/{id}/orders/{index}",method = RequestMethod.GET)
     public @ResponseBody
     Object allOrders(@PathVariable(value = "id") Integer id,
-                   @PathVariable(value = "index") Integer index) throws IOException {
+                   @PathVariable(value = "index") Integer index) throws IOException, SQLException {
         User user = RestaurantManager.getInstance().findSpecUser(id);
         if(user!=null){
             Cart result = RestaurantManager.getInstance().findSpecOrder(index,user);
@@ -130,7 +131,7 @@ public class Users {
 
     @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.GET)
     public @ResponseBody
-    Object userCart(@PathVariable(value = "id") Integer id) throws IOException {
+    Object userCart(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
         User user = RestaurantManager.getInstance().findSpecUser(id);
         if(user!=null){
             Cart userCart = user.getMyCart();
@@ -147,7 +148,7 @@ public class Users {
     Object addToCart(
             @PathVariable(value = "id") Integer id,
             @RequestParam(value = "restaurantId") String restaurantId,
-            @RequestParam(value = "foodName") String foodName) throws IOException {
+            @RequestParam(value = "foodName") String foodName) throws IOException, SQLException {
         boolean restaurantNotFound = RestaurantManager.getInstance().searchInProperResById(restaurantId);
         if(restaurantNotFound)
             return new Error(404,"no such restaurantId");
@@ -169,7 +170,7 @@ public class Users {
     Object addSaleFoodToCart(
             @PathVariable(value = "id") Integer id,
             @RequestParam(value = "restaurantId") String restaurantId,
-            @RequestParam(value = "saleFoodName") String foodName) throws IOException {
+            @RequestParam(value = "saleFoodName") String foodName) throws IOException, SQLException {
         boolean restaurantFound = RestaurantManager.getInstance().restaurantIdOfSaleFoodFound(restaurantId);
         if(!restaurantFound)
             return new Error(404,"no such restaurantId");
@@ -192,7 +193,7 @@ public class Users {
     Object deleteFromCart(
             @PathVariable(value = "id") Integer id,
             @RequestParam(value = "restaurantId") String restaurantId,
-            @RequestParam(value = "foodName") String foodName) throws IOException {
+            @RequestParam(value = "foodName") String foodName) throws IOException, SQLException {
         boolean restaurantNotFound = RestaurantManager.getInstance().searchInProperResById(restaurantId);
         if(restaurantNotFound)
             return new Error(404,"no such restaurantId");
@@ -212,7 +213,7 @@ public class Users {
     Object deleteSaleFoodFromCart(
             @PathVariable(value = "id") Integer id,
             @RequestParam(value = "restaurantId") String restaurantId,
-            @RequestParam(value = "saleFoodName") String foodName) throws IOException {
+            @RequestParam(value = "saleFoodName") String foodName) throws IOException, SQLException {
         boolean restaurantFound = RestaurantManager.getInstance().restaurantIdOfSaleFoodFound(restaurantId);
         if(!restaurantFound)
             return new Error(404,"no such restaurantId");
@@ -230,7 +231,7 @@ public class Users {
 
     @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.POST)
     public @ResponseBody
-    Object finalizeCart(@PathVariable(value = "id") Integer id) throws IOException {
+    Object finalizeCart(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
         User u = RestaurantManager.getInstance().findSpecUser(id);
         if(u!=null){
             Cart userCart = u.getMyCart();

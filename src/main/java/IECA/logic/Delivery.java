@@ -1,6 +1,7 @@
 package IECA.logic;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class Delivery {
     private String id;
@@ -30,7 +31,7 @@ public class Delivery {
     public void setLocation(Location location) {
         this.location = location;
     }
-    public double getTime(String restaurantId) throws IOException {
+    public double getTime(String restaurantId) throws IOException, SQLException {
         Location restaurantLocation = new Location();
         String jsonString = "{\"id\":\""+restaurantId+"\"}";
         if(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods().size()>0)

@@ -1,6 +1,7 @@
 package IECA.logic;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -92,7 +93,7 @@ public class User {
     public void setOrders(ArrayList<Cart> orders) {
         this.orders = orders;
     }
-    public void addOrder(Cart newOrder) throws IOException {
+    public void addOrder(Cart newOrder) throws IOException, SQLException {
         newOrder.setIndex(RestaurantManager.getInstance().getCurrentUser().getOrders().size());
         orders.add(newOrder);
     }

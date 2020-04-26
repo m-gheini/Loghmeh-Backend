@@ -5,6 +5,7 @@ import IECA.logic.Restaurant;
 import IECA.logic.RestaurantManager;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,7 +34,7 @@ public class DeliveryScheduler extends TimerTask{
         }
         try {
             RestaurantManager.getInstance().setDeliveries(deliveryDataset.getDeliveries());
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
         if (deliveryDataset.getDeliveries().size()!=0){
@@ -42,7 +43,7 @@ public class DeliveryScheduler extends TimerTask{
                 RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).setStatus("delivering");
                 RestaurantManager.getInstance().getBestDelivery(restaurantId);
                 TimeScheduler timeScheduler = new TimeScheduler();
-            } catch (IOException e) {
+            } catch (IOException | SQLException e) {
                 e.printStackTrace();
             }
             timer.cancel();

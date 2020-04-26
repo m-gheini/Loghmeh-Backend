@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,13 +31,13 @@ public class Finalize extends HttpServlet {
     private ArrayList<Integer> saleCounts;
     private HashMap<String,String> strAttr;
 
-    public void initial() throws IOException {
+    public void initial() throws IOException, SQLException {
         total = RestaurantManager.getInstance().makeTotal();
         restaurantId = "";
         restaurantName =RestaurantManager.getInstance().getCurrentUser().getMyCart().getRestaurantName();;
         servletHandler = new ServletHandler();
     }
-    public void initForFinalize() throws IOException {
+    public void initForFinalize() throws IOException, SQLException {
         previousCart = new IECA.logic.Cart();
         foods = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getFoods());
         saleFoods = new ArrayList<>(RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods());
@@ -65,25 +66,41 @@ public class Finalize extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        initial();
-        restaurantId =  RestaurantManager.getInstance().setRestaurantId(restaurantId);
-
-        if(RestaurantManager.getInstance().getCurrentUser().getCredit()>=total && total!=0){
-            RestaurantManager.getInstance().getCurrentUser().addCredit(-total);
-            initForFinalize();
-            DeliveryScheduler deliveryScheduler = new DeliveryScheduler();
-            deliveryScheduler.setRestaurant(restaurantId);
-
-            dispatch(request,response,"finalize.jsp",200);
+        try {
+            initial();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        else{
-            if(RestaurantManager.getInstance().getCurrentUser().getCredit()<total) {
-                restaurantName = RestaurantManager.getInstance().setRestaurantName(restaurantName,restaurantId);
-                initialForErrors(request);
-                dispatch(request,response,"enoughCreditError.jsp",400);
+        try {
+            restaurantId =  RestaurantManager.getInstance().setRestaurantId(restaurantId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if(RestaurantManager.getInstance().getCurrentUser().getCredit()>=total && total!=0){
+                RestaurantManager.getInstance().getCurrentUser().addCredit(-total);
+                initForFinalize();
+                DeliveryScheduler deliveryScheduler = new DeliveryScheduler();
+                deliveryScheduler.setRestaurant(restaurantId);
+
+                dispatch(request,response,"finalize.jsp",200);
             }
-            else
-                dispatch(request,response,"emptyCartError.jsp",400);
+            else{
+                try {
+                    if(RestaurantManager.getInstance().getCurrentUser().getCredit()<total) {
+                        restaurantName = RestaurantManager.getInstance().setRestaurantName(restaurantName,restaurantId);
+                        initialForErrors(request);
+                        dispatch(request,response,"enoughCreditError.jsp",400);
+                    }
+                    else
+                        dispatch(request,response,"emptyCartError.jsp",400);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
     }

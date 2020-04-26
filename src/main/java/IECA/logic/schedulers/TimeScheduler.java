@@ -3,6 +3,7 @@ package IECA.logic.schedulers;
 import IECA.logic.RestaurantManager;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,7 +25,7 @@ public class TimeScheduler extends TimerTask {
                 System.out.println(RestaurantManager.getInstance().getBestTime());
                 timer.cancel();
             }
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }

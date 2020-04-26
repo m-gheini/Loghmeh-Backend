@@ -20,7 +20,7 @@ public class RemainingTime extends TimerTask {
                 RestaurantManager.getInstance().setRemainingTime(1800000);
             }
             RestaurantManager.getInstance().updateRemainingTime();
-            System.out.println(RestaurantManager.getInstance().getRemainingTime());
+            //System.out.println(RestaurantManager.getInstance().getRemainingTime());
         } catch (IOException e) {
             e.printStackTrace();
         }

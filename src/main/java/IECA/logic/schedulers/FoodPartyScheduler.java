@@ -1,11 +1,16 @@
 package IECA.logic.schedulers;
+import IECA.database.DatabaseManager;
 import IECA.database.DeliveryDataset;
 import IECA.database.FoodPartyDataset;
+import IECA.database.mappers.ConnectionPool;
+import IECA.database.mappers.FoodPartyMapper;
 import IECA.logic.Restaurant;
 import IECA.logic.RestaurantManager;
 import IECA.logic.SaleFood;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -40,6 +45,20 @@ public class FoodPartyScheduler extends TimerTask {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        try{
+            Connection connection = ConnectionPool.getConnection();
+            System.out.println("HEREEEE.");
+            System.out.println("NOWWW");
+            boolean DoManage = ! DatabaseManager.getInstance().existInDatabase("foodParty_table");
+            System.out.println("HII"+DoManage);
+            FoodPartyMapper fpm = new FoodPartyMapper(DoManage);
+            for(SaleFood saleFood : foodPartyDataset.getFoodsOnSale()) {
+                fpm.insert(saleFood);
+            }
+            connection.close();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
         try {
             RestaurantManager.getInstance().setSaleFoods(foodPartyDataset.getFoodsOnSale());
             for(SaleFood saleFood: RestaurantManager.getInstance().getCurrentUser().getMyCart().getSaleFoods()){
@@ -47,7 +66,7 @@ public class FoodPartyScheduler extends TimerTask {
                     continue;
                 else
                     RestaurantManager.getInstance().getCurrentUser().getMyCart().deleteSaleFood(saleFood);
-                System.out.println(timer);
+                //System.out.println(timer);
 
             }
         } catch (IOException e) {

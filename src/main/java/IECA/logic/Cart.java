@@ -1,10 +1,14 @@
 package IECA.logic;
+import IECA.database.mappers.CartMapper;
+import IECA.database.mappers.ConnectionPool;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 import IECA.logic.schedulers.*;
@@ -192,7 +196,7 @@ public class Cart {
             }
         }
     }
-    public int addFood(String jsonString, ArrayList<Food> allFoods) throws IOException {
+    public int addFood(String jsonString, ArrayList<Food> allFoods) throws IOException, SQLException {
         boolean found = false;
         boolean totallyFound = false;
         ObjectMapper mapper = new ObjectMapper();
@@ -215,13 +219,33 @@ public class Cart {
         }
         for (int j = 0; j < allFoods.size(); j++) {
             if (foodName.equals(allFoods.get(j).getName()) && restaurantId.equals(allFoods.get(j).getRestaurantId())) {
-
+                CartMapper cartMapper = new CartMapper(false);
+                Connection connection = ConnectionPool.getConnection();
                 if (found == true) {
+                    Cart temp = new Cart();
+                    temp.setUserId(RestaurantManager.getInstance().getCurrentUser().getId());
+                    ArrayList<Food> tempArray = new ArrayList<Food>();
+                    tempArray.add(allFoods.get(j));
+                    temp.setFoods(tempArray);
+                    ArrayList<Integer> tempNum = new ArrayList<Integer>();
+                    tempNum.add(numberOfFood.get(index) + 1);
+                    temp.setNumberOfFood(tempNum);
+                    cartMapper.insert(temp);
                     numberOfFood.set(index, numberOfFood.get(index) + 1);
                 } else {
+                    Cart temp = new Cart();
+                    temp.setUserId(RestaurantManager.getInstance().getCurrentUser().getId());
+                    ArrayList<Food> tempArray = new ArrayList<Food>();
+                    tempArray.add(allFoods.get(j));
+                    temp.setFoods(tempArray);
+                    ArrayList<Integer> tempNum = new ArrayList<Integer>();
+                    tempNum.add(1);
+                    temp.setNumberOfFood(tempNum);
+                    cartMapper.insert(temp);
                     foods.add(allFoods.get(j));
                     numberOfFood.add(1);
                 }
+                connection.close();
                 return 1;
             }
         }

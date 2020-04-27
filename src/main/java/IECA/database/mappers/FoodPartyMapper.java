@@ -76,7 +76,7 @@ public class FoodPartyMapper extends Mapper<SaleFood, String> implements IFoodPa
                 "'" + saleFood.getRestaurantName()+ "'," +
                 "'" + saleFood.getName() + "'," +
                 "'" + saleFood.getDescription() + "'" +
-                ");");
+                ") ON DUPLICATE KEY UPDATE count = " + saleFood.getCount() +";");
         return "INSERT IGNORE INTO " + TABLE_NAME +
                 "(" + COLUMNS + ")" + " VALUES "+
                 "("+
@@ -92,7 +92,7 @@ public class FoodPartyMapper extends Mapper<SaleFood, String> implements IFoodPa
                 "'" + saleFood.getRestaurantName()+ "'," +
                 "'" + saleFood.getName() + "'," +
                 "'" + saleFood.getDescription() + "'" +
-                ");";
+                ") ON DUPLICATE KEY UPDATE count = " + saleFood.getCount() +";";
     }
 
     @Override

@@ -1,6 +1,8 @@
 package IECA.logic;
 import IECA.database.mappers.CartMapper;
 import IECA.database.mappers.ConnectionPool;
+import IECA.database.mappers.FoodPartyMapper;
+import IECA.database.mappers.UserMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
@@ -61,7 +63,7 @@ public class Cart {
         setRestaurantName(restaurantName);
 
     }
-    public int addSaleFood(String jsonString, ArrayList<SaleFood> allSaleFoods) throws IOException {
+    public int addSaleFood(String jsonString, ArrayList<SaleFood> allSaleFoods) throws IOException, SQLException {
         System.out.println("+*+*+*+*+*+*+*+*+()()()()()FoodSaleB------>"+saleFoods.size());
         boolean found = false;
         ObjectMapper mapper = new ObjectMapper();
@@ -95,7 +97,12 @@ public class Cart {
                         numberOfSaleFood.add(1);
                     }
                     allSaleFood.updateCount();
-
+                    FoodPartyMapper fpm = new FoodPartyMapper(false);
+                    Connection connection = ConnectionPool.getConnection();
+                    ArrayList<Integer> key = new ArrayList<Integer>();
+//                    key.add(id);
+                    fpm.insert(allSaleFood);
+                    connection.close();
                     return 1;
                 }
                 else{

@@ -1,6 +1,10 @@
 package IECA.logic;
 
+import IECA.database.mappers.ConnectionPool;
+import IECA.database.mappers.UserMapper;
+
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,6 +101,14 @@ public class User {
         newOrder.setIndex(RestaurantManager.getInstance().getCurrentUser().getOrders().size());
         orders.add(newOrder);
     }
-    public void addCredit(int value){credit = credit+value;}
+    public void addCredit(int value) throws SQLException {
+        credit = credit+value;
+        UserMapper userMapper = new UserMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<Integer> key = new ArrayList<Integer>();
+        key.add(id);
+        userMapper.insert(this);
+        connection.close();
+    }
 
 }

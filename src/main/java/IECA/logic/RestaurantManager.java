@@ -381,7 +381,7 @@ public class RestaurantManager {
 
         return success;
     }
-    public boolean finalizeOrder(int credit) {
+    public boolean finalizeOrder(int credit) throws SQLException {
         int totalCost=0;
         for (int i = 0; i<currentUser.getMyCart().getFoods().size();i++){
             for(int j =0;j<currentUser.getMyCart().getNumberOfFood().get(i);j++){

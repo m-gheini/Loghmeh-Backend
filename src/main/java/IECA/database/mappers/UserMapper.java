@@ -55,7 +55,7 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
                 "'" + user.getEmail() + "'," +
                 user.getCredit() + "," +
                 "'" +user.getPhoneNumber() + "'" +
-                ");";
+                ") ON DUPLICATE KEY UPDATE credit = " + user.getCredit() +";";
     }
 
     @Override

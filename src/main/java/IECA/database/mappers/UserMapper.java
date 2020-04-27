@@ -4,9 +4,11 @@ import IECA.logic.Cart;
 import IECA.logic.Food;
 import IECA.logic.SaleFood;
 import IECA.logic.User;
+import org.springframework.core.annotation.Order;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
     private static final String COLUMNS = " id, name, familyName, email, credit, phoneNumber";
@@ -101,12 +103,47 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
         user.setCredit(rs.getInt(5));
         user.setPhoneNumber(rs.getString(6));
         CartMapper cartMapper = new CartMapper(false);
+        OrderMapper orderMapper = new OrderMapper(false);
         SaleCartMapper saleCartMapper = new SaleCartMapper(false);
         Connection connection = ConnectionPool.getConnection();
         ArrayList<Integer> id = new ArrayList<Integer>();
         id.add(rs.getInt(1));
         ArrayList<Cart> foods = cartMapper.findByForeignKey(id);
         ArrayList<Cart> saleFoods = saleCartMapper.findByForeignKey(id);
+        HashMap<Integer, ArrayList<Cart>> allOrders = new HashMap<Integer, ArrayList<Cart>>();
+//        ArrayList<ArrayList<Cart>> allOrders = new ArrayList<ArrayList<Cart>>();
+        ArrayList<Cart> orders = orderMapper.findByForeignKey(id);
+        if(orders.size()>0) {
+            for (Cart c : orders) {
+                Integer index = c.getIndex();
+                ArrayList<Cart> specOrder = new ArrayList<Cart>();
+                if (allOrders.get(index) == null) {
+                    specOrder.add(c);
+                    allOrders.put(index, specOrder);
+                } else {
+                    specOrder = allOrders.get(index);
+                    specOrder.add(c);
+                    allOrders.put(index, specOrder);
+                }
+            }
+            ArrayList<Cart> resultOrder = new ArrayList<Cart>();
+            for (int i = 0; i < allOrders.size(); i++) {
+                Cart newCart = new Cart();
+                newCart.setUserId(rs.getInt(1));
+                newCart.setIndex(i);
+                newCart.setStatus(allOrders.get(i).get(0).getStatus());
+                //TODO set resName
+                ArrayList<Cart> spec = allOrders.get(i);
+                ArrayList<Food> orderFoods = new ArrayList<Food>();
+                ArrayList<Integer> orderNumOfFoods = new ArrayList<Integer>();
+                for (Cart c : spec) {
+                    orderFoods.add(c.getFoods().get(0));
+                    orderNumOfFoods.add(c.getNumberOfFood().get(0));
+                }
+                resultOrder.add(newCart);
+            }
+            user.setOrders(resultOrder);
+        }
         Cart tempCart = new Cart();
         if(foods.size()>0) {
             tempCart.setUserId(rs.getInt(1));

@@ -56,7 +56,7 @@ public class SaleCartMapper extends Mapper<Cart, Integer> implements ISaleCartMa
                 cart.getUserId()+ "," +
                 cart.getNumberOfSaleFood().get(0) + "," +
                 "'" + cart.getSaleFoods().get(0).getRestaurantId() + "'," +
-                "'" + cart.getSaleFoods().get(0).getName() + "'" +
+                "'" + cart.getSaleFoods().get(0).getName() + "'," +
                 "'" + cart.getSaleFoods().get(0).getRestaurantName() + "'" +
                 ") ON DUPLICATE KEY UPDATE number = " + cart.getNumberOfSaleFood().get(0) +";");
         return "INSERT IGNORE INTO " + TABLE_NAME +
@@ -65,7 +65,7 @@ public class SaleCartMapper extends Mapper<Cart, Integer> implements ISaleCartMa
                 cart.getUserId()+ "," +
                 cart.getNumberOfSaleFood().get(0) + "," +
                 "'" + cart.getSaleFoods().get(0).getRestaurantId() + "'," +
-                "'" + cart.getSaleFoods().get(0).getName() + "'" +
+                "'" + cart.getSaleFoods().get(0).getName() + "'," +
                 "'" + cart.getSaleFoods().get(0).getRestaurantName() + "'" +
                 ") ON DUPLICATE KEY UPDATE number = " + cart.getNumberOfSaleFood().get(0) +";";
     }

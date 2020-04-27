@@ -1,8 +1,5 @@
 package IECA.logic;
-import IECA.database.mappers.CartMapper;
-import IECA.database.mappers.ConnectionPool;
-import IECA.database.mappers.FoodPartyMapper;
-import IECA.database.mappers.UserMapper;
+import IECA.database.mappers.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
@@ -87,21 +84,42 @@ public class Cart {
             }
         }
 
-        for (SaleFood allSaleFood : allSaleFoods) {
-            if (foodName.equals(allSaleFood.getName()) && restaurantId.equals(allSaleFood.getRestaurantId())) {
-                if(allSaleFood.getCount() > 0) {
+        for (int j = 0; j < allSaleFoods.size(); j++) {
+            if (foodName.equals(allSaleFoods.get(j).getName()) && restaurantId.equals(allSaleFoods.get(j).getRestaurantId())) {
+                SaleCartMapper saleCartMapper = new SaleCartMapper(false);
+                Connection connection = ConnectionPool.getConnection();
+                if(allSaleFoods.get(j).getCount() > 0) {
                     if (found) {
+                        Cart temp = new Cart();
+                        temp.setUserId(RestaurantManager.getInstance().getCurrentUser().getId());
+                        ArrayList<SaleFood> tempArray = new ArrayList<SaleFood>();
+                        tempArray.add(allSaleFoods.get(j));
+                        temp.setSaleFoods(tempArray);
+                        ArrayList<Integer> tempNum = new ArrayList<Integer>();
+                        tempNum.add(numberOfSaleFood.get(index) + 1);
+                        temp.setNumberOfSaleFood(tempNum);
+                        System.out.println("RESName::::::"+temp.getSaleFoods().get(0).getRestaurantName());
+                        saleCartMapper.insert(temp);
                         numberOfSaleFood.set(index, numberOfSaleFood.get(index) + 1);
                     } else {
-                        saleFoods.add(allSaleFood);
+                        Cart temp = new Cart();
+                        temp.setUserId(RestaurantManager.getInstance().getCurrentUser().getId());
+                        ArrayList<SaleFood> tempArray = new ArrayList<SaleFood>();
+                        tempArray.add(allSaleFoods.get(j));
+                        temp.setSaleFoods(tempArray);
+                        ArrayList<Integer> tempNum = new ArrayList<Integer>();
+                        tempNum.add(1);
+                        temp.setNumberOfSaleFood(tempNum);
+                        System.out.println("RESName::::::"+temp.getSaleFoods().get(0).getRestaurantName());
+                        saleCartMapper.insert(temp);
+                        saleFoods.add(allSaleFoods.get(j));
                         numberOfSaleFood.add(1);
                     }
-                    allSaleFood.updateCount();
+                    allSaleFoods.get(j).updateCount();
                     FoodPartyMapper fpm = new FoodPartyMapper(false);
-                    Connection connection = ConnectionPool.getConnection();
                     ArrayList<Integer> key = new ArrayList<Integer>();
 //                    key.add(id);
-                    fpm.insert(allSaleFood);
+                    fpm.insert(allSaleFoods.get(j));
                     connection.close();
                     return 1;
                 }

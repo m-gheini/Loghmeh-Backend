@@ -97,7 +97,8 @@ public class CartMapper extends Mapper<Cart, Integer> implements ICartMapper {
     }
 
     public Cart findSpecRow(Integer id,String foodName) throws SQLException {
-        String stm = "SELECT " + COLUMNS + " FROM " + TABLE_NAME + " WHERE id = "+  id  + "and name = '"+foodName+"';";
+        String stm = "SELECT " + COLUMNS + " FROM " + TABLE_NAME + " WHERE id = "+ id + " and name = " + "'" + foodName+ "'" +";";
+        System.out.println("1::"+stm);
         try (Connection con = ConnectionPool.getConnection();
              PreparedStatement st = con.prepareStatement(stm)
         ) {
@@ -116,7 +117,8 @@ public class CartMapper extends Mapper<Cart, Integer> implements ICartMapper {
     }
 
     public void deleteSpecRow(Integer id,String foodName) throws SQLException {
-        String stm = "DELETE FROM " + TABLE_NAME + " WHERE id = " + id +"and name='"+foodName+ "';";
+        String stm = "DELETE FROM " + TABLE_NAME + " WHERE id = " + id +" and name = " + "'" + foodName+ "'" +";";
+        System.out.println("1::"+stm);
         try (Connection con = ConnectionPool.getConnection();
              PreparedStatement st = con.prepareStatement(stm)
         ) {

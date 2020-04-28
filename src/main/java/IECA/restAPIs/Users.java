@@ -78,8 +78,11 @@ public class Users {
         Integer prevSize = userMapper.convertAllResultToObject().size();
         ArrayList<Integer> key = new ArrayList<Integer>();
         userMapper.delete(key);
-        if (userMapper.convertAllResultToObject().size()==prevSize)
-            return new Error(404,"no such id");
+        if (userMapper.convertAllResultToObject().size()==prevSize) {
+            connection.close();
+            return new Error(404, "no such id");
+        }
+        connection.close();
         return new Error(202,"user deleted successfully");
 
     }
@@ -97,6 +100,10 @@ public class Users {
         user.setAllParameters(id,name,familyName,email,credit,phoneNumber);
         Integer prevSize=RestaurantManager.getInstance().getUsers().size();
         RestaurantManager.getInstance().addUser(user);
+        UserMapper userMapper = new UserMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        userMapper.insert(user);
+        connection.close();
         if(prevSize==RestaurantManager.getInstance().getUsers().size()){
             Error error = new Error(403,"already existed");
             return error;

@@ -1,5 +1,7 @@
 package IECA.restAPIs;
 
+import IECA.database.mappers.ConnectionPool;
+import IECA.database.mappers.UserMapper;
 import IECA.logic.*;
 import IECA.logic.Error;
 import IECA.logic.schedulers.DeliveryScheduler;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -17,7 +20,11 @@ public class Users {
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public @ResponseBody
     ArrayList<User> allUsers() throws IOException, InterruptedException, SQLException {
-        ArrayList<User> users = RestaurantManager.getInstance().getUsers();
+//        ArrayList<User> users = RestaurantManager.getInstance().getUsers();
+        UserMapper userMapper = new UserMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<User> users = userMapper.convertAllResultToObject();
+        connection.close();
         return users;
     }
 

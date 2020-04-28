@@ -87,7 +87,14 @@ public class Restaurants {
         if(RestaurantManager.getInstance().errorForRestaurant(id)!=null)
             return RestaurantManager.getInstance().errorForRestaurant(id);
         else {
-            return RestaurantManager.getInstance().searchResById(id);
+            RestaurantMapper restaurantMapper= new RestaurantMapper(false);
+            Connection connection = ConnectionPool.getConnection();
+            ArrayList<String> key = new ArrayList<String>();
+            key.add(id);
+            Restaurant restaurant = restaurantMapper.find(key);
+            connection.close();
+            return restaurant;
+//            return RestaurantManager.getInstance().searchResById(id);
         }
     }
 

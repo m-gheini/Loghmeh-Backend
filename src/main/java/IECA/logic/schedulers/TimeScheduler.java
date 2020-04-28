@@ -1,7 +1,8 @@
 package IECA.logic.schedulers;
 
 import IECA.database.mappers.ConnectionPool;
-import IECA.database.mappers.order.OrderMapper;
+import IECA.database.mappers.OrderMapper;
+import IECA.database.mappers.SaleOrderMapper;
 import IECA.logic.Cart;
 import IECA.logic.RestaurantManager;
 
@@ -25,18 +26,27 @@ public class TimeScheduler extends TimerTask {
             int newValue = (RestaurantManager.getInstance().getBestTime())-1;
             RestaurantManager.getInstance().setBestTime(newValue);
             if(RestaurantManager.getInstance().getBestTime()<=0){
-                //todo saleOrder
                 int finalIndex = RestaurantManager.getInstance().getCurrentUser().getOrders().size()-1;
                 RestaurantManager.getInstance().getCurrentUser().getOrders().get(finalIndex).setStatus("done");
                 OrderMapper orderMapper = new OrderMapper(false);
+                SaleOrderMapper saleOrderMapper = new SaleOrderMapper(false);
                 Connection connection = ConnectionPool.getConnection();
                 ArrayList<Integer> keys = new ArrayList<Integer>();
                 keys.add(RestaurantManager.getInstance().getCurrentUser().getId());
                 keys.add(finalIndex);
                 ArrayList<Cart> order = orderMapper.findByForeignKey(keys);
-                for (Cart c:order){
-                    c.setStatus("done");
-                    orderMapper.insert(c);
+                ArrayList<Cart> saleOrder = saleOrderMapper.findByForeignKey(keys);
+                if(order.size() != 0) {
+                    for (Cart c : order) {
+                        c.setStatus("done");
+                        orderMapper.insert(c);
+                    }
+                }
+                if(saleOrder.size() != 0){
+                    for (Cart c : saleOrder) {
+                        c.setStatus("done");
+                        saleOrderMapper.insert(c);
+                    }
                 }
                 connection.close();
 

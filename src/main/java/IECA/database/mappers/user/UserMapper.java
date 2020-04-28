@@ -110,14 +110,17 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
         CartMapper cartMapper = new CartMapper(false);
         OrderMapper orderMapper = new OrderMapper(false);
         SaleCartMapper saleCartMapper = new SaleCartMapper(false);
+        SaleOrderMapper saleOrderMapper = new SaleOrderMapper(false);
         Connection connection = ConnectionPool.getConnection();
         ArrayList<Integer> id = new ArrayList<Integer>();
         id.add(rs.getInt(1));
         ArrayList<Cart> foods = cartMapper.findByForeignKey(id);
         ArrayList<Cart> saleFoods = saleCartMapper.findByForeignKey(id);
         HashMap<Integer, ArrayList<Cart>> allOrders = new HashMap<Integer, ArrayList<Cart>>();
-//        ArrayList<ArrayList<Cart>> allOrders = new ArrayList<ArrayList<Cart>>();
         ArrayList<Cart> orders = orderMapper.findByForeignKey(id);
+        HashMap<Integer, ArrayList<Cart>> allSaleOrders = new HashMap<Integer, ArrayList<Cart>>();
+        ArrayList<Cart> saleOrders = saleOrderMapper.findByForeignKey(id);
+        ArrayList<Cart> resultOrder = new ArrayList<Cart>();
         if(orders.size()>0) {
             for (Cart c : orders) {
                 Integer index = c.getIndex();
@@ -131,7 +134,7 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
                     allOrders.put(index, specOrder);
                 }
             }
-            ArrayList<Cart> resultOrder = new ArrayList<Cart>();
+//            ArrayList<Cart> resultOrder = new ArrayList<Cart>();
             for (int i = 0; i < allOrders.size(); i++) {
                 Cart newCart = new Cart();
                 newCart.setUserId(rs.getInt(1));
@@ -149,6 +152,38 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
             }
             user.setOrders(resultOrder);
         }
+        if(saleOrders.size()>0) {
+            for (Cart c : saleOrders) {
+                Integer index = c.getIndex();
+                ArrayList<Cart> specOrder = new ArrayList<Cart>();
+                if (allSaleOrders.get(index) == null) {
+                    specOrder.add(c);
+                    allSaleOrders.put(index, specOrder);
+                } else {
+                    specOrder = allSaleOrders.get(index);
+                    specOrder.add(c);
+                    allSaleOrders.put(index, specOrder);
+                }
+            }
+//            ArrayList<Cart> resultOrder = new ArrayList<Cart>();
+            for (int i = 0; i < allSaleOrders.size(); i++) {
+                Cart newCart = new Cart();
+                newCart.setUserId(rs.getInt(1));
+                newCart.setIndex(i);
+                newCart.setStatus(allSaleOrders.get(i).get(0).getStatus());
+                newCart.setRestaurantName(allOrders.get(i).get(0).getRestaurantName());
+                ArrayList<Cart> spec = allOrders.get(i);
+                ArrayList<Food> saleOrderFoods = new ArrayList<Food>();
+                ArrayList<Integer> saleOrderNumOfFoods = new ArrayList<Integer>();
+                for (Cart c : spec) {
+                    saleOrderFoods.add(c.getFoods().get(0));
+                    saleOrderNumOfFoods.add(c.getNumberOfFood().get(0));
+                }
+                resultOrder.add(newCart);
+            }
+            user.setOrders(resultOrder);
+        }
+
         Cart tempCart = new Cart();
         if(foods.size()>0) {
             tempCart.setUserId(rs.getInt(1));

@@ -1,9 +1,6 @@
 package IECA.logic;
 
-import IECA.database.mappers.ConnectionPool;
-import IECA.database.mappers.cart.CartMapper;
-import IECA.database.mappers.order.OrderMapper;
-import IECA.database.mappers.user.UserMapper;
+import IECA.database.mappers.*;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -100,18 +97,29 @@ public class User {
         this.orders = orders;
     }
     public void addOrder(Cart newOrder) throws IOException, SQLException {
-        //Todo saleOrder
         CartMapper cartMapper = new CartMapper(false);
         OrderMapper orderMapper  = new OrderMapper(false);
+        SaleCartMapper saleCartMapper = new SaleCartMapper(false);
+        SaleOrderMapper saleOrderMapper = new SaleOrderMapper(false);
         Connection connection =  ConnectionPool.getConnection();
         ArrayList<Integer> idKey = new ArrayList<Integer>();
         idKey.add(this.id);
         ArrayList<Cart> carts = cartMapper.findByForeignKey(idKey);
-        for(Cart c:carts){
-            c.setIndex(RestaurantManager.getInstance().getCurrentUser().getOrders().size());
-            orderMapper.insert(c);
+        ArrayList<Cart> saleCarts = saleCartMapper.findByForeignKey(idKey);
+        if(carts.size() > 0) {
+            for (Cart c : carts) {
+                c.setIndex(RestaurantManager.getInstance().getCurrentUser().getOrders().size());
+                orderMapper.insert(c);
+            }
+            cartMapper.delete(idKey);
         }
-        cartMapper.delete(idKey);
+        if(saleCarts.size() > 0) {
+            for (Cart c : saleCarts) {
+                c.setIndex(RestaurantManager.getInstance().getCurrentUser().getOrders().size());
+                saleOrderMapper.insert(c);
+            }
+            saleCartMapper.delete(idKey);
+        }
         connection.close();
         System.out.println("ADD ORDER IN  USER SIDE!!!!");
         newOrder.setIndex(RestaurantManager.getInstance().getCurrentUser().getOrders().size());

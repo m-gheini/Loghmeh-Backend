@@ -96,7 +96,7 @@ public class DatabaseManager {
         CartMapper cm = new CartMapper(cartDoManage);
         OrderMapper om = new OrderMapper(orderDoManage);
         SaleCartMapper scm = new SaleCartMapper(saleCDoManage);
-        //SaleOrderMapper som = new SaleOrderMapper(saleOManage);
+        SaleOrderMapper som = new SaleOrderMapper(saleOManage);
         Connection connection = ConnectionPool.getConnection();
         for(Restaurant res: restaurants){
             rm.insert(res);

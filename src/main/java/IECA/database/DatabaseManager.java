@@ -80,14 +80,14 @@ public class DatabaseManager {
         cartDoManage = !(existInDatabase("cart_table"));
         orderDoManage = !(existInDatabase("order_table"));
         saleCDoManage = !(existInDatabase("salecart_table"));
-        saleOManage = !(existInDatabase("salecrder_table"));
+        saleOManage = !(existInDatabase("saleorder_table"));
         RestaurantMapper rm = new RestaurantMapper(resDoManage);
         FoodMapper fm = new FoodMapper(foodDoManage);
         System.out.println("AA::"+saleFoodDoManage);
         FoodPartyMapper fpm = new FoodPartyMapper(saleFoodDoManage);
         UserMapper um = new UserMapper(userDoManage);
         CartMapper cm = new CartMapper(cartDoManage);
-        //OrderMapper om = new OrderMapper(orderDoManage);
+        OrderMapper om = new OrderMapper(orderDoManage);
         SaleCartMapper scm = new SaleCartMapper(saleCDoManage);
         //SaleOrderMapper som = new SaleOrderMapper(saleOManage);
         Connection connection = ConnectionPool.getConnection();

@@ -10,7 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class OrderMapper extends Mapper<Cart, Integer> implements IOrderMapper {
-    private static final String COLUMNS = " id, number, index, status, restaurantId, name";
+    private static final String COLUMNS = " id, number, orderIndex, status, restaurantId, name";
     private static final String TABLE_NAME = "order_table";
 
     private Boolean doManage;
@@ -25,11 +25,11 @@ public class OrderMapper extends Mapper<Cart, Integer> implements IOrderMapper {
                             "(" +
                             "id int, " +
                             "number int, " +
-                            "index int, " +
+                            "orderIndex int, " +
                             "status varchar(255), " +
                             "restaurantId varchar(255), " +
                             "name varchar(255), " +
-                            "PRIMARY KEY(id, index, name), " +
+                            "PRIMARY KEY(id, orderIndex, name), " +
                             "foreign key(restaurantId, name) references food_table(restaurantId, name) on delete  cascade, " +
                             "foreign key(id) references user_table(id) on delete  cascade" +
                             ");",
@@ -44,9 +44,12 @@ public class OrderMapper extends Mapper<Cart, Integer> implements IOrderMapper {
         if(keys.size()==2){
             Integer id = keys.get(0);
             Integer index = keys.get(1);
+            System.out.println("SELECT " + COLUMNS +
+                    " FROM " + TABLE_NAME +
+                    " WHERE id = " + id + "and orderIndex = " + index + ";");
             return "SELECT " + COLUMNS +
                     " FROM " + TABLE_NAME +
-                    " WHERE id = " + id + "and index = " + index + ";";
+                    " WHERE id = " + id + " and orderIndex = " + index + ";";
 
         }
         Integer id = keys.get(0);
@@ -58,6 +61,16 @@ public class OrderMapper extends Mapper<Cart, Integer> implements IOrderMapper {
 
     @Override
     protected String getInsertStatement(Cart cart) {
+        System.out.println("INSERT IGNORE INTO " + TABLE_NAME +
+                "(" + COLUMNS + ")" + " VALUES "+
+                "("+
+                cart.getUserId()+ "," +
+                cart.getNumberOfFood().get(0) + "," +
+                cart.getIndex()+ "," +
+                "'" + cart.getStatus() + "'," +
+                "'" + cart.getFoods().get(0).getRestaurantId() + "'," +
+                "'" + cart.getFoods().get(0).getName() + "'" +
+                ") ON DUPLICATE KEY UPDATE status = " + cart.getStatus() +";");
         return "INSERT IGNORE INTO " + TABLE_NAME +
                 "(" + COLUMNS + ")" + " VALUES "+
                 "("+
@@ -67,7 +80,7 @@ public class OrderMapper extends Mapper<Cart, Integer> implements IOrderMapper {
                 "'" + cart.getStatus() + "'," +
                 "'" + cart.getFoods().get(0).getRestaurantId() + "'," +
                 "'" + cart.getFoods().get(0).getName() + "'" +
-                ") ON DUPLICATE KEY UPDATE status = " + cart.getStatus() +";";
+                ") ON DUPLICATE KEY UPDATE status = " + "'" +cart.getStatus()+ "'" +";";
     }
     @Override
     protected String getDeleteStatement(ArrayList<Integer> keys) {

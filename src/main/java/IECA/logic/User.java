@@ -113,8 +113,10 @@ public class User {
         }
         cartMapper.delete(idKey);
         connection.close();
+        System.out.println("ADD ORDER IN  USER SIDE!!!!");
         newOrder.setIndex(RestaurantManager.getInstance().getCurrentUser().getOrders().size());
         orders.add(newOrder);
+        System.out.println(orders.size());
     }
     public void addCredit(int value) throws SQLException {
         credit = credit+value;

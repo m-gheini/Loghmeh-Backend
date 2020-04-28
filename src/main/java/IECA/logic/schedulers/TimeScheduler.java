@@ -31,7 +31,8 @@ public class TimeScheduler extends TimerTask {
                 OrderMapper orderMapper = new OrderMapper(false);
                 Connection connection = ConnectionPool.getConnection();
                 ArrayList<Integer> keys = new ArrayList<Integer>();
-                keys.add(RestaurantManager.getInstance().getCurrentUser().getId(),finalIndex);
+                keys.add(RestaurantManager.getInstance().getCurrentUser().getId());
+                keys.add(finalIndex);
                 ArrayList<Cart> order = orderMapper.findByForeignKey(keys);
                 for (Cart c:order){
                     c.setStatus("done");

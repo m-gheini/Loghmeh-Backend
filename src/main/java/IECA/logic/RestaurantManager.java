@@ -30,11 +30,12 @@ public class RestaurantManager {
         restaurantDataset.addToDataset(restaurantDataset.readFromWeb("http://138.197.181.131:8080/restaurants"));
         restaurants = db.getPermanentRestaurants();
         foods = db.getPermanentFoods();
-        currentUser = new User();
+//        currentUser = new User();
         deliveries = new ArrayList<Delivery>();
         remainingTime = 0;
         //FoodPartyScheduler foodPartyScheduler = new FoodPartyScheduler();
         users = db.getPermanentUser();
+        currentUser = users.get(0);
 //        users=new ArrayList<User>();
 //        users.add(currentUser);
     }

@@ -132,7 +132,7 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
                 newCart.setUserId(rs.getInt(1));
                 newCart.setIndex(i);
                 newCart.setStatus(allOrders.get(i).get(0).getStatus());
-                //TODO set resName
+                newCart.setRestaurantName(allOrders.get(i).get(0).getRestaurantName());
                 ArrayList<Cart> spec = allOrders.get(i);
                 ArrayList<Food> orderFoods = new ArrayList<Food>();
                 ArrayList<Integer> orderNumOfFoods = new ArrayList<Integer>();

@@ -64,15 +64,23 @@ public class Users {
     @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
     public @ResponseBody
     Object deleteUser(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
-        for(User u:RestaurantManager.getInstance().getUsers()){
-            if(u.getId()==id){
-                RestaurantManager.getInstance().getUsers().remove(u);
-                Error error = new Error(202,"user deleted successfully");
-                return error;
-            }
-        }
-        Error error = new Error(404,"no such id");
-        return error;
+//        for(User u:RestaurantManager.getInstance().getUsers()){
+//            if(u.getId()==id){
+//                RestaurantManager.getInstance().getUsers().remove(u);
+//                Error error = new Error(202,"user deleted successfully");
+//                return error;
+//            }
+//        }
+//        Error error = new Error(404,"no such id");
+//        return error;
+        UserMapper userMapper = new UserMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        Integer prevSize = userMapper.convertAllResultToObject().size();
+        ArrayList<Integer> key = new ArrayList<Integer>();
+        userMapper.delete(key);
+        if (userMapper.convertAllResultToObject().size()==prevSize)
+            return new Error(404,"no such id");
+        return new Error(202,"user deleted successfully");
 
     }
 

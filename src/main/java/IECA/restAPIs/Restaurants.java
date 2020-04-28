@@ -21,7 +21,11 @@ public class Restaurants {
     @RequestMapping(value = "/restaurants", method = RequestMethod.GET)
     public @ResponseBody
     ArrayList<Restaurant> allRestaurants() throws IOException, SQLException {
-        ArrayList<Restaurant> restaurants = RestaurantManager.getInstance().getRestaurants();
+//        ArrayList<Restaurant> restaurants = RestaurantManager.getInstance().getRestaurants();
+        RestaurantMapper restaurantMapper= new RestaurantMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<Restaurant> restaurants = restaurantMapper.convertAllResultToObject();
+        connection.close();
         return restaurants;
     }
 

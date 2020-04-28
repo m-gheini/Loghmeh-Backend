@@ -1,5 +1,9 @@
-package IECA.database.mappers;
+package IECA.database.mappers.restaurant;
 
+import IECA.database.mappers.ConnectionPool;
+import IECA.database.mappers.Mapper;
+import IECA.database.mappers.food.FoodMapper;
+import IECA.database.mappers.foodParty.FoodPartyMapper;
 import IECA.logic.Food;
 import IECA.logic.Location;
 import IECA.logic.Restaurant;

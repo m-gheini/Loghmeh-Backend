@@ -1,5 +1,6 @@
-package IECA.database.mappers;
+package IECA.database.mappers.foodParty;
 
+import IECA.database.mappers.IMapper;
 import IECA.logic.Location;
 import IECA.logic.SaleFood;
 

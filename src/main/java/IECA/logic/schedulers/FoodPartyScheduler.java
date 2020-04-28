@@ -3,7 +3,7 @@ import IECA.database.DatabaseManager;
 import IECA.database.DeliveryDataset;
 import IECA.database.FoodPartyDataset;
 import IECA.database.mappers.ConnectionPool;
-import IECA.database.mappers.FoodPartyMapper;
+import IECA.database.mappers.foodParty.FoodPartyMapper;
 import IECA.logic.Restaurant;
 import IECA.logic.RestaurantManager;
 import IECA.logic.SaleFood;

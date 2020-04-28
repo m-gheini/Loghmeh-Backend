@@ -1,9 +1,9 @@
 package IECA.restAPIs;
 
 import IECA.database.mappers.ConnectionPool;
-import IECA.database.mappers.FoodMapper;
-import IECA.database.mappers.FoodPartyMapper;
-import IECA.database.mappers.RestaurantMapper;
+import IECA.database.mappers.food.FoodMapper;
+import IECA.database.mappers.foodParty.FoodPartyMapper;
+import IECA.database.mappers.restaurant.RestaurantMapper;
 import IECA.logic.*;
 import IECA.logic.Error;
 import org.codehaus.jackson.map.util.JSONPObject;

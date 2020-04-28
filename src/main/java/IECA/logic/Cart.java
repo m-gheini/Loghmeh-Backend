@@ -1,5 +1,8 @@
 package IECA.logic;
 import IECA.database.mappers.*;
+import IECA.database.mappers.cart.CartMapper;
+import IECA.database.mappers.cart.SaleCartMapper;
+import IECA.database.mappers.foodParty.FoodPartyMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;

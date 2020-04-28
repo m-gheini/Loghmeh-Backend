@@ -4,6 +4,7 @@ import IECA.database.DatabaseManager;
 import IECA.logic.*;
 import IECA.servlets.FoodParty;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -13,6 +14,12 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws SQLException, IOException {
+        UserMapper userMapper = new UserMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<Integer> key = new ArrayList<Integer>();
+        key.add(2);
+        userMapper.delete(key);
+        connection.close();
 //        UserMapper userMapper = new UserMapper(true);
 //        FoodMapper foodMapper = new FoodMapper(true);
 //        CartMapper cartMapper = new CartMapper(true);
@@ -38,8 +45,8 @@ public class Main {
 //        User u = userMapper.find(n);
 //        System.out.println(u.getMyCart().getFoods());
 //        System.out.println(u.getMyCart().getNumberOfFood());
-        DatabaseManager dbm = new DatabaseManager();
-        dbm.createDatabases();
+//        DatabaseManager dbm = new DatabaseManager();
+//        dbm.createDatabases();
 //        RestaurantMapper rm = new RestaurantMapper(true);
 //        Restaurant R1 = new Restaurant();
 //        R1.setId("5e4fcf14af68ed25d5900ebc");

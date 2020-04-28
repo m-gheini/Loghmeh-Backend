@@ -1,6 +1,5 @@
 package IECA.logic;
 import IECA.database.*;
-import IECA.database.mappers.RestaurantMapper;
 import IECA.logic.schedulers.FoodPartyScheduler;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

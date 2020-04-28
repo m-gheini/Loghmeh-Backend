@@ -1,7 +1,11 @@
-package IECA.database.mappers;
+package IECA.database.mappers.order;
 
+import IECA.database.mappers.ConnectionPool;
+import IECA.database.mappers.Mapper;
+import IECA.database.mappers.food.FoodMapper;
+import IECA.database.mappers.restaurant.RestaurantMapper;
 import IECA.logic.Cart;
-import IECA.logic.SaleFood;
+import IECA.logic.Food;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,13 +13,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class SaleOrderMapper extends Mapper<Cart, Integer> implements ISaleCartMapper {
-    private static final String COLUMNS = " id, number, index, status, restaurantId, name, restaurantName";
-    private static final String TABLE_NAME = "saleOrder_table";
+public class OrderMapper extends Mapper<Cart, Integer> implements IOrderMapper {
+    private static final String COLUMNS = " id, number, orderIndex, status, restaurantId, name";
+    private static final String TABLE_NAME = "order_table";
 
     private Boolean doManage;
 
-    public SaleOrderMapper(Boolean doManage) throws SQLException {
+    public OrderMapper(Boolean doManage) throws SQLException {
         if (this.doManage = doManage) {
             Connection con = ConnectionPool.getConnection();
             Statement st = con.createStatement();
@@ -25,13 +29,12 @@ public class SaleOrderMapper extends Mapper<Cart, Integer> implements ISaleCartM
                             "(" +
                             "id int, " +
                             "number int, " +
-                            "index int, " +
+                            "orderIndex int, " +
                             "status varchar(255), " +
                             "restaurantId varchar(255), " +
                             "name varchar(255), " +
-                            "restaurantName varchar(255), " +
-                            "PRIMARY KEY(id, name, index), " +
-                            "foreign key(restaurantId, name) references foodParty_table(restaurantId, name) on delete  cascade, " +
+                            "PRIMARY KEY(id, orderIndex, name), " +
+                            "foreign key(restaurantId, name) references food_table(restaurantId, name) on delete  cascade, " +
                             "foreign key(id) references user_table(id) on delete  cascade" +
                             ");",
                     TABLE_NAME));
@@ -45,30 +48,43 @@ public class SaleOrderMapper extends Mapper<Cart, Integer> implements ISaleCartM
         if(keys.size()==2){
             Integer id = keys.get(0);
             Integer index = keys.get(1);
+            System.out.println("SELECT " + COLUMNS +
+                    " FROM " + TABLE_NAME +
+                    " WHERE id = " + id + "and orderIndex = " + index + ";");
             return "SELECT " + COLUMNS +
                     " FROM " + TABLE_NAME +
-                    " WHERE id = " + id + "and index = " + index + ";";
+                    " WHERE id = " + id + " and orderIndex = " + index + ";";
 
         }
         Integer id = keys.get(0);
         return "SELECT " + COLUMNS +
                 " FROM " + TABLE_NAME +
                 " WHERE id = " + id + ";";
+
     }
 
     @Override
     protected String getInsertStatement(Cart cart) {
+        System.out.println("INSERT IGNORE INTO " + TABLE_NAME +
+                "(" + COLUMNS + ")" + " VALUES "+
+                "("+
+                cart.getUserId()+ "," +
+                cart.getNumberOfFood().get(0) + "," +
+                cart.getIndex()+ "," +
+                "'" + cart.getStatus() + "'," +
+                "'" + cart.getFoods().get(0).getRestaurantId() + "'," +
+                "'" + cart.getFoods().get(0).getName() + "'" +
+                ") ON DUPLICATE KEY UPDATE status = " + cart.getStatus() +";");
         return "INSERT IGNORE INTO " + TABLE_NAME +
                 "(" + COLUMNS + ")" + " VALUES "+
                 "("+
                 cart.getUserId()+ "," +
-                cart.getNumberOfSaleFood().get(0) + "," +
+                cart.getNumberOfFood().get(0) + "," +
                 cart.getIndex()+ "," +
                 "'" + cart.getStatus() + "'," +
-                "'" + cart.getSaleFoods().get(0).getRestaurantId() + "'," +
-                "'" + cart.getSaleFoods().get(0).getName() + "'" +
-                "'" + cart.getSaleFoods().get(0).getRestaurantName() + "'" +
-                ") ON DUPLICATE KEY UPDATE number = " + cart.getStatus() +";";
+                "'" + cart.getFoods().get(0).getRestaurantId() + "'," +
+                "'" + cart.getFoods().get(0).getName() + "'" +
+                ") ON DUPLICATE KEY UPDATE status = " + "'" +cart.getStatus()+ "'" +";";
     }
     @Override
     protected String getDeleteStatement(ArrayList<Integer> keys) {
@@ -83,21 +99,21 @@ public class SaleOrderMapper extends Mapper<Cart, Integer> implements ISaleCartM
         cart.setUserId(rs.getInt(1));
         cart.setIndex(rs.getInt(3));
         cart.setStatus(rs.getString(4));
-        FoodPartyMapper foodPartyMapper = new FoodPartyMapper(false);
-//        RestaurantMapper restaurantMapper = new RestaurantMapper(false);
+        FoodMapper foodMapper = new FoodMapper(false);
+        RestaurantMapper restaurantMapper = new RestaurantMapper(false);
         Connection connection = ConnectionPool.getConnection();
-//        ArrayList<String > resId = new ArrayList<String>();
-//        resId.add(rs.getString(3));
-        cart.setRestaurantName(rs.getString(7));
+        ArrayList<String > resId = new ArrayList<String>();
+        resId.add(rs.getString(5));
+        cart.setRestaurantName(restaurantMapper.find(resId).getName());
         ArrayList<String> keys = new ArrayList<String>();
         keys.add(rs.getString(6));
         keys.add(rs.getString(5));
-        ArrayList<SaleFood> foodParties = new ArrayList<SaleFood>();
-        ArrayList<Integer> numberOfSaleFoods = new ArrayList<Integer>();
-        foodParties.add(foodPartyMapper.find(keys));
-        numberOfSaleFoods.add(rs.getInt(2));
-        cart.setSaleFoods(foodParties);
-        cart.setNumberOfSaleFood(numberOfSaleFoods);
+        ArrayList<Food> foods = new ArrayList<Food>();
+        ArrayList<Integer> numberOfFoods = new ArrayList<Integer>();
+        foods.add(foodMapper.find(keys));
+        numberOfFoods.add(rs.getInt(2));
+        cart.setFoods(foods);
+        cart.setNumberOfFood(numberOfFoods);
         connection.close();
         return  cart;
     }

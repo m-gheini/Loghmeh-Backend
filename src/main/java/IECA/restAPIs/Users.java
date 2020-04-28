@@ -1,7 +1,7 @@
 package IECA.restAPIs;
 
 import IECA.database.mappers.ConnectionPool;
-import IECA.database.mappers.UserMapper;
+import IECA.database.mappers.user.UserMapper;
 import IECA.logic.*;
 import IECA.logic.Error;
 import IECA.logic.schedulers.DeliveryScheduler;

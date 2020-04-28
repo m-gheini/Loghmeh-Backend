@@ -1,5 +1,10 @@
-package IECA.database.mappers;
+package IECA.database.mappers.user;
 
+import IECA.database.mappers.ConnectionPool;
+import IECA.database.mappers.Mapper;
+import IECA.database.mappers.cart.CartMapper;
+import IECA.database.mappers.cart.SaleCartMapper;
+import IECA.database.mappers.order.OrderMapper;
 import IECA.logic.Cart;
 import IECA.logic.Food;
 import IECA.logic.SaleFood;

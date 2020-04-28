@@ -35,6 +35,7 @@ public class Users {
         UserMapper userMapper = new UserMapper(false);
         Connection connection = ConnectionPool.getConnection();
         ArrayList<Integer> key = new ArrayList<Integer>();
+        key.add(id);
         User result = userMapper.find(key);
         connection.close();
         if(result != null)
@@ -51,6 +52,7 @@ public class Users {
         UserMapper userMapper = new UserMapper(false);
         Connection connection = ConnectionPool.getConnection();
         ArrayList<Integer> key = new ArrayList<Integer>();
+        key.add(id);
         User result = userMapper.find(key);
         connection.close();
 
@@ -77,6 +79,7 @@ public class Users {
         Connection connection = ConnectionPool.getConnection();
         Integer prevSize = userMapper.convertAllResultToObject().size();
         ArrayList<Integer> key = new ArrayList<Integer>();
+        key.add(id);
         userMapper.delete(key);
         if (userMapper.convertAllResultToObject().size()==prevSize) {
             connection.close();

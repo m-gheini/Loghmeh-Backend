@@ -2,6 +2,7 @@ package IECA.restAPIs;
 
 import IECA.database.mappers.ConnectionPool;
 import IECA.database.mappers.FoodMapper;
+import IECA.database.mappers.FoodPartyMapper;
 import IECA.database.mappers.RestaurantMapper;
 import IECA.logic.*;
 import IECA.logic.Error;
@@ -32,7 +33,12 @@ public class Restaurants {
     @RequestMapping(value = "/saleFoods", method = RequestMethod.GET)
     public @ResponseBody
     ArrayList<SaleFood> allSaleFoods() throws IOException, SQLException {
-        ArrayList<SaleFood> saleFoods = RestaurantManager.getInstance().getSaleFoods();
+//        ArrayList<SaleFood> saleFoods = RestaurantManager.getInstance().getSaleFoods();
+        FoodPartyMapper foodPartyMapper= new FoodPartyMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<SaleFood> saleFoods = foodPartyMapper.convertAllResultToObject();
+        connection.close();
+
         return saleFoods;
     }
 

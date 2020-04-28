@@ -136,7 +136,13 @@ public class Users {
     @RequestMapping(value = "/users/{id}/orders",method = RequestMethod.GET)
     public @ResponseBody
     Object allOrders(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
-        User user = RestaurantManager.getInstance().findSpecUser(id);
+//        User user = RestaurantManager.getInstance().findSpecUser(id);
+        UserMapper userMapper = new UserMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<Integer> key = new ArrayList<Integer>();
+        key.add(id);
+        User user = userMapper.find(key);
+        connection.close();
         if(user!=null){
             return user.getOrders();
         }

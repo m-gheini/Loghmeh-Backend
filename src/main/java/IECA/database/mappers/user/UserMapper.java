@@ -2,6 +2,7 @@ package IECA.database.mappers.user;
 
 import IECA.database.mappers.ConnectionPool;
 import IECA.database.mappers.Mapper;
+import IECA.database.mappers.order.SaleOrderMapper;
 import IECA.database.mappers.cart.CartMapper;
 import IECA.database.mappers.cart.SaleCartMapper;
 import IECA.database.mappers.order.OrderMapper;

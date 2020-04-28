@@ -1,8 +1,8 @@
 package IECA.logic.schedulers;
 
 import IECA.database.mappers.ConnectionPool;
-import IECA.database.mappers.OrderMapper;
-import IECA.database.mappers.SaleOrderMapper;
+import IECA.database.mappers.order.SaleOrderMapper;
+import IECA.database.mappers.order.OrderMapper;
 import IECA.logic.Cart;
 import IECA.logic.RestaurantManager;
 

@@ -6,6 +6,7 @@ import IECA.database.mappers.cart.SaleCartMapper;
 import IECA.database.mappers.food.FoodMapper;
 import IECA.database.mappers.foodParty.FoodPartyMapper;
 import IECA.database.mappers.order.OrderMapper;
+import IECA.database.mappers.order.SaleOrderMapper;
 import IECA.database.mappers.restaurant.RestaurantMapper;
 import IECA.database.mappers.user.UserMapper;
 import IECA.logic.*;

@@ -1,6 +1,11 @@
 package IECA.logic;
 
 import IECA.database.mappers.*;
+import IECA.database.mappers.order.SaleOrderMapper;
+import IECA.database.mappers.cart.CartMapper;
+import IECA.database.mappers.cart.SaleCartMapper;
+import IECA.database.mappers.order.OrderMapper;
+import IECA.database.mappers.user.UserMapper;
 
 import java.io.IOException;
 import java.sql.Connection;

@@ -45,8 +45,14 @@ public class Restaurants {
     @RequestMapping(value = "/saleFoods/{id}", method = RequestMethod.GET)
     public @ResponseBody
     ArrayList<SaleFood> allSaleFoodsOfRestaurant(@PathVariable(value = "id") String id) throws IOException, SQLException {
-        ArrayList<SaleFood> result = RestaurantManager.getInstance().saleFoodsOfSpecialRestaurant(id);
-        return result;
+//        ArrayList<SaleFood> result = RestaurantManager.getInstance().saleFoodsOfSpecialRestaurant(id);
+        FoodPartyMapper foodPartyMapper= new FoodPartyMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<String> ids = new ArrayList<String>();
+        ids.add(id);
+        ArrayList<SaleFood> saleFoods = foodPartyMapper.findByForeignKey(ids);
+        connection.close();
+        return saleFoods;
     }
 
     @RequestMapping(value = "/saleFoods/{id}",params = "saleFoodName",method = RequestMethod.GET)

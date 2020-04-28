@@ -1,6 +1,8 @@
 package IECA.logic;
 
+import IECA.database.mappers.CartMapper;
 import IECA.database.mappers.ConnectionPool;
+import IECA.database.mappers.OrderMapper;
 import IECA.database.mappers.UserMapper;
 
 import java.io.IOException;
@@ -98,6 +100,19 @@ public class User {
         this.orders = orders;
     }
     public void addOrder(Cart newOrder) throws IOException, SQLException {
+        //Todo saleOrder
+        CartMapper cartMapper = new CartMapper(false);
+        OrderMapper orderMapper  = new OrderMapper(false);
+        Connection connection =  ConnectionPool.getConnection();
+        ArrayList<Integer> idKey = new ArrayList<Integer>();
+        idKey.add(this.id);
+        ArrayList<Cart> carts = cartMapper.findByForeignKey(idKey);
+        for(Cart c:carts){
+            c.setIndex(RestaurantManager.getInstance().getCurrentUser().getOrders().size());
+            orderMapper.insert(c);
+        }
+        cartMapper.delete(idKey);
+        connection.close();
         newOrder.setIndex(RestaurantManager.getInstance().getCurrentUser().getOrders().size());
         orders.add(newOrder);
     }

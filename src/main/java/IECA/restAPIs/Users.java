@@ -31,7 +31,12 @@ public class Users {
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public @ResponseBody
     Object specificUser(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
-        User result = RestaurantManager.getInstance().findSpecUser(id);
+//        User result = RestaurantManager.getInstance().findSpecUser(id);
+        UserMapper userMapper = new UserMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<Integer> key = new ArrayList<Integer>();
+        User result = userMapper.find(key);
+        connection.close();
         if(result != null)
             return result;
         Error error = new Error(404,"no such id");

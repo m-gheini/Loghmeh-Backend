@@ -219,14 +219,26 @@ public class Cart {
             }
         }
     }
-    public void deleteSpecificSaleFood(SaleFood saleFood){
+    public void deleteSpecificSaleFood(SaleFood saleFood) throws SQLException {
         for (int i=0;i<saleFoods.size();i++){
             if(saleFoods.get(i).getRestaurantId().equals(saleFood.getRestaurantId()) &&
                     saleFoods.get(i).getName().equals(saleFood.getName())){
                 if(numberOfSaleFood.get(i)>1) {
+                    SaleCartMapper saleCartMapper = new SaleCartMapper(false);
+                    Connection connection = ConnectionPool.getConnection();
+                    Cart specFood = saleCartMapper.findSpecRow(userId,saleFood.getName());
+                    ArrayList<Integer> num = new ArrayList<Integer>();
+                    num.add(specFood.getNumberOfSaleFood().get(0)-1);
+                    specFood.setNumberOfSaleFood(num);
+                    connection.close();
                     numberOfSaleFood.set(i, numberOfSaleFood.get(i) - 1);
                 }
                 else{
+                    SaleCartMapper saleCartMapper = new SaleCartMapper(false);
+                    Connection connection = ConnectionPool.getConnection();
+                    saleCartMapper.deleteSpecRow(userId,saleFood.getName());
+                    connection.close();
+
                     saleFoods.remove(i);
                     numberOfSaleFood.remove(i);
                 }

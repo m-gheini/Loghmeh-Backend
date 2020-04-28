@@ -5,10 +5,7 @@ import IECA.logic.Food;
 import IECA.logic.SaleFood;
 import IECA.servlets.FoodParty;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class SaleCartMapper extends Mapper<Cart, Integer> implements ISaleCartMapper {
@@ -104,5 +101,41 @@ public class SaleCartMapper extends Mapper<Cart, Integer> implements ISaleCartMa
         return "SELECT " + COLUMNS +
                 " FROM " + TABLE_NAME ;
     }
+
+    public Cart findSpecRow(Integer id,String foodName) throws SQLException {
+        String stm = "SELECT " + COLUMNS + " FROM " + TABLE_NAME + " WHERE id = "+ id + " and name = " + "'" + foodName+ "'" +";";
+        System.out.println("1::"+stm);
+        try (Connection con = ConnectionPool.getConnection();
+             PreparedStatement st = con.prepareStatement(stm)
+        ) {
+            ResultSet resultSet;
+            try {
+                resultSet = st.executeQuery();
+                Object res = resultSet.next();
+                if(!(Boolean)res)
+                    return null;
+                return convertResultSetToObject(resultSet);
+            } catch (SQLException ex) {
+                System.out.println("error in Mapper.findByID query.");
+                throw ex;
+            }
+        }
+    }
+
+    public void deleteSpecRow(Integer id,String foodName) throws SQLException {
+        String stm = "DELETE FROM " + TABLE_NAME + " WHERE id = " + id +" and name = " + "'" + foodName+ "'" +";";
+        System.out.println("1::"+stm);
+        try (Connection con = ConnectionPool.getConnection();
+             PreparedStatement st = con.prepareStatement(stm)
+        ) {
+            try {
+                st.executeUpdate();
+            } catch (SQLException ex) {
+                System.out.println("error in Mapper.delete query.");
+                throw ex;
+            }
+        }
+    }
+
 
 }

@@ -70,7 +70,14 @@ public class Restaurants {
             Error error = new Error(404, "no such saleFood");
             return error;
         }
-        SaleFood result = RestaurantManager.getInstance().findSpecialSaleFood(id,saleFoodName);
+//        SaleFood result = RestaurantManager.getInstance().findSpecialSaleFood(id,saleFoodName);
+        FoodPartyMapper foodPartyMapper= new FoodPartyMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<String> ids = new ArrayList<String>();
+        ids.add(saleFoodName);
+        ids.add(id);
+        ArrayList<SaleFood> result = foodPartyMapper.findByForeignKey(ids);
+        connection.close();
         return result;
     }
 

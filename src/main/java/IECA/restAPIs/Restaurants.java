@@ -1,5 +1,8 @@
 package IECA.restAPIs;
 
+import IECA.database.mappers.ConnectionPool;
+import IECA.database.mappers.FoodMapper;
+import IECA.database.mappers.RestaurantMapper;
 import IECA.logic.*;
 import IECA.logic.Error;
 import org.codehaus.jackson.map.util.JSONPObject;
@@ -8,6 +11,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +67,30 @@ public class Restaurants {
             return RestaurantManager.getInstance().searchResById(id);
         }
     }
+
+    @RequestMapping(value = "/restaurants/{name}" , method = RequestMethod.GET)
+    public @ResponseBody
+    Object specificRestaurantByName(@PathVariable(value = "name") String name) throws IOException, SQLException {
+        RestaurantMapper restaurantMapper = new RestaurantMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<Restaurant> res = (ArrayList<Restaurant>) restaurantMapper.searchRestaurantByName(name);
+        connection.close();
+        if(res.size()==0)
+            return new Error(404,"no such restaurant");
+        return res;
+    }
+    @RequestMapping(value = "/foods/{name}" , method = RequestMethod.GET)
+    public @ResponseBody
+    Object specificFoodByName(@PathVariable(value = "name") String name) throws IOException, SQLException {
+        FoodMapper foodMapper = new FoodMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<Food> res = (ArrayList<Food>) foodMapper.searchFoodByName(name);
+        connection.close();
+        if(res.size()==0)
+            return new Error(404,"no such food");
+        return res;
+    }
+
     @RequestMapping(value = "/restaurants/{id}" , params = "foodName",method = RequestMethod.GET)
     public @ResponseBody
     Object specificFood(@PathVariable(value = "id") String id,

@@ -2,12 +2,11 @@ package IECA.database.mappers;
 
 import IECA.logic.Food;
 import IECA.logic.Location;
+import IECA.logic.Restaurant;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FoodMapper extends Mapper<Food, String> implements IFoodMapper {
 
@@ -36,6 +35,29 @@ public class FoodMapper extends Mapper<Food, String> implements IFoodMapper {
                     TABLE_NAME));
             st.close();
             con.close();
+        }
+    }
+    public List<Food> searchFoodByName(String inName) throws SQLException {
+        String statement = "SELECT " + COLUMNS + " FROM " + TABLE_NAME +
+                " Where name LIKE " + "'%" + inName + "%'";
+        return executingGivenQuery(statement);
+    }
+
+    private List<Food> executingGivenQuery(String statement) throws SQLException {
+        List<Food> result = new ArrayList<Food>();
+        try (Connection con = ConnectionPool.getConnection();
+             PreparedStatement st = con.prepareStatement(statement);
+        ) {
+            ResultSet resultSet;
+            try {
+                resultSet = st.executeQuery();
+                while (resultSet.next())
+                    result.add(convertResultSetToObject(resultSet));
+                return result;
+            } catch (SQLException ex) {
+                System.out.println("error in Mapper.findByID query.");
+                throw ex;
+            }
         }
     }
 

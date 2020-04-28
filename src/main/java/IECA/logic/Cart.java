@@ -193,14 +193,26 @@ public class Cart {
             }
         }
     }
-    public void deleteSpecificFood(Food food){
+    public void deleteSpecificFood(Food food) throws SQLException {
         for (int i=0;i<foods.size();i++){
             if(foods.get(i).getRestaurantId().equals(food.getRestaurantId()) &&
                     foods.get(i).getName().equals(food.getName())){
                 if(numberOfFood.get(i)>1) {
+                    CartMapper cartMapper = new CartMapper(false);
+                    Connection connection = ConnectionPool.getConnection();
+                    Cart specFood = cartMapper.findSpecRow(userId,food.getName());
+                    ArrayList<Integer> num = new ArrayList<Integer>();
+                    num.add(specFood.getNumberOfFood().get(0)-1);
+                    specFood.setNumberOfFood(num);
+                    connection.close();
                     numberOfFood.set(i, numberOfFood.get(i) - 1);
                 }
                 else{
+                    CartMapper cartMapper = new CartMapper(false);
+                    Connection connection = ConnectionPool.getConnection();
+                    cartMapper.deleteSpecRow(userId,food.getName());
+                    connection.close();
+
                     foods.remove(i);
                     numberOfFood.remove(i);
                 }

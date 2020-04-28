@@ -113,12 +113,19 @@ public class Restaurants {
     public @ResponseBody
     Object specificFoodByName(@PathVariable(value = "name") String name) throws IOException, SQLException {
         FoodMapper foodMapper = new FoodMapper(false);
+        RestaurantMapper restaurantMapper = new RestaurantMapper(false);
         Connection connection = ConnectionPool.getConnection();
         ArrayList<Food> res = (ArrayList<Food>) foodMapper.searchFoodByName(name);
+        ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
+        for(Food f:res){
+            ArrayList<String> key = new ArrayList<String>();
+            key.add(f.getRestaurantId());
+            restaurants.add(restaurantMapper.find(key));
+        }
         connection.close();
         if(res.size()==0)
             return new Error(404,"no such food");
-        return res;
+        return restaurants;
     }
 
     @RequestMapping(value = "/restaurants/{id}" , params = "foodName",method = RequestMethod.GET)

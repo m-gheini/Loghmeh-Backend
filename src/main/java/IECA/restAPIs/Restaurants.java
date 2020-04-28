@@ -98,7 +98,7 @@ public class Restaurants {
         }
     }
 
-    @RequestMapping(value = "/restaurants/{name}" , method = RequestMethod.GET)
+    @RequestMapping(value = "/restaurants/name/{name}" , method = RequestMethod.GET)
     public @ResponseBody
     Object specificRestaurantByName(@PathVariable(value = "name") String name) throws IOException, SQLException {
         RestaurantMapper restaurantMapper = new RestaurantMapper(false);

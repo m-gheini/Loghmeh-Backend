@@ -151,7 +151,7 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
                 }
                 resultOrder.add(newCart);
             }
-            user.setOrders(resultOrder);
+            //user.setOrders(resultOrder);
         }
         if(saleOrders.size()>0) {
             for (Cart c : saleOrders) {
@@ -177,14 +177,14 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
                 ArrayList<Food> saleOrderFoods = new ArrayList<Food>();
                 ArrayList<Integer> saleOrderNumOfFoods = new ArrayList<Integer>();
                 for (Cart c : spec) {
-                    saleOrderFoods.add(c.getFoods().get(0));
-                    saleOrderNumOfFoods.add(c.getNumberOfFood().get(0));
+                    saleOrderFoods.add(c.getSaleFoods().get(0));
+                    saleOrderNumOfFoods.add(c.getNumberOfSaleFood().get(0));
                 }
                 resultOrder.add(newCart);
             }
-            user.setOrders(resultOrder);
+            //user.setOrders(resultOrder);
         }
-
+        user.setOrders(resultOrder);
         Cart tempCart = new Cart();
         if(foods.size()>0) {
             tempCart.setUserId(rs.getInt(1));

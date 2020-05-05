@@ -99,7 +99,20 @@ public class Users {
             @RequestParam(value = "email") String email,
             @RequestParam(value = "phoneNumber") String phoneNumber) throws IOException, SQLException {
         User user = new User();
+        System.out.println(password);
+        System.out.println(name);
+        System.out.println(familyName);
+        System.out.println(email);
+        System.out.println(phoneNumber);
+        System.out.println("-----------------------------------");
+
         user.setAllParameters(password,name,familyName,email,phoneNumber);
+        System.out.println(user.getId());
+        System.out.println(user.getName());
+        System.out.println(user.getFamilyName());
+        System.out.println(user.getEmail());
+        System.out.println(user.getPhoneNumber());
+        System.out.println(user.getPassword());
         Integer prevSize=RestaurantManager.getInstance().getUsers().size();
         RestaurantManager.getInstance().addUser(user);
         UserMapper userMapper = new UserMapper(false);

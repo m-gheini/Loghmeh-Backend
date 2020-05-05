@@ -87,8 +87,8 @@ public class DatabaseManager {
         userDoManage = !(existInDatabase("user_table"));
         cartDoManage = !(existInDatabase("cart_table"));
         orderDoManage = !(existInDatabase("order_table"));
-        saleCDoManage = !(existInDatabase("salecart_table"));
-        saleOManage = !(existInDatabase("saleorder_table"));
+        saleCDoManage = !(existInDatabase("saleCart_table"));
+        saleOManage = !(existInDatabase("saleOrder_table"));
         RestaurantMapper rm = new RestaurantMapper(resDoManage);
         FoodMapper fm = new FoodMapper(foodDoManage);
         System.out.println("AA::"+saleFoodDoManage);

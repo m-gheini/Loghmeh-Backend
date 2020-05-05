@@ -37,7 +37,7 @@ public class User {
         orders = new ArrayList<>();
     }
     public void setAllParameters(String  password,String name,String familyName,String email,String phoneNumber) throws IOException, SQLException {
-        this.id = RestaurantManager.getInstance().getUsers().size();
+        this.id = RestaurantManager.getInstance().getUsers().size()+1;
         this.name = name;
         this.familyName = familyName;
         this.email = email;

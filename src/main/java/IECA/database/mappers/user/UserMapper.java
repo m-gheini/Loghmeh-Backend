@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
-    private static final String COLUMNS = " id, name, familyName, email, credit, phoneNumber";
+    private static final String COLUMNS = " id, name, familyName, email, credit, phoneNumber, password";
     private static final String TABLE_NAME = "user_table";
 
     private Boolean doManage;
@@ -31,11 +31,12 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
                     "CREATE TABLE  %s " +
                             "(" +
                             "id int, " +
-                            "name varchar(255), " +
-                            "familyName varchar(255), " +
-                            "email varchar(255), " +
+                            "name varchar(255) NOT NULL, " +
+                            "familyName varchar(255) NOT NULL , " +
+                            "email varchar(255) NOT NULL UNIQUE, " +
                             "credit int, " +
-                            "phoneNumber varchar(255), " +
+                            "phoneNumber varchar(255) NOT NULL UNIQUE, " +
+                            "password varchar(50) NOT NULL, " +
                             "PRIMARY KEY(id) " +
                             ");",
                     TABLE_NAME));
@@ -62,7 +63,8 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
                 "'" + user.getFamilyName() + "'," +
                 "'" + user.getEmail() + "'," +
                 user.getCredit() + "," +
-                "'" +user.getPhoneNumber() + "'" +
+                "'" +user.getPhoneNumber() + "'," +
+                "'" +user.getPassword() + "'" +
                 ") ON DUPLICATE KEY UPDATE credit = " + user.getCredit() +";";
     }
 

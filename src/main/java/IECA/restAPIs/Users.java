@@ -93,14 +93,13 @@ public class Users {
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     public @ResponseBody
     Object addUser(
-            @RequestParam(value = "id") Integer id,
+            @RequestParam(value = "password") String password,
             @RequestParam(value = "name") String name,
             @RequestParam(value = "familyName") String familyName,
-            @RequestParam(value = "credit") Integer credit,
             @RequestParam(value = "email") String email,
             @RequestParam(value = "phoneNumber") String phoneNumber) throws IOException, SQLException {
         User user = new User();
-        user.setAllParameters(id,name,familyName,email,credit,phoneNumber);
+        user.setAllParameters(password,name,familyName,email,phoneNumber);
         Integer prevSize=RestaurantManager.getInstance().getUsers().size();
         RestaurantManager.getInstance().addUser(user);
         UserMapper userMapper = new UserMapper(false);

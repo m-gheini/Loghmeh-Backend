@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class User {
+    private String password;
     private int id;
     private String name;
     private String familyName;
@@ -29,21 +30,33 @@ public class User {
         email ="fakheri90@gmail.com";
         credit = 5000;
         phoneNumber = "09121111111";
+        MD5 hash = new MD5();
+        this.password = hash.getMd5(" ");
         myCart = new Cart();
         myCart.setUserId(id);
         orders = new ArrayList<>();
     }
-    public void setAllParameters(int id,String name,String familyName,String email,int credit,String phoneNumber){
-        this.id = id;
+    public void setAllParameters(String  password,String name,String familyName,String email,String phoneNumber) throws IOException, SQLException {
+        this.id = RestaurantManager.getInstance().getUsers().size();
         this.name = name;
         this.familyName = familyName;
         this.email = email;
-        this.credit = credit;
         this.phoneNumber = phoneNumber;
+        MD5 hash = new MD5();
+        this.password = hash.getMd5(password);
         this.myCart = new Cart();
         myCart.setUserId(id);
         this.orders = new ArrayList<Cart>();
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public ArrayList<Cart> getOrders() {
         return orders;
     }

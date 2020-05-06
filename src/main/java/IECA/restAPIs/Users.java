@@ -5,14 +5,19 @@ import IECA.database.mappers.user.UserMapper;
 import IECA.logic.*;
 import IECA.logic.Error;
 import IECA.logic.schedulers.DeliveryScheduler;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 @RestController
 public class Users {
@@ -138,8 +143,46 @@ public class Users {
         Connection connection = ConnectionPool.getConnection();
         User found = userMapper.findForLogin(email,hashPass);
         connection.close();
-        if(found!=null)
+        if(found!=null) {
+//            RsaJsonWebKey rsaJsonWebKey = RsaJwkGenerator.generateJwk(2048);
+//            System.out.println("type : "+rsaJsonWebKey.getKeyType());
+//            // Give the JWK a Key ID (kid), which is just the polite thing to do
+//            rsaJsonWebKey.setKeyId("loghme");
+//
+//            // Create the Claims, which will be the content of the JWT
+//            JwtClaims claims = new JwtClaims();
+//            claims.setIssuer("user");  // who creates the token and signs it
+//            claims.setExpirationTimeMinutesInTheFuture(10); // time when the token will expire (10 minutes from now)
+//            claims.setIssuedAtToNow();  // when the token was issued/created (now)
+//            claims.setClaim("email",email); // additional claims/attributes about the subject can be added
+//            claims.setClaim("id",found.getId()); // additional claims/attributes about the subject can be added
+//            JsonWebSignature jws = new JsonWebSignature();
+//            jws.setPayload(claims.toJson());
+//            System.out.println(rsaJsonWebKey.getPrivateKey());
+//            jws.setKey(rsaJsonWebKey.getPrivateKey());
+//            jws.setKeyIdHeaderValue(rsaJsonWebKey.getKeyId());
+//            jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA256);
+//            String jwt = jws.getCompactSerialization();
+//            System.out.println("JWT: " + jwt);
+            try {
+                Algorithm algorithm = Algorithm.HMAC256("loghme");
+                Date now = new Date();
+                Date expire = new Date();
+                expire.setTime(600000);
+                String token = JWT.create()
+                        .withIssuer("user")
+                        .withClaim("email", email)
+                        .withClaim("id", found.getId())
+                        .withIssuedAt(now)
+                        .withExpiresAt(expire)
+                        .sign(algorithm);
+                System.out.println(token);
+
+            } catch (JWTCreationException | UnsupportedEncodingException exception){
+                //Invalid Signing configuration / Couldn't convert Claims.
+            }
             return new Error(200, "found successfully");
+        }
         return new Error(404, "no such user");
     }
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)

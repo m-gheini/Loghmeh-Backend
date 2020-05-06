@@ -210,16 +210,33 @@ public class Users {
             System.out.println("iss: "+jwt.getClaim("iss").asString());
             System.out.println(jwt.getClaim("exp").asLong());
             System.out.println(jwt.getClaim("id").asInt());
+            System.out.println(RestaurantManager.getInstance().getCurrentUser().getId());
             System.out.println(jwt.getClaim("email").asString());
+            System.out.println(RestaurantManager.getInstance().getCurrentUser().getEmail());
             System.out.println(jwt.getClaim("iss").asString());
-            if(!(System.currentTimeMillis()<jwt.getClaim("exp").asLong()
-            && jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
             && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
             && jwt.getClaim("iss").asString().equals("user"))){
                 Error error=new Error(300,"error in jwt");
                 return error;
 
             }
+//            if(!(System.currentTimeMillis()<jwt.getClaim("exp").asLong())){
+//                Error error=new Error(300,System.currentTimeMillis()+"(--)"+jwt.getClaim("exp").asLong()+"error in jwt-time");
+//                return error;
+//            }
+//            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId())){
+//                Error error=new Error(300,"error in jwt-id");
+//                return error;
+//            }
+//            if(!(jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail()))){
+//                Error error=new Error(300,"error in jwt-email");
+//                return error;
+//            }
+//            if(!(jwt.getClaim("iss").asString().equals("user"))){
+//                Error error=new Error(300,"error in jwt-iss");
+//                return error;
+//            }
 
         } catch (JWTVerificationException exception){
             exception.printStackTrace();

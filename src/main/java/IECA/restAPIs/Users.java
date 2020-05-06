@@ -6,8 +6,11 @@ import IECA.logic.*;
 import IECA.logic.Error;
 import IECA.logic.schedulers.DeliveryScheduler;
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -18,10 +21,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 @RestController
 public class Users {
-
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public @ResponseBody
     ArrayList<User> allUsers() throws IOException, InterruptedException, SQLException {
@@ -164,12 +167,14 @@ public class Users {
 //            jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA256);
 //            String jwt = jws.getCompactSerialization();
 //            System.out.println("JWT: " + jwt);
+            String token="";
             try {
                 Algorithm algorithm = Algorithm.HMAC256("loghme");
                 Date now = new Date();
                 Date expire = new Date();
-                expire.setTime(600000);
-                String token = JWT.create()
+                long nowMillis = System.currentTimeMillis();
+                expire.setTime(nowMillis+600000);
+                token = JWT.create()
                         .withIssuer("user")
                         .withClaim("email", email)
                         .withClaim("id", found.getId())
@@ -177,20 +182,52 @@ public class Users {
                         .withExpiresAt(expire)
                         .sign(algorithm);
                 System.out.println(token);
-
+                RestaurantManager.getInstance().setCurrentUser(found);
             } catch (JWTCreationException | UnsupportedEncodingException exception){
                 //Invalid Signing configuration / Couldn't convert Claims.
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            return new Error(200, "found successfully");
+            return new Error(200, token);
         }
-        return new Error(404, "no such user");
+        return new Error(403, "no such user");
     }
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
     public @ResponseBody
     Object updateUserCredit(
+            @RequestHeader Map<String, String> headers,
             @PathVariable(value = "id") Integer id,
             @RequestParam(value = "credit") Integer credit) throws IOException, SQLException {
         User user = RestaurantManager.getInstance().findSpecUser(id);
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            System.out.println(headers.get("authorization"));
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            System.out.println(headers.get("authorization"));
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            System.out.println("after claims");
+            System.out.println("iss: "+jwt.getClaim("iss").asString());
+            System.out.println(jwt.getClaim("exp").asLong());
+            System.out.println(jwt.getClaim("id").asInt());
+            System.out.println(jwt.getClaim("email").asString());
+            System.out.println(jwt.getClaim("iss").asString());
+            if(!(System.currentTimeMillis()<jwt.getClaim("exp").asLong()
+            && jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+            && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+            && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+
+            //Invalid signature/claims
+        }
         if(user == null){
             Error error=new Error(404,"no such id");
             return error;
@@ -198,7 +235,7 @@ public class Users {
         else{
             if(credit<0 )
                 return new Error(403,"please enter a positive number");
-            user.addCredit(credit);
+            RestaurantManager.getInstance().getCurrentUser().addCredit(credit);
             Error error=new Error(200,"successful");
             return error;
         }

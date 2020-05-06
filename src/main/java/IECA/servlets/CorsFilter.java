@@ -22,6 +22,7 @@ public class CorsFilter implements Filter {
 //        System.out.println("Time take to execute action " + path + "   is  :  " + tt);
         HttpServletRequest request = (HttpServletRequest) req;
         System.out.println("HTTP method: " + request.getMethod());
+        ((HttpServletResponse) resp).addHeader("Access-Control-Allow-Headers", "Authorization");
         ((HttpServletResponse) resp).addHeader("Access-Control-Allow-Origin", "*");
         ((HttpServletResponse) resp).addHeader("Access-Control-Allow-Methods","GET, OPTIONS, HEAD, PUT, POST");
 

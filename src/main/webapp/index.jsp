@@ -1,6 +1,13 @@
 <%@ page import="IECA.logic.RestaurantManager" %>
+<%@ page import="java.sql.SQLException" %>
 <jsp:include page="header.jsp" />
-<%RestaurantManager.getInstance();%>
+<%
+    try {
+        RestaurantManager.getInstance();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+%>
 <ul>
     <form action="GetRestaurants" method="post">
         <button type="submit" name="getRestaurants" value="">See Available Restaurants In Radius</button>

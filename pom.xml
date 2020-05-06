@@ -101,6 +101,11 @@
       <version>8.0.19</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.bitbucket.b_c</groupId>
+      <artifactId>jose4j</artifactId>
+      <version>0.7.0</version>
+    </dependency>
 
   </dependencies>
 

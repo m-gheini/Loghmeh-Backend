@@ -53,6 +53,33 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
                 " WHERE id = "+  id   +";";
     }
 
+    protected String findSpecUser(String email, String password) {
+        System.out.println("SELECT " + COLUMNS +
+                " FROM " + TABLE_NAME +
+                " WHERE email = '"+  email + "' and password = '" + password +"';");
+        return "SELECT " + COLUMNS +
+                " FROM " + TABLE_NAME +
+                " WHERE email = '"+  email + "' and password = '" + password +"';";
+    }
+
+    public User findForLogin(String email, String password) throws SQLException {
+        try (Connection con = ConnectionPool.getConnection();
+             PreparedStatement st = con.prepareStatement(findSpecUser(email, password))
+        ) {
+            ResultSet resultSet;
+            try {
+                resultSet = st.executeQuery();
+                Object res = resultSet.next();
+                if(!(Boolean)res)
+                    return null;
+                return convertResultSetToObject(resultSet);
+            } catch (SQLException ex) {
+                System.out.println("error in Mapper.findByID query.");
+                throw ex;
+            }
+        }
+    }
+
     @Override
     protected String getInsertStatement(User user) {
         return "INSERT IGNORE INTO " + TABLE_NAME +

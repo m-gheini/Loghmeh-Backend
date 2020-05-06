@@ -128,7 +128,20 @@ public class Users {
             return error;
         }
     }
-
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public @ResponseBody
+    Object authenticate(@RequestParam(value = "email") String email,
+                        @RequestParam(value = "password") String password) throws SQLException {
+        MD5 hash = new MD5();
+        String hashPass = hash.getMd5(password);
+        UserMapper userMapper = new UserMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        User found = userMapper.findForLogin(email,hashPass);
+        connection.close();
+        if(found!=null)
+            return new Error(200, "found successfully");
+        return new Error(404, "no such user");
+    }
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
     public @ResponseBody
     Object updateUserCredit(

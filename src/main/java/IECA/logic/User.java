@@ -31,7 +31,7 @@ public class User {
         credit = 5000;
         phoneNumber = "09121111111";
         MD5 hash = new MD5();
-        this.password = hash.getMd5(" ");
+        this.password = hash.getMd5("123456");
         myCart = new Cart();
         myCart.setUserId(id);
         orders = new ArrayList<>();

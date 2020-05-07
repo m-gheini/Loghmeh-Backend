@@ -532,18 +532,23 @@ public class Users {
         }
 
         User u = RestaurantManager.getInstance().findSpecUser(id);
+        System.out.println(u.getName()+",,"+u.getFamilyName()+",,"+u.getEmail()+",,"+u.getMyCart().getFoods().size());
         if(u!=null){
             Cart userCart = u.getMyCart();
-            if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0)
-                return new Error(404,"Your cart is empty!");
+            if(userCart.getFoods().size()==0 && userCart.getSaleFoods().size()==0) {
+                System.out.println("HEREEEE");
+                return new Error(404, "Your cart is empty!");
+            }
             else {
                 Integer total = RestaurantManager.getInstance().makeTotal();
+                System.out.println("TOTAL::"+total);
                 String restaurantId = "";
                 if(u.getMyCart().getFoods().size()>0)
                     restaurantId = u.getMyCart().getFoods().get(0).getRestaurantId();
                 else
                     restaurantId = u.getMyCart().getSaleFoods().get(0).getRestaurantId();
                 if(u.getCredit()>=total && total!=0){
+                    System.out.println("UNDERSTOOD");
                     Cart previousCart = new Cart();
                     u.addCredit(-total);
                     DeliveryScheduler deliveryScheduler = new DeliveryScheduler();
@@ -556,8 +561,10 @@ public class Users {
                 else{
                     if(u.getCredit()<total)
                         return new Error(403,"not enough credit");
-                    else
-                        return new Error(404,"empty cart");
+                    else {
+                        System.out.println("HEREEEE//ELSEEE");
+                        return new Error(404, "empty cart");
+                    }
                 }
             }
         }

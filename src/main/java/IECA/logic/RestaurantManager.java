@@ -5,6 +5,7 @@ import IECA.database.mappers.user.UserMapper;
 import IECA.logic.schedulers.FoodPartyScheduler;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+//import org.graalvm.compiler.lir.LIRInstruction;
 
 
 import java.io.IOException;
@@ -180,15 +181,17 @@ public class RestaurantManager {
         }
         return restaurantName;
     }
-    public int makeTotal(){
+    public int makeTotal() throws SQLException {
+        User u = findSpecUser(getCurrentUser().getId());
+        System.out.println(getCurrentUser().getName()+",,"+getCurrentUser().getFamilyName()+",,"+u.getMyCart().getFoods().size());
         int total=0;
-        for (int i =0;i<getCurrentUser().getMyCart().getFoods().size();i++){
-            total+=getCurrentUser().getMyCart().getNumberOfFood().get(i)*
-                    getCurrentUser().getMyCart().getFoods().get(i).getPrice();
+        for (int i =0;i<u.getMyCart().getFoods().size();i++){
+            total+=u.getMyCart().getNumberOfFood().get(i)*
+                    u.getMyCart().getFoods().get(i).getPrice();
         }
-        for (int i =0;i<getCurrentUser().getMyCart().getSaleFoods().size();i++){
-            total+=getCurrentUser().getMyCart().getNumberOfSaleFood().get(i)*
-                    getCurrentUser().getMyCart().getSaleFoods().get(i).getPrice();
+        for (int i =0;i<u.getMyCart().getSaleFoods().size();i++){
+            total+=u.getMyCart().getNumberOfSaleFood().get(i)*
+                    u.getMyCart().getSaleFoods().get(i).getPrice();
         }
         return total;
     }

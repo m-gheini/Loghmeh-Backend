@@ -343,15 +343,35 @@ public class Users {
             return new Error(404,"No such user!");
     }
 
-    @RequestMapping(value = "/users/{id}/cart", params = "foodName",method = RequestMethod.PUT)
+    @RequestMapping(value = "/user/cart", params = "foodName",method = RequestMethod.PUT)
     public @ResponseBody
     Object addToCart(
-            @PathVariable(value = "id") Integer id,
+            @RequestHeader Map<String, String> headers,
             @RequestParam(value = "restaurantId") String restaurantId,
             @RequestParam(value = "foodName") String foodName) throws IOException, SQLException {
         boolean restaurantNotFound = RestaurantManager.getInstance().searchInProperResById(restaurantId);
         if(restaurantNotFound)
             return new Error(404,"no such restaurantId");
+        Integer id = null;
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+                    && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+            id = jwt.getClaim("id").asInt();
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
+
         User u = RestaurantManager.getInstance().findSpecUser(id);
         if(u==null)
             return new Error(404,"no such id");

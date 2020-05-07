@@ -1,11 +1,14 @@
 package IECA.logic;
 import IECA.database.*;
+import IECA.database.mappers.ConnectionPool;
+import IECA.database.mappers.user.UserMapper;
 import IECA.logic.schedulers.FoodPartyScheduler;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -281,13 +284,14 @@ public class RestaurantManager {
         }
         return null;
     }
-    public User findSpecUser(int id){
-        for(User u:users){
-            if(u.getId()==id){
-                return u;
-            }
-        }
-        return null;
+    public User findSpecUser(int id) throws SQLException {
+        UserMapper userMapper = new UserMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        ArrayList<Integer> key = new ArrayList<Integer>();
+        key.add(id);
+        User result = userMapper.find(key);
+        connection.close();
+        return result;
     }
     public Cart findSpecOrder(int index,User user) {
         for (Cart order : user.getOrders()) {

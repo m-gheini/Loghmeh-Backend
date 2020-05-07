@@ -25,15 +25,15 @@ import java.util.Map;
 
 @RestController
 public class Users {
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public @ResponseBody
-    ArrayList<User> allUsers() throws IOException, InterruptedException, SQLException {
-        UserMapper userMapper = new UserMapper(false);
-        Connection connection = ConnectionPool.getConnection();
-        ArrayList<User> users = userMapper.convertAllResultToObject();
-        connection.close();
-        return users;
-    }
+//    @RequestMapping(value = "/users", method = RequestMethod.GET)
+//    public @ResponseBody
+//    ArrayList<User> allUsers() throws IOException, InterruptedException, SQLException {
+//        UserMapper userMapper = new UserMapper(false);
+//        Connection connection = ConnectionPool.getConnection();
+//        ArrayList<User> users = userMapper.convertAllResultToObject();
+//        connection.close();
+//        return users;
+//    }
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public @ResponseBody
@@ -69,50 +69,50 @@ public class Users {
 
     }
 
-    @RequestMapping(value = "/users/{id}/credit", method = RequestMethod.GET)
-    public @ResponseBody
-    Object specificUserCredit(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
-//        User result = RestaurantManager.getInstance().findSpecUser(id);
-        UserMapper userMapper = new UserMapper(false);
-        Connection connection = ConnectionPool.getConnection();
-        ArrayList<Integer> key = new ArrayList<Integer>();
-        key.add(id);
-        User result = userMapper.find(key);
-        connection.close();
-
-        if(result != null)
-            return result.getCredit();
-        Error error = new Error(404,"no such id");
-        return error;
-
-    }
-
-    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
-    public @ResponseBody
-    Object deleteUser(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
-//        for(User u:RestaurantManager.getInstance().getUsers()){
-//            if(u.getId()==id){
-//                RestaurantManager.getInstance().getUsers().remove(u);
-//                Error error = new Error(202,"user deleted successfully");
-//                return error;
-//            }
-//        }
+//    @RequestMapping(value = "/users/{id}/credit", method = RequestMethod.GET)
+//    public @ResponseBody
+//    Object specificUserCredit(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
+////        User result = RestaurantManager.getInstance().findSpecUser(id);
+//        UserMapper userMapper = new UserMapper(false);
+//        Connection connection = ConnectionPool.getConnection();
+//        ArrayList<Integer> key = new ArrayList<Integer>();
+//        key.add(id);
+//        User result = userMapper.find(key);
+//        connection.close();
+//
+//        if(result != null)
+//            return result.getCredit();
 //        Error error = new Error(404,"no such id");
 //        return error;
-        UserMapper userMapper = new UserMapper(false);
-        Connection connection = ConnectionPool.getConnection();
-        Integer prevSize = userMapper.convertAllResultToObject().size();
-        ArrayList<Integer> key = new ArrayList<Integer>();
-        key.add(id);
-        userMapper.delete(key);
-        if (userMapper.convertAllResultToObject().size()==prevSize) {
-            connection.close();
-            return new Error(404, "no such id");
-        }
-        connection.close();
-        return new Error(202,"user deleted successfully");
+//
+//    }
 
-    }
+//    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
+//    public @ResponseBody
+//    Object deleteUser(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
+////        for(User u:RestaurantManager.getInstance().getUsers()){
+////            if(u.getId()==id){
+////                RestaurantManager.getInstance().getUsers().remove(u);
+////                Error error = new Error(202,"user deleted successfully");
+////                return error;
+////            }
+////        }
+////        Error error = new Error(404,"no such id");
+////        return error;
+//        UserMapper userMapper = new UserMapper(false);
+//        Connection connection = ConnectionPool.getConnection();
+//        Integer prevSize = userMapper.convertAllResultToObject().size();
+//        ArrayList<Integer> key = new ArrayList<Integer>();
+//        key.add(id);
+//        userMapper.delete(key);
+//        if (userMapper.convertAllResultToObject().size()==prevSize) {
+//            connection.close();
+//            return new Error(404, "no such id");
+//        }
+//        connection.close();
+//        return new Error(202,"user deleted successfully");
+//
+//    }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     public @ResponseBody
@@ -123,20 +123,7 @@ public class Users {
             @RequestParam(value = "email") String email,
             @RequestParam(value = "phoneNumber") String phoneNumber) throws IOException, SQLException {
         User user = new User();
-        System.out.println(password);
-        System.out.println(name);
-        System.out.println(familyName);
-        System.out.println(email);
-        System.out.println(phoneNumber);
-        System.out.println("-----------------------------------");
-
         user.setAllParameters(password,name,familyName,email,phoneNumber);
-        System.out.println(user.getId());
-        System.out.println(user.getName());
-        System.out.println(user.getFamilyName());
-        System.out.println(user.getEmail());
-        System.out.println(user.getPhoneNumber());
-        System.out.println(user.getPassword());
         Integer prevSize=RestaurantManager.getInstance().getUsers().size();
         RestaurantManager.getInstance().addUser(user);
         UserMapper userMapper = new UserMapper(false);
@@ -152,6 +139,7 @@ public class Users {
             return error;
         }
     }
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public @ResponseBody
     Object authenticate(@RequestParam(value = "email") String email,
@@ -208,12 +196,12 @@ public class Users {
         }
         return new Error(403, "no such user");
     }
+
     @RequestMapping(value = "/user", method = RequestMethod.PUT)
     public @ResponseBody
     Object updateUserCredit(
             @RequestHeader Map<String, String> headers,
             @RequestParam(value = "credit") Integer credit) throws IOException, SQLException {
-        System.out.println("in increasing credit");
         try {
             Algorithm algorithm = Algorithm.HMAC256("loghme");
             JWTVerifier verifier = JWT.require(algorithm)
@@ -239,10 +227,29 @@ public class Users {
 
     }
 
-    @RequestMapping(value = "/users/{id}/orders",method = RequestMethod.GET)
+    @RequestMapping(value = "/user/orders",method = RequestMethod.GET)
     public @ResponseBody
-    Object allOrders(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
-//        User user = RestaurantManager.getInstance().findSpecUser(id);
+    Object allOrders(@RequestHeader Map<String, String> headers) throws IOException, SQLException {
+        Integer id = null;
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+                    && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+            id = jwt.getClaim("id").asInt();
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
+
         UserMapper userMapper = new UserMapper(false);
         Connection connection = ConnectionPool.getConnection();
         ArrayList<Integer> key = new ArrayList<Integer>();

@@ -265,11 +265,29 @@ public class Users {
         }
     }
 
-    @RequestMapping(value = "/users/{id}/orders/{index}",method = RequestMethod.GET)
+    @RequestMapping(value = "/user/orders/{index}",method = RequestMethod.GET)
     public @ResponseBody
-    Object allOrders(@PathVariable(value = "id") Integer id,
+    Object allOrders(@RequestHeader Map<String, String> headers,
                    @PathVariable(value = "index") Integer index) throws IOException, SQLException {
-//        User user = RestaurantManager.getInstance().findSpecUser(id);
+        Integer id = null;
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+                    && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+            id = jwt.getClaim("id").asInt();
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
         UserMapper userMapper = new UserMapper(false);
         Connection connection = ConnectionPool.getConnection();
         ArrayList<Integer> key = new ArrayList<Integer>();
@@ -287,10 +305,28 @@ public class Users {
             return new Error(404,"no such user id");
     }
 
-    @RequestMapping(value = "/users/{id}/cart",method = RequestMethod.GET)
+    @RequestMapping(value = "/user/cart",method = RequestMethod.GET)
     public @ResponseBody
-    Object userCart(@PathVariable(value = "id") Integer id) throws IOException, SQLException {
-//        User user = RestaurantManager.getInstance().findSpecUser(id);
+    Object userCart(@RequestHeader Map<String, String> headers) throws IOException, SQLException {
+        Integer id = null;
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+                    && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+            id = jwt.getClaim("id").asInt();
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
         UserMapper userMapper = new UserMapper(false);
         Connection connection = ConnectionPool.getConnection();
         ArrayList<Integer> key = new ArrayList<Integer>();

@@ -202,6 +202,42 @@ public class Users {
         return new Error(403, "no such user");
     }
 
+    @RequestMapping(value = "/googleLogin", method = RequestMethod.POST)
+    public @ResponseBody
+    Object authenticate(@RequestParam(value = "email") String email) throws SQLException {
+//        MD5 hash = new MD5();
+//        String hashPass = hash.getMd5(password);
+        UserMapper userMapper = new UserMapper(false);
+        Connection connection = ConnectionPool.getConnection();
+        User found = userMapper.findForGoogleLogin(email);
+        connection.close();
+        if(found!=null) {
+            String token="";
+            try {
+                Algorithm algorithm = Algorithm.HMAC256("loghme");
+                Date now = new Date();
+                Date expire = new Date();
+                long nowMillis = System.currentTimeMillis();
+                expire.setTime(nowMillis+600000);
+                token = JWT.create()
+                        .withIssuer("user")
+                        .withClaim("email", email)
+                        .withClaim("id", found.getId())
+                        .withIssuedAt(now)
+                        .withExpiresAt(expire)
+                        .sign(algorithm);
+                System.out.println(token);
+                RestaurantManager.getInstance().setCurrentUser(found);
+            } catch (JWTCreationException | UnsupportedEncodingException exception){
+                //Invalid Signing configuration / Couldn't convert Claims.
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return new Error(200, token);
+        }
+        return new Error(403, "no such user");
+    }
+
     @RequestMapping(value = "/user", method = RequestMethod.PUT)
     public @ResponseBody
     Object updateUserCredit(

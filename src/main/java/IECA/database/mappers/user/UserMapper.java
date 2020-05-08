@@ -62,9 +62,36 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
                 " WHERE email = '"+  email + "' and password = '" + password +"';";
     }
 
+    protected String findSpecUserByEmail(String email) {
+        System.out.println("SELECT " + COLUMNS +
+                " FROM " + TABLE_NAME +
+                " WHERE email = '"+  email + "';");
+        return "SELECT " + COLUMNS +
+                " FROM " + TABLE_NAME +
+                " WHERE email = '"+  email + "';";
+    }
+
     public User findForLogin(String email, String password) throws SQLException {
         try (Connection con = ConnectionPool.getConnection();
              PreparedStatement st = con.prepareStatement(findSpecUser(email, password))
+        ) {
+            ResultSet resultSet;
+            try {
+                resultSet = st.executeQuery();
+                Object res = resultSet.next();
+                if(!(Boolean)res)
+                    return null;
+                return convertResultSetToObject(resultSet);
+            } catch (SQLException ex) {
+                System.out.println("error in Mapper.findByID query.");
+                throw ex;
+            }
+        }
+    }
+
+    public User findForGoogleLogin(String email) throws SQLException {
+        try (Connection con = ConnectionPool.getConnection();
+             PreparedStatement st = con.prepareStatement(findSpecUserByEmail(email))
         ) {
             ResultSet resultSet;
             try {

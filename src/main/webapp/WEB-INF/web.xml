@@ -22,7 +22,7 @@
   </filter-mapping>
   <filter-mapping>
     <filter-name>jwtFilter</filter-name>
-    <url-pattern>/user/*</url-pattern>
+    <url-pattern>{/user/*,/restaurants/*}</url-pattern>
   </filter-mapping>
   <servlet>
     <servlet-name>dispatcher</servlet-name>

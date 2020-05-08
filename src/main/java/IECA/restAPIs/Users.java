@@ -62,8 +62,13 @@ public class Users {
         key.add(id);
         User result = userMapper.find(key);
         connection.close();
-        if(result != null)
+        if(result != null) {
+            System.out.println(result.getName());
+            System.out.println(result.getFamilyName());
+            System.out.println(result.getEmail());
+            System.out.println(result.getPhoneNumber());
             return result;
+        }
         Error error = new Error(404,"no such id");
         return error;
 

@@ -40,7 +40,7 @@ public class Users {
     Object specificUser(@RequestHeader Map<String, String> headers) throws IOException, SQLException {
         Integer id  = null;
         try {
-            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
             JWTVerifier verifier = JWT.require(algorithm)
                     .build();
             DecodedJWT jwt = verifier.verify(headers.get("authorization"));
@@ -178,7 +178,7 @@ public class Users {
 //            System.out.println("JWT: " + jwt);
             String token="";
             try {
-                Algorithm algorithm = Algorithm.HMAC256("loghme");
+                Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
                 Date now = new Date();
                 Date expire = new Date();
                 long nowMillis = System.currentTimeMillis();
@@ -244,7 +244,7 @@ public class Users {
             @RequestHeader Map<String, String> headers,
             @RequestParam(value = "credit") Integer credit) throws IOException, SQLException {
         try {
-            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
             JWTVerifier verifier = JWT.require(algorithm)
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(headers.get("authorization"));
@@ -273,7 +273,7 @@ public class Users {
     Object allOrders(@RequestHeader Map<String, String> headers) throws IOException, SQLException {
         Integer id = null;
         try {
-            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
             JWTVerifier verifier = JWT.require(algorithm)
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(headers.get("authorization"));
@@ -312,7 +312,7 @@ public class Users {
                    @PathVariable(value = "index") Integer index) throws IOException, SQLException {
         Integer id = null;
         try {
-            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
             JWTVerifier verifier = JWT.require(algorithm)
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(headers.get("authorization"));
@@ -351,7 +351,7 @@ public class Users {
     Object userCart(@RequestHeader Map<String, String> headers) throws IOException, SQLException {
         Integer id = null;
         try {
-            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
             JWTVerifier verifier = JWT.require(algorithm)
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(headers.get("authorization"));
@@ -395,7 +395,7 @@ public class Users {
             return new Error(404,"no such restaurantId");
         Integer id = null;
         try {
-            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
             JWTVerifier verifier = JWT.require(algorithm)
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(headers.get("authorization"));
@@ -434,7 +434,7 @@ public class Users {
             @RequestParam(value = "saleFoodName") String foodName) throws IOException, SQLException {
         Integer id = null;
         try {
-            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
             JWTVerifier verifier = JWT.require(algorithm)
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(headers.get("authorization"));
@@ -476,7 +476,7 @@ public class Users {
             @RequestParam(value = "foodName") String foodName) throws IOException, SQLException {
         Integer id = null;
         try {
-            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
             JWTVerifier verifier = JWT.require(algorithm)
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(headers.get("authorization"));
@@ -516,7 +516,7 @@ public class Users {
             @RequestParam(value = "saleFoodName") String foodName) throws IOException, SQLException {
         Integer id = null;
         try {
-            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
             JWTVerifier verifier = JWT.require(algorithm)
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(headers.get("authorization"));
@@ -554,7 +554,7 @@ public class Users {
     Object finalizeCart(@RequestHeader Map<String, String> headers) throws IOException, SQLException {
         Integer id = null;
         try {
-            Algorithm algorithm = Algorithm.HMAC256("loghme");
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
             JWTVerifier verifier = JWT.require(algorithm)
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(headers.get("authorization"));

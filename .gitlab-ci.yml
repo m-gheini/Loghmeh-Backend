@@ -1,7 +1,27 @@
 stages:
     - build
+    
+docker-build:
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -t "$CI_REGISTRY_IMAGE" .
+    - docker run -d 8080:8080 "$CI_REGISTRY_IMAGE"
+    - docker push "$CI_REGISTRY_IMAGE"
+  only:
+    - master
 
-build:
-    stage: build
-    script:
-        - echo "building..." 
+# stages:
+#     - build
+
+# build:
+#     stage: build
+#     script:
+#         - echo "building..." 
+#         - docker build -t myapp .
+#         - docker run -d 8080:8080 myapp
+#         - 

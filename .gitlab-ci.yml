@@ -9,18 +9,7 @@ docker-build:
   before_script:
     - docker login -u "leila1378" -p "fakheri1378" 
   script:
-    - docker build -t "https://hub.docker.com/leila1378/loghmeh" .
-    - docker push "https://hub.docker.com/leila1378/loghmeh"
+    - docker build -t "index.docker.io/leila1378/loghmeh" .
+    - docker push "index.docker.io/leila1378/loghmeh"
   only:
     - master
-
-# stages:
-#     - build
-
-# build:
-#     stage: build
-#     script:
-#         - echo "building..." 
-#         - docker build -t myapp .
-#         - docker run -d 8080:8080 myapp
-#         - 

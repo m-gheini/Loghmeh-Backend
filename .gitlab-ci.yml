@@ -7,11 +7,10 @@ docker-build:
   services:
     - docker:dind
   before_script:
-    - docker login -u "leila1378" -p "fakheri1378"
+    - docker login -u "leila1378" -p "fakheri1378" docker.io
   script:
-    - docker build -t myapp .
-    # - docker run -d 8080:8080 "$CI_REGISTRY_IMAGE"
-    - docker push myapp
+    - docker build -t "index.docker.io/leila1378/myapp" .
+    - docker push "index.docker.io/leila1378/myapp"
   only:
     - master
 

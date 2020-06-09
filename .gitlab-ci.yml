@@ -14,12 +14,6 @@ docker-build:
         User: root
         Password: "$MYSQL_ROOT_PASSWORD"
         Database: "$MYSQL_DATABASE"
-#   connect:
-#     image: mysql
-#     script:
-#       - echo "SELECT 'OK';" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql "$MYSQL_DATABASE"
-
-
     before_script:
         - docker login -u "leila1378" -p "fakheri1378" 
     script:

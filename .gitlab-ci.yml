@@ -5,15 +5,15 @@ docker-build:
   image: docker:latest
   stage: build
   services:
-    # - mysql
-    - docker:dind
-    # variables:
-    #     MYSQL_DATABASE: loghmeh
-    #     MYSQL_ROOT_PASSWORD: yaali121
-    # connect:
-    #     image: mysql
-    #     script:
-    #     - echo "SELECT 'OK';" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql "$MYSQL_DATABASE"
+    - mysql
+    # - docker:dind
+    variables:
+        MYSQL_DATABASE: loghmeh
+        MYSQL_ROOT_PASSWORD: yaali121
+    connect:
+        image: mysql
+        script:
+        - echo "SELECT 'OK';" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql "$MYSQL_DATABASE"
 
 
   before_script:

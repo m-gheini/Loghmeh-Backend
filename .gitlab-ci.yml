@@ -10,10 +10,10 @@ docker-build:
     variables:
         MYSQL_DATABASE: loghmeh
         MYSQL_ROOT_PASSWORD: yaali121
-    Host: mysql
-    User: root
-    Password: "$MYSQL_ROOT_PASSWORD"
-    Database: "$MYSQL_DATABASE"
+        Host: mysql
+        User: root
+        Password: "$MYSQL_ROOT_PASSWORD"
+        Database: "$MYSQL_DATABASE"
 #   connect:
 #     image: mysql
 #     script:

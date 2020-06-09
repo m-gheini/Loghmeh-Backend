@@ -2,24 +2,28 @@ stages:
     - build
     
 docker-build:
-  image: docker:latest
-  stage: build
-  services:
-    - mysql:latest
-    - docker:dind
-  variables:
-    MYSQL_DATABASE: loghmeh
-    MYSQL_ROOT_PASSWORD: yaali121
+    image: docker:latest
+    stage: build
+    services:
+        - mysql:latest
+        - docker:dind
+    variables:
+        MYSQL_DATABASE: loghmeh
+        MYSQL_ROOT_PASSWORD: yaali121
+    Host: mysql
+    User: root
+    Password: "$MYSQL_ROOT_PASSWORD"
+    Database: "$MYSQL_DATABASE"
 #   connect:
 #     image: mysql
 #     script:
 #       - echo "SELECT 'OK';" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql "$MYSQL_DATABASE"
 
 
-  before_script:
-    - docker login -u "leila1378" -p "fakheri1378" 
-  script:
-    - docker build -t "index.docker.io/leila1378/loghmeh" .
-    - docker push "index.docker.io/leila1378/loghmeh"
-  only:
-    - master
+    before_script:
+        - docker login -u "leila1378" -p "fakheri1378" 
+    script:
+        - docker build -t "index.docker.io/leila1378/loghmeh" .
+        - docker push "index.docker.io/leila1378/loghmeh"
+    only:
+        - master

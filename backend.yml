@@ -34,4 +34,11 @@ spec:
           image: leila1378/loghmeh:latest
           ports:
             - containerPort: 8080
+          resources:
+            limits:
+              memory: "350Mi"
+              cpu: "350m"
+            requests:
+              memory: "350Mi"
+              cpu: "350m"
 

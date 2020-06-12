@@ -21,9 +21,9 @@ public class FoodMapper extends Mapper<Food, String> implements IFoodMapper {
         if (this.doManage = doManage) {
             Connection con = ConnectionPool.getConnection();
             Statement st = con.createStatement();
-            st.executeUpdate(String.format("DROP TABLE IF EXISTS %s", TABLE_NAME));
+//            st.executeUpdate(String.format("DROP TABLE IF EXISTS %s", TABLE_NAME));
             st.executeUpdate(String.format(
-                    "CREATE TABLE  %s " +
+                    "CREATE TABLE  %s if not exists" +
                             "(" +
                             "name varchar(100), " +
                             "description varchar(255), " +

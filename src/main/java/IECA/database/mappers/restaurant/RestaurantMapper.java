@@ -23,9 +23,9 @@ public class RestaurantMapper extends Mapper<Restaurant, String> implements IRes
         if (this.doManage = doManage) {
             Connection con = ConnectionPool.getConnection();
             Statement st = con.createStatement();
-            st.executeUpdate(String.format("DROP TABLE IF EXISTS %s", TABLE_NAME));
+//            st.executeUpdate(String.format("DROP TABLE IF EXISTS %s", TABLE_NAME));
             st.executeUpdate(String.format(
-                    "CREATE TABLE  %s " +
+                    "CREATE TABLE  %s if not exists" +
                             "(" +
                             "id varchar(50) not null, " +
                             "name varchar(100), " +

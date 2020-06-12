@@ -22,9 +22,9 @@ public class FoodPartyMapper extends Mapper<SaleFood, String> implements IFoodPa
         if (this.doManage = doManage) {
             Connection con = ConnectionPool.getConnection();
             Statement st = con.createStatement();
-            st.executeUpdate(String.format("DROP TABLE IF EXISTS %s", TABLE_NAME));
+//            st.executeUpdate(String.format("DROP TABLE IF EXISTS %s", TABLE_NAME));
             st.executeUpdate(String.format(
-                    "CREATE TABLE  %s " +
+                    "CREATE TABLE  %s if not exists" +
                             "(" +
                             "restaurantId varchar(50) not null , " +
                             "count integer, "+

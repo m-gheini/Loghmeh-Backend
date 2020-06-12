@@ -13,7 +13,7 @@ public class ConnectionPool {
     static {
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
         // remote db
-        ds.setUrl("jdbc:mysql://localhost:3306/loghmeh");
+        ds.setUrl("jdbc:mysql://database-service:3306/loghmeh");
         ds.setUsername("root");
         ds.setPassword("yaali121");
         ds.setMinIdle(1);

@@ -24,7 +24,7 @@ public class FoodPartyMapper extends Mapper<SaleFood, String> implements IFoodPa
             Statement st = con.createStatement();
 //            st.executeUpdate(String.format("DROP TABLE IF EXISTS %s", TABLE_NAME));
             st.executeUpdate(String.format(
-                    "CREATE TABLE  %s if not exists" +
+                    "CREATE TABLE if not exists %s" +
                             "(" +
                             "restaurantId varchar(50) not null , " +
                             "count integer, "+

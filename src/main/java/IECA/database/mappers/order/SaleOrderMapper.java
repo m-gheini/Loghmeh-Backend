@@ -25,7 +25,7 @@ public class SaleOrderMapper extends Mapper<Cart, Integer> implements ISaleOrder
             Statement st = con.createStatement();
 //            st.executeUpdate(String.format("DROP TABLE IF EXISTS %s", TABLE_NAME));
             st.executeUpdate(String.format(
-                    "CREATE TABLE  %s if not exists" +
+                    "CREATE TABLE if not exists %s" +
                             "(" +
                             "id int, " +
                             "number int, " +

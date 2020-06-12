@@ -28,7 +28,7 @@ public class UserMapper extends Mapper<User, Integer> implements IUserMapper {
             Statement st = con.createStatement();
 //            st.executeUpdate(String.format("DROP TABLE IF EXISTS %s", TABLE_NAME));
             st.executeUpdate(String.format(
-                    "CREATE TABLE  %s if not exists" +
+                    "CREATE TABLE if not exists %s" +
                             "(" +
                             "id int, " +
                             "name varchar(255) NOT NULL, " +

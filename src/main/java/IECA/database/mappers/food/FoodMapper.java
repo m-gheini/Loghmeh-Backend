@@ -23,7 +23,7 @@ public class FoodMapper extends Mapper<Food, String> implements IFoodMapper {
             Statement st = con.createStatement();
 //            st.executeUpdate(String.format("DROP TABLE IF EXISTS %s", TABLE_NAME));
             st.executeUpdate(String.format(
-                    "CREATE TABLE  %s if not exists" +
+                    "CREATE TABLE if not exists %s" +
                             "(" +
                             "name varchar(100), " +
                             "description varchar(255), " +

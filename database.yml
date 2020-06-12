@@ -50,11 +50,11 @@ spec:
               memory: "380Mi"
               cpu: "200m"
             requests:
-              memory: "28 0Mi"
+              memory: "280Mi"
               cpu: "200m"
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: "yaali121"
+              value: yaali121
 
       volumes:
         - name: mysql-data

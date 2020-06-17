@@ -39,23 +39,23 @@ public class Users {
     public @ResponseBody
     Object specificUser(@RequestHeader Map<String, String> headers) throws IOException, SQLException {
         Integer id  = null;
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
-//            JWTVerifier verifier = JWT.require(algorithm)
-//                    .build();
-//            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
-//            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
-//                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
-//                    && jwt.getClaim("iss").asString().equals("user"))){
-//                Error error=new Error(300,"error in jwt");
-//                return error;
-//            }
-//            id = jwt.getClaim("id").asInt();
-//        } catch (JWTVerificationException exception){
-//            exception.printStackTrace();
-//            Error error=new Error(300,"error in jwt");
-//            return error;
-//        }
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build();
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+                    && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+            }
+            id = jwt.getClaim("id").asInt();
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
         UserMapper userMapper = new UserMapper(false);
         Connection connection = ConnectionPool.getConnection();
         ArrayList<Integer> key = new ArrayList<Integer>();
@@ -177,26 +177,26 @@ public class Users {
 //            String jwt = jws.getCompactSerialization();
 //            System.out.println("JWT: " + jwt);
             String token="";
-//            try {
-//                Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
-//                Date now = new Date();
-//                Date expire = new Date();
-//                long nowMillis = System.currentTimeMillis();
-//                expire.setTime(nowMillis+600000);
-//                token = JWT.create()
-//                        .withIssuer("user")
-//                        .withClaim("email", email)
-//                        .withClaim("id", found.getId())
-//                        .withIssuedAt(now)
-//                        .withExpiresAt(expire)
-//                        .sign(algorithm);
-//                System.out.println(token);
-//                RestaurantManager.getInstance().setCurrentUser(found);
-//            } catch (JWTCreationException | UnsupportedEncodingException exception){
-//                //Invalid Signing configuration / Couldn't convert Claims.
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
+                Date now = new Date();
+                Date expire = new Date();
+                long nowMillis = System.currentTimeMillis();
+                expire.setTime(nowMillis+600000);
+                token = JWT.create()
+                        .withIssuer("user")
+                        .withClaim("email", email)
+                        .withClaim("id", found.getId())
+                        .withIssuedAt(now)
+                        .withExpiresAt(expire)
+                        .sign(algorithm);
+                System.out.println(token);
+                RestaurantManager.getInstance().setCurrentUser(found);
+            } catch (JWTCreationException | UnsupportedEncodingException exception){
+                //Invalid Signing configuration / Couldn't convert Claims.
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return new Error(200, token);
         }
         return new Error(403, "no such user");
@@ -243,23 +243,23 @@ public class Users {
     Object updateUserCredit(
             @RequestHeader Map<String, String> headers,
             @RequestParam(value = "credit") Integer credit) throws IOException, SQLException {
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
-//            JWTVerifier verifier = JWT.require(algorithm)
-//                    .build(); //Reusable verifier instance
-//            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
-//            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
-//            && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
-//            && jwt.getClaim("iss").asString().equals("user"))){
-//                Error error=new Error(300,"error in jwt");
-//                return error;
-//
-//            }
-//        } catch (JWTVerificationException exception){
-//            exception.printStackTrace();
-//            Error error=new Error(300,"error in jwt");
-//            return error;
-//        }
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+            && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+            && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
         if(credit<0 )
             return new Error(403,"please enter a positive number");
         RestaurantManager.getInstance().getCurrentUser().addCredit(credit);
@@ -272,24 +272,24 @@ public class Users {
     public @ResponseBody
     Object allOrders(@RequestHeader Map<String, String> headers) throws IOException, SQLException {
         Integer id = null;
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
-//            JWTVerifier verifier = JWT.require(algorithm)
-//                    .build(); //Reusable verifier instance
-//            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
-//            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
-//                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
-//                    && jwt.getClaim("iss").asString().equals("user"))){
-//                Error error=new Error(300,"error in jwt");
-//                return error;
-//
-//            }
-//            id = jwt.getClaim("id").asInt();
-//        } catch (JWTVerificationException exception){
-//            exception.printStackTrace();
-//            Error error=new Error(300,"error in jwt");
-//            return error;
-//        }
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+                    && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+            id = jwt.getClaim("id").asInt();
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
 
         UserMapper userMapper = new UserMapper(false);
         Connection connection = ConnectionPool.getConnection();
@@ -311,24 +311,24 @@ public class Users {
     Object allOrders(@RequestHeader Map<String, String> headers,
                    @PathVariable(value = "index") Integer index) throws IOException, SQLException {
         Integer id = null;
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
-//            JWTVerifier verifier = JWT.require(algorithm)
-//                    .build(); //Reusable verifier instance
-//            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
-//            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
-//                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
-//                    && jwt.getClaim("iss").asString().equals("user"))){
-//                Error error=new Error(300,"error in jwt");
-//                return error;
-//
-//            }
-//            id = jwt.getClaim("id").asInt();
-//        } catch (JWTVerificationException exception){
-//            exception.printStackTrace();
-//            Error error=new Error(300,"error in jwt");
-//            return error;
-//        }
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+                    && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+            id = jwt.getClaim("id").asInt();
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
         UserMapper userMapper = new UserMapper(false);
         Connection connection = ConnectionPool.getConnection();
         ArrayList<Integer> key = new ArrayList<Integer>();
@@ -350,24 +350,24 @@ public class Users {
     public @ResponseBody
     Object userCart(@RequestHeader Map<String, String> headers) throws IOException, SQLException {
         Integer id = null;
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
-//            JWTVerifier verifier = JWT.require(algorithm)
-//                    .build(); //Reusable verifier instance
-//            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
-//            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
-//                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
-//                    && jwt.getClaim("iss").asString().equals("user"))){
-//                Error error=new Error(300,"error in jwt");
-//                return error;
-//
-//            }
-//            id = jwt.getClaim("id").asInt();
-//        } catch (JWTVerificationException exception){
-//            exception.printStackTrace();
-//            Error error=new Error(300,"error in jwt");
-//            return error;
-//        }
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+                    && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+            id = jwt.getClaim("id").asInt();
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
         UserMapper userMapper = new UserMapper(false);
         Connection connection = ConnectionPool.getConnection();
         ArrayList<Integer> key = new ArrayList<Integer>();
@@ -394,24 +394,24 @@ public class Users {
         if(restaurantNotFound)
             return new Error(404,"no such restaurantId");
         Integer id = null;
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
-//            JWTVerifier verifier = JWT.require(algorithm)
-//                    .build(); //Reusable verifier instance
-//            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
-//            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
-//                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
-//                    && jwt.getClaim("iss").asString().equals("user"))){
-//                Error error=new Error(300,"error in jwt");
-//                return error;
-//
-//            }
-//            id = jwt.getClaim("id").asInt();
-//        } catch (JWTVerificationException exception){
-//            exception.printStackTrace();
-//            Error error=new Error(300,"error in jwt");
-//            return error;
-//        }
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+                    && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+            id = jwt.getClaim("id").asInt();
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
 
         User u = RestaurantManager.getInstance().findSpecUser(id);
         if(u==null)
@@ -433,24 +433,24 @@ public class Users {
             @RequestParam(value = "restaurantId") String restaurantId,
             @RequestParam(value = "saleFoodName") String foodName) throws IOException, SQLException {
         Integer id = null;
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
-//            JWTVerifier verifier = JWT.require(algorithm)
-//                    .build(); //Reusable verifier instance
-//            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
-//            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
-//                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
-//                    && jwt.getClaim("iss").asString().equals("user"))){
-//                Error error=new Error(300,"error in jwt");
-//                return error;
-//
-//            }
-//            id = jwt.getClaim("id").asInt();
-//        } catch (JWTVerificationException exception){
-//            exception.printStackTrace();
-//            Error error=new Error(300,"error in jwt");
-//            return error;
-//        }
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+                    && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+            id = jwt.getClaim("id").asInt();
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
         boolean restaurantFound = RestaurantManager.getInstance().restaurantIdOfSaleFoodFound(restaurantId);
         if(!restaurantFound)
             return new Error(404,"no such restaurantId");
@@ -475,24 +475,24 @@ public class Users {
             @RequestParam(value = "restaurantId") String restaurantId,
             @RequestParam(value = "foodName") String foodName) throws IOException, SQLException {
         Integer id = null;
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
-//            JWTVerifier verifier = JWT.require(algorithm)
-//                    .build(); //Reusable verifier instance
-//            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
-//            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
-//                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
-//                    && jwt.getClaim("iss").asString().equals("user"))){
-//                Error error=new Error(300,"error in jwt");
-//                return error;
-//
-//            }
-//            id = jwt.getClaim("id").asInt();
-//        } catch (JWTVerificationException exception){
-//            exception.printStackTrace();
-//            Error error=new Error(300,"error in jwt");
-//            return error;
-//        }
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+                    && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+            id = jwt.getClaim("id").asInt();
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
 
         boolean restaurantNotFound = RestaurantManager.getInstance().searchInProperResById(restaurantId);
         if(restaurantNotFound)
@@ -515,24 +515,24 @@ public class Users {
             @RequestParam(value = "restaurantId") String restaurantId,
             @RequestParam(value = "saleFoodName") String foodName) throws IOException, SQLException {
         Integer id = null;
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
-//            JWTVerifier verifier = JWT.require(algorithm)
-//                    .build(); //Reusable verifier instance
-//            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
-//            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
-//                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
-//                    && jwt.getClaim("iss").asString().equals("user"))){
-//                Error error=new Error(300,"error in jwt");
-//                return error;
-//
-//            }
-//            id = jwt.getClaim("id").asInt();
-//        } catch (JWTVerificationException exception){
-//            exception.printStackTrace();
-//            Error error=new Error(300,"error in jwt");
-//            return error;
-//        }
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+                    && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+            id = jwt.getClaim("id").asInt();
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
 
         boolean restaurantFound = RestaurantManager.getInstance().restaurantIdOfSaleFoodFound(restaurantId);
         if(!restaurantFound)
@@ -553,24 +553,24 @@ public class Users {
     public @ResponseBody
     Object finalizeCart(@RequestHeader Map<String, String> headers) throws IOException, SQLException {
         Integer id = null;
-//        try {
-//            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
-//            JWTVerifier verifier = JWT.require(algorithm)
-//                    .build(); //Reusable verifier instance
-//            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
-//            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
-//                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
-//                    && jwt.getClaim("iss").asString().equals("user"))){
-//                Error error=new Error(300,"error in jwt");
-//                return error;
-//
-//            }
-//            id = jwt.getClaim("id").asInt();
-//        } catch (JWTVerificationException exception){
-//            exception.printStackTrace();
-//            Error error=new Error(300,"error in jwt");
-//            return error;
-//        }
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("loghmeh loghmeh loghmeh loghmeh loghmeh");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(headers.get("authorization"));
+            if(!(jwt.getClaim("id").asInt()==RestaurantManager.getInstance().getCurrentUser().getId()
+                    && jwt.getClaim("email").asString().equals(RestaurantManager.getInstance().getCurrentUser().getEmail())
+                    && jwt.getClaim("iss").asString().equals("user"))){
+                Error error=new Error(300,"error in jwt");
+                return error;
+
+            }
+            id = jwt.getClaim("id").asInt();
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            Error error=new Error(300,"error in jwt");
+            return error;
+        }
 
         User u = RestaurantManager.getInstance().findSpecUser(id);
         System.out.println(u.getName()+",,"+u.getFamilyName()+",,"+u.getEmail()+",,"+u.getMyCart().getFoods().size());
